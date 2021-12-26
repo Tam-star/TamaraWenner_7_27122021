@@ -8,6 +8,7 @@ const sequelize = require('./config/db.js')
 
 //Routes
 const userRoutes = require('./routes/user.route')
+const postRoutes = require('./routes/post.route')
 
 app.use(morgan('dev'))
    .use(express.json());
@@ -17,5 +18,6 @@ sequelize.initDb()
 
 //Endpoints
 app.use('/api/users', userRoutes)
+app.use('/api/posts', postRoutes)
 
 app.listen(port, () => console.log('Connectée sur le port', port))
