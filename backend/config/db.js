@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize')
-const UserModel = require('../models/user')
+const UserModel = require('../models/user.model')
 require('dotenv').config({ path: './config/.env' })
 
 const sequelize = new Sequelize('groupomania', `${process.env.DB_USER}`, `${process.env.DB_PASSWORD}`, {
