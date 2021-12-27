@@ -12,9 +12,12 @@ const sequelize = new Sequelize('groupomania', `${process.env.DB_USER}`, `${proc
 const User = UserModel(sequelize, DataTypes)
 const Post = PostModel(sequelize, DataTypes)
 
+// User.hasMany(Post, {foreignKey: 'userId', sourceKey: 'id'});
+// Post.belongsTo(User, {foreignKey: 'userId', targetKey: 'id'});
+
 const initDb = () => {
     return sequelize.sync({ force: true }).then(_ => {
-
+        
         User.create({
             pseudo: 'J-P',
             email: 'jp@gmail.com',
