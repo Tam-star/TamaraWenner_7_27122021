@@ -20,4 +20,10 @@ sequelize.initDb()
 app.use('/api/users', userRoutes)
 app.use('/api/posts', postRoutes)
 
+//In case the endpoint does not exist
+app.use(({res}) => {
+   const message = 'Impossible de trouver la ressource demandée. Essayez une autre URL'
+   res.status(404).json({message})
+})
+
 app.listen(port, () => console.log('Connectée sur le port', port))
