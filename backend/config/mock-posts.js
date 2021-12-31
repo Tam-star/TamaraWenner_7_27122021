@@ -2,7 +2,8 @@ const posts = [
     {
         id: 1,
         text: "Coucou",
-        userId: 1
+        userId: 1,
+        usersLiked : "Jim"
     },
     {
         id: 2,

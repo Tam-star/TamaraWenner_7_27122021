@@ -9,6 +9,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: false
       },
+      image: {
+        type: DataTypes.STRING
+      },
+      //Nombre de personnes qui ont liké le post
+      usersLiked : {
+        type : DataTypes.STRING,
+        defaultValue : ''
+      },
       userId: {
         type: DataTypes.INTEGER,
         allowNull: false,

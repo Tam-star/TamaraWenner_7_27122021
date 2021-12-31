@@ -32,7 +32,8 @@ const initDb = () => {
         posts.map(post => {
             Post.create({
                 text: post.text,
-                userId: post.userId
+                userId: post.userId,
+                usersLiked : post.usersLiked
             }).then(post => console.log(post.toJSON()))
         })
         console.log('La base de donnée a bien été initialisée !')
