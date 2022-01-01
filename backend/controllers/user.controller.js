@@ -1,5 +1,6 @@
 const { User } = require('../config/db')
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 exports.getAllUsers = (req, res, next) => {
   User.findAll()
@@ -56,11 +57,11 @@ exports.deleteUser = (req, res, next) => {
         res.json({ message, data: userDeleted })
       })
   })
-  .catch(error => {
-    const message = 'L\'utilisateur n\'a pas pu être supprimé. Réessayez dans quelques instants'
-    res.status(500).json({ message, data: error })
-    console.log(`Il y a eu une erreur : ${error}`)
-  })
+    .catch(error => {
+      const message = 'L\'utilisateur n\'a pas pu être supprimé. Réessayez dans quelques instants'
+      res.status(500).json({ message, data: error })
+      console.log(`Il y a eu une erreur : ${error}`)
+    })
 }
 
 
@@ -96,7 +97,15 @@ exports.login = (req, res, next) => {
             return res.status(401).json({ error: 'Incorrect password !' });
           }
           const message = `L\'utilisateur ${user.pseudo} est bien connecté.`
-          res.json({ message, data: user })
+          //res.json({ message, data: user })
+          res.status(200).json({
+            userId: user.id,
+            token: jwt.sign(
+              { userId: user.id },
+              'GROUPOMANIA_SECRET_TOKEN',
+              { expiresIn: '24h' }
+            )
+          })
         })
       //Check password with bcrypt, utilisation du jwt token
     })
