@@ -1,7 +1,9 @@
 require('dotenv').config({ path: './config/.env' })
 
 const express = require('express')
+const path = require('path');
 const morgan = require('morgan')
+
 const app = express()
 const port = process.env.PORT
 const sequelize = require('./config/db.js')
@@ -17,6 +19,7 @@ app.use(morgan('dev'))
 sequelize.initDb()
 
 //Endpoints
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/users', userRoutes)
 app.use('/api/posts', postRoutes)
 

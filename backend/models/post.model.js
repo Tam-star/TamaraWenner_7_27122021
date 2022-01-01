@@ -7,9 +7,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       text: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
       },
-      image: {
+      imageUrl: {
         type: DataTypes.STRING
       },
       //Nombre de personnes qui ont liké le post

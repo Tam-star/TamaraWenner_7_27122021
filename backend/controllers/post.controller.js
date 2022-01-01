@@ -1,5 +1,7 @@
-const { Post } = require('../config/db')
+const { Post, User } = require('../config/db')
 const { ValidationError, ForeignKeyConstraintError } = require('sequelize')
+const fs = require('fs');
+const { create } = require('domain');
 
 exports.getAllPosts = (req, res, next) => {
   Post.findAll()
@@ -34,27 +36,35 @@ exports.getPostById = (req, res, next) => {
 exports.createPost = (req, res, next) => {
   //Si l'utilisateur indique un id dans son POST, on le supprime
   //pour que cela n'interfère pas avec l'auto-incrémentation de la base de donnée
-  if (req.body.id) {
-    delete req.body.id
+  console.log(req.body.post)
+  console.log(JSON.parse(req.body.post))
+  try {
+    // if (req.body.id) {
+    //   delete req.body.id
+    // }
+    Post.create({ ...JSON.parse(req.body.post), imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` })
+      .then(post => {
+        const message = `Le post a bien été créé.`
+        res.json({ message, data: post })
+      })
+      .catch(error => {
+        if (error instanceof ValidationError) {
+          const message = `Vous avez fait une erreur dans la création de ce post`
+          return res.status(400).json({ message, data: error })
+        }
+        if (error instanceof ForeignKeyConstraintError) {
+          const message = `L'userId n'appartient à aucun de nos utilisateurs`
+          return res.status(400).json({ message, data: error })
+        }
+        const message = `Le post n'a pas pu être créé, réessayez dans quelques instants`
+        res.status(500).json({ message, data: error })
+        console.log(`Il y a eu une erreur : ${error}`)
+      })
   }
-  Post.create(req.body)
-    .then(post => {
-      const message = `Le post a bien été créé.`
-      res.json({ message, data: post })
-    })
-    .catch(error => {
-      if (error instanceof ValidationError) {
-        const message = `Vous avez fait une erreur dans la création de ce post`
-        return res.status(400).json({ message, data: error })
-      }
-      if (error instanceof ForeignKeyConstraintError) {
-        const message = `L'userId n'appartient à aucun de nos utilisateurs`
-        return res.status(400).json({ message, data: error })
-      }
-      const message = `Le post n'a pas pu être créé, réessayez dans quelques instants`
-      res.status(500).json({ message, data: error })
-      console.log(`Il y a eu une erreur : ${error}`)
-    })
+  catch (e) {
+    console.log(`Il y a eu une erreur : ${e.message}`)
+  }
+
 }
 
 
