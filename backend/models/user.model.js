@@ -7,7 +7,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     pseudo: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      unique:{
+        msg: 'Ce pseudo est déjà pris'
+      }
     },
     email: {
       type: DataTypes.STRING,

@@ -1,4 +1,5 @@
 const { User } = require('../config/db')
+const bcrypt = require('bcrypt');
 
 exports.getAllUsers = (req, res, next) => {
   User.findAll()
@@ -6,7 +7,11 @@ exports.getAllUsers = (req, res, next) => {
       const message = 'La liste des utilisateurs a bien été récupérée.'
       res.json({ message, data: users })
     })
-    .catch(error => console.log(`Il y a eu une erreur : ${error}`))
+    .catch(error => {
+      const message = 'La liste des utilisateurs n\'a pas pu être récupérée. Réessayez dans quelques instants'
+      res.status(500).json({ message, data: error })
+      console.log(`Il y a eu une erreur : ${error}`)
+    })
 }
 
 exports.getUserById = (req, res, next) => {
@@ -15,7 +20,11 @@ exports.getUserById = (req, res, next) => {
       const message = 'L\'utilisateur a bien été récupéré.'
       res.json({ message, data: user })
     })
-    .catch(error => console.log(`Il y a eu une erreur : ${error}`))
+    .catch(error => {
+      const message = 'L\'utilisateur n\'a pas pu être récupéré. Réessayez dans quelques instants'
+      res.status(500).json({ message, data: error })
+      console.log(`Il y a eu une erreur : ${error}`)
+    })
 }
 
 exports.modifyUser = (req, res, next) => {
@@ -24,17 +33,22 @@ exports.modifyUser = (req, res, next) => {
     where: { id: id }
   })
     .then(_ => {
-      User.findByPk(id).then(user => {
+      return User.findByPk(id).then(user => {
         const message = `L\'utilisateur ${user.pseudo} a bien été modifié.`
         res.json({ message, data: user })
       })
+    })
+    .catch(error => {
+      const message = 'L\'utilisateur n\'a pas pu être modifié. Réessayez dans quelques instants'
+      res.status(500).json({ message, data: error })
+      console.log(`Il y a eu une erreur : ${error}`)
     })
 }
 
 exports.deleteUser = (req, res, next) => {
   User.findByPk(req.params.id).then(user => {
     const userDeleted = user;
-    User.destroy({
+    return User.destroy({
       where: { id: user.id }
     })
       .then(_ => {
@@ -42,26 +56,54 @@ exports.deleteUser = (req, res, next) => {
         res.json({ message, data: userDeleted })
       })
   })
+  .catch(error => {
+    const message = 'L\'utilisateur n\'a pas pu être supprimé. Réessayez dans quelques instants'
+    res.status(500).json({ message, data: error })
+    console.log(`Il y a eu une erreur : ${error}`)
+  })
 }
 
 
 exports.signUp = (req, res, next) => {
-  User.create(req.body)
-    .then(user => {
-      const message = `L\'utilisateur ${req.body.pseudo} a bien été créé.`
-      res.json({ message, data: user })
+  bcrypt.hash(req.body.password, 10)
+    .then(hash => {
+      return User.create({
+        pseudo: req.body.pseudo,
+        email: req.body.email,
+        password: hash
+      })
+        .then(user => {
+          const message = `L\'utilisateur ${req.body.pseudo} a bien été créé.`
+          res.json({ message, data: user })
+        })
     })
-    .catch(error => console.log(`Il y a eu une erreur : ${error}`))
+    .catch(error => {
+      const message = 'L\'utilisateur n\'a pas pu être enregistré. Réessayez dans quelques instants'
+      res.status(500).json({ message, data: error })
+      console.log(`Il y a eu une erreur : ${error}`)
+    })
 }
 
 exports.login = (req, res, next) => {
-  User.findByPk({ email: req.body.email })
+  User.findOne({ where: { email: req.body.email } })
     .then(user => {
       if (!user) {
-        return res.status(404).json({ error: 'This user does not exist' })
+        return res.status(404).json({ error: 'Cet utilisateur n\'existe pas.' })
       }
-      //Check password with bcrypt, utilisation du jwt token 
-      const message = `L\'utilisateur ${req.body.pseudo} est bien connecté.`
-      res.json({ message, data: user })
+      return bcrypt.compare(req.body.password, user.password)
+        .then(valid => {
+          if (!valid) {
+            return res.status(401).json({ error: 'Incorrect password !' });
+          }
+          const message = `L\'utilisateur ${user.pseudo} est bien connecté.`
+          res.json({ message, data: user })
+        })
+      //Check password with bcrypt, utilisation du jwt token
     })
+    .catch(error => {
+      const message = 'L\'utilisateur n\'a pas pu être loggé. Réessayez dans quelques instants'
+      res.status(500).json({ message, data: error })
+      console.log(`Il y a eu une erreur : ${error}`)
+    })
+
 }
