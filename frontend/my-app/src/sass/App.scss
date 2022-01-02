@@ -1,0 +1,23 @@
+@import 'normalize';
+@import 'utils/variables';
+
+.main-header {
+    background-color: white;
+    color : $primary-color;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    &__logo{
+        width : 20%;
+    }
+    &__avatar{
+        width : 10%;
+    }
+}
+
+main {
+    display: flex;
+    justify-content: space-between;
+    background-color: $fourth-color;
+    height : 500px;
+}

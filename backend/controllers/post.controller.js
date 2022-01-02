@@ -34,11 +34,9 @@ exports.getPostById = (req, res, next) => {
 }
 
 exports.createPost = (req, res, next) => {
-  //Si l'utilisateur indique un id dans son POST, on le supprime
-  //pour que cela n'interfère pas avec l'auto-incrémentation de la base de donnée
-  console.log(req.body.post)
-  console.log(JSON.parse(req.body.post))
   try {
+    //Si l'utilisateur indique un id dans son POST, on le supprime
+    //pour que cela n'interfère pas avec l'auto-incrémentation de la base de donnée
     // if (req.body.id) {
     //   delete req.body.id
     // }
