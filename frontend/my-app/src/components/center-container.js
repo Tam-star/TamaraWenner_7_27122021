@@ -1,11 +1,13 @@
 import React from 'react';
 import NewPost from './newpost';
+import PostContainer from './post-container';
 
 export default function CenterContainer() {
     return (
-        <article className='center-container'> 
+        <section className='center-container'> 
             <NewPost/>
-        </article>
+            <PostContainer/>
+        </section>
     )
 
 }

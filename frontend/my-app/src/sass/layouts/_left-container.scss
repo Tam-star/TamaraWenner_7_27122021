@@ -3,13 +3,16 @@
 }
 
 .profile-container {
-    @include card-style;
+    @include card-style();
     display : flex;
     justify-content: space-between;
+    & img {
+        @include profile-image();
+    }
 }
 
 .menu{
-    @include card-style;
+    @include card-style();
     & ul{
         padding : 0;
     }

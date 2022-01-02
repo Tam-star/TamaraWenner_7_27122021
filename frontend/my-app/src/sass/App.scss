@@ -1,17 +1,18 @@
 @import 'normalize';
 @import 'utils/variables';
 @import 'utils/mixins';
+@import 'layouts/generals';
 @import 'layouts/header';
 @import 'layouts/left-container';
 @import 'layouts/center-container';
 @import 'layouts/right-container';
 
 
-main {
+.main-container {
     display: flex;
     justify-content: space-between;
     background-color: $fourth-color;
-    height : 500px;
+    //height : 500px;
 }
 
 

@@ -9,7 +9,7 @@ function NewsFeed() {
   return (
     <div className="App">
       <Header />
-      <main>
+      <main className='main-container'>
         <LeftContainer/>
         <CenterContainer/>
         <div className='right-container'>
