@@ -21,5 +21,8 @@
     & li {
         list-style-type:none;
         padding : 15px;
+        & i{
+            margin-right: 15px;
+        }
     }
 }

@@ -8,7 +8,7 @@ export default function Header() {
             <div className='main-header__logo'></div>
             <div className='main-header__right-container'>
                 <form className='main-header__form'>
-                    <input value={'Search'}></input>
+                    <input></input>
                 </form>
                 <img src={maleAvatar} className='main-header__avatar' alt='Profil'/>
             </div>
