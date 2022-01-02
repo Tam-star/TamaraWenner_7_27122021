@@ -19,12 +19,20 @@
     }
     &__form{
         color : black;
+        position : relative;
         & input {
             height : 30px;
             width : 300px;
-            padding : 10px;
+            padding : 10px 10px 10px 45px;
             border-radius: 20px;
             background-color: $fourth-color;
+        }
+        &__icon{
+            color : $primary-color;
+            position : absolute;
+            left : 15px;
+            top : 17px;
+            font-size : 20px;
         }
     }
     &__avatar{
