@@ -1,0 +1,25 @@
+.left-container{
+    width: 35vh;
+}
+
+.profile-container {
+    background-color: white;
+    display : flex;
+    justify-content: space-between;
+    margin : 20px;
+    padding : 20px;
+    border-radius: 15px;
+}
+
+.menu{
+    background-color: white;
+    margin : 20px;
+    border-radius: 15px;
+    & ul{
+        padding : 20px;
+    }
+    & li {
+        list-style-type:none;
+        padding : 15px;
+    }
+}

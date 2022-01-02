@@ -1,17 +1,15 @@
 import React from 'react';
-import logo from '../assets/icon-left-font.png';
-import maleAvatar from '../assets/male-avatar-profile.jpg';
 
 export default function Nav() {
     return (
-        <nav>
+        <nav className='menu'>
             <ul>
-                <li>Home</li>
-                <li>People</li>
-                <li>Photos</li>
-                <li>News Feed</li>
-                <li>Profile</li>
-                <li>Settings</li>
+                <li><i class="fas fa-home"></i> Home</li>
+                <li><i class="fas fa-user-friends"></i> People</li>
+                <li><i class="fas fa-images"></i> Photos</li>
+                <li><i class="far fa-newspaper"></i> News Feed</li>
+                <li><i class="fas fa-user"></i> Profile</li>
+                <li><i class="fas fa-cog"></i> Settings</li>
             </ul>
         </nav>
     )

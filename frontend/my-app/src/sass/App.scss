@@ -1,19 +1,9 @@
 @import 'normalize';
 @import 'utils/variables';
+@import 'layouts/header';
+@import 'layouts/left-container';
+@import 'layouts/right-container';
 
-.main-header {
-    background-color: white;
-    color : $primary-color;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    &__logo{
-        width : 20%;
-    }
-    &__avatar{
-        width : 10%;
-    }
-}
 
 main {
     display: flex;
@@ -21,3 +11,7 @@ main {
     background-color: $fourth-color;
     height : 500px;
 }
+
+
+
+

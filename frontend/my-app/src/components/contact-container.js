@@ -1,15 +1,14 @@
 import React from 'react';
-import logo from '../assets/icon-left-font.png';
 import maleAvatar from '../assets/male-avatar-profile.jpg';
 
 export default function ContactContainer() {
     return (
-        <div>
-            <ul>
-                <li>Julia</li>
-                <li>J-P</li>
-                <li>Alexis</li>
-                <li>Fred</li>
+        <div className='contact-container'>
+            <ul className='contact-list'>
+                <li><img src={maleAvatar} alt='Profil de Julia'/>Julia</li>
+                <li><img src={maleAvatar} alt='Profil de J-P'/>J-P</li>
+                <li><img src={maleAvatar} alt='Profil de Alexis'/>Alexis</li>
+                <li><img src={maleAvatar} alt='Profil de Fred'/>Fred</li>
             </ul>
         </div>
     )
