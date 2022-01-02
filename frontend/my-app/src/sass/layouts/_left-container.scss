@@ -1,22 +1,17 @@
 .left-container{
-    width: 35vh;
+    width: 20vw;
 }
 
 .profile-container {
-    background-color: white;
+    @include card-style;
     display : flex;
     justify-content: space-between;
-    margin : 20px;
-    padding : 20px;
-    border-radius: 15px;
 }
 
 .menu{
-    background-color: white;
-    margin : 20px;
-    border-radius: 15px;
+    @include card-style;
     & ul{
-        padding : 20px;
+        padding : 0;
     }
     & li {
         list-style-type:none;

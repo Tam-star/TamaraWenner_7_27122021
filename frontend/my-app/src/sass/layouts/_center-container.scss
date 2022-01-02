@@ -1,0 +1,9 @@
+.center-container{
+    width : 60vw;
+}
+
+.new-post{
+    @include card-style;
+    display : flex;
+    justify-content: space-between;
+}

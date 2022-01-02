@@ -1,16 +1,12 @@
 
 .right-container{
-    width: 35vh;
+    width: 20vw;
 }
 
-
-
 .contact-container{
-    margin : 20px;
-    background-color: white;
-    border-radius: 15px;
+    @include card-style;
     & ul{
-        padding : 30px;
+        padding : 0;
         & li {
             list-style-type: none;
             display : flex;

@@ -5,7 +5,7 @@ import {
   Routes,
   Route
 } from "react-router-dom";
-import App from './App';
+//import App from './App';
 import NewsFeed from "./routes/newsfeed"
 import Home from "./routes/home"
 import reportWebVitals from './reportWebVitals';
