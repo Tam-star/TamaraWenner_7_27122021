@@ -16,9 +16,17 @@
     & ul{
         padding : 0;
     }
-    & li {
+    &__element {
         list-style-type:none;
         padding : 15px;
+        font-weight : bold;
+        border-bottom: 1px $secondary-color solid;
+        &--no-border{
+            border-bottom: none;
+        }
+        &:hover{
+            background-color: $secondary-color;
+        }
         & i{
             margin-right: 15px;
             color : $primary-color;

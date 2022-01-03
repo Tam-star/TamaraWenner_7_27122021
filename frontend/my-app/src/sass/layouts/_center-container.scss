@@ -19,6 +19,10 @@
             border : none;
             padding : 10px;
             border-radius: 15px;
+            &:focus{
+                outline: none;
+                border : 3px solid $secondary-color;
+            }
         }
     }
     & button {
