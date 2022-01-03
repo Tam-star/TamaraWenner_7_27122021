@@ -1,6 +1,27 @@
 import React from 'react';
+import { signUp } from '../API-functions';
 
 export default function Subscription() {
+    
+    function redirectToNewsFeed(){
+        window.location.href = `./newsfeed`
+    }
+
+    const register = (event) => {
+        event.preventDefault()
+        const myRequest = {
+            "lastname": document.getElementById("last-name").value,
+            "firstname": document.getElementById("first-name").value,
+            "pseudo": document.getElementById("pseudo").value,
+            "email": document.getElementById("email").value,
+            "password": document.getElementById("password").value
+        }
+        signUp(myRequest).then((response) => {
+            console.log(JSON.stringify(response))
+            setTimeout(redirectToNewsFeed, 3000);
+        })   
+    }
+
     return (
         <section className='center-container login-container'>
             <h1>Inscription</h1>
@@ -25,7 +46,7 @@ export default function Subscription() {
                     Votre mot de passe :
                 </label>
                 <input type={'password'} id="password" name="password" ></input>
-                <input type="submit" value="Valider"></input>
+                <input type="submit" value="Valider" onClick={register}></input>
             </form>
         </section>
     )
