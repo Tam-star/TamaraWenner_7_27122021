@@ -2,7 +2,7 @@
     width: 20vw;
 }
 
-.profile-container {
+.profile-aside {
     @include card-style();
     display : flex;
     justify-content: space-between;

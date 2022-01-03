@@ -6,10 +6,10 @@ export default function LeftContainer({ connected, changeCenterContainer }) {
     return (
         <section className='left-container'>
             {connected ?
-                <div className='profile-container'>
+                <aside className='profile-aside'>
                     <img src={maleAvatar} alt='Profil' />
                     <p>Alexandre</p>
-                </div> 
+                </aside> 
                 : ''}
             <Nav connected={connected} handleClick={changeCenterContainer} />
         </section>
