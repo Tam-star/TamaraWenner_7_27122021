@@ -6,8 +6,32 @@
     @include card-style;
     display : flex;
     justify-content: space-between;
+    align-items: center;
     & img {
         @include profile-image();
+    }
+    & form{
+        width : 60%;
+        & textarea{
+            resize: none;
+            height : auto;
+            width : 100%;
+            border : none;
+            padding : 10px;
+            border-radius: 15px;
+        }
+    }
+    & button {
+        background-color: $primary-color;
+        font-weight : bold;
+        color : white;
+        border : none;
+        border-radius: 15px;
+        padding : 10px;
+        & i {
+            margin-right : 10px;
+        }
+
     }
 }
 

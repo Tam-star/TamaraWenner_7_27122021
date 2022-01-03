@@ -8,7 +8,7 @@ export default function Header() {
             <div className='main-header__logo'></div>
             <div className='main-header__right-container'>
                 <form className='main-header__form'>
-                    <i class="fas fa-search main-header__form__icon"></i>
+                    <i className="fas fa-search main-header__form__icon"></i>
                     <input></input>
                 </form>
 
