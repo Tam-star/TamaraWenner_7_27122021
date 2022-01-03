@@ -10,7 +10,7 @@ function NewsFeed() {
     <div className="App">
       <Header />
       <main className='main-container'>
-        <LeftContainer/>
+        <LeftContainer connected={true}/>
         <CenterContainer/>
         <div className='right-container'>
           <h2>CONTACT</h2>

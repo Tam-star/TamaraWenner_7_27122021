@@ -1,9 +1,14 @@
 
 .right-container{
     width: 20vw;
+    height :fit-content;
 }
 
-.contact-container{
+.info{
+    @include card-style();
+}
+
+.contact-container {
     @include card-style;
     & ul{
         padding : 0;

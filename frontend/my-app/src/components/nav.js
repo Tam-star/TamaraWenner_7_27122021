@@ -1,6 +1,23 @@
 import React from 'react';
 
-export default function Nav() {
+export default function Nav({ connected, handleClick }) {
+
+    // const handleClick = event =>{
+    //     // event.preventDefault()
+    //     console.log('coucou')
+    // }
+
+
+    if (!connected) {
+        return (
+            <nav className='menu'>
+                <ul>
+                    <li className='menu__element' onClick={handleClick}><i className="fas fa-id-badge"></i> Inscription</li>
+                    <li className='menu__element menu__element--no-border' onClick={handleClick}><i className="fas fa-link"></i> Connexion</li>
+                </ul>
+            </nav>
+        )
+    }
     return (
         <nav className='menu'>
             <ul>
