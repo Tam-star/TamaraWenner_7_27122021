@@ -7,9 +7,10 @@ export default function Nav() {
                 <li className='menu__element'><i className="fas fa-home"></i> Home</li>
                 <li className='menu__element'><i className="fas fa-user-friends"></i> People</li>
                 <li className='menu__element'><i className="fas fa-images"></i> Photos</li>
-                <li className='menu__element'><i className="far fa-newspaper"></i> News Feed</li>
-                <li className='menu__element'><i className="fas fa-user"></i> Profile</li>
-                <li className='menu__element menu__element--no-border'><i className="fas fa-cog"></i> Settings</li>
+                <li className='menu__element'><i className="far fa-newspaper"></i> Journal</li>
+                <li className='menu__element'><i className="fas fa-user"></i> Profil</li>
+                <li className='menu__element'><i className="fas fa-cog"></i> Paramètres</li>
+                <li className='menu__element menu__element--no-border'><i class="fas fa-unlink"></i> Déconnexion</li>
             </ul>
         </nav>
     )
