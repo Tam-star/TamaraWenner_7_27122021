@@ -20,9 +20,11 @@ const Post = PostModel(sequelize, DataTypes)
 
 const initDb = () => {
     return sequelize.sync({ force: true }).then(_ => {
-        
+
         users.map(user => {
             User.create({
+                lastname: user.lastname,
+                firstname: user.firstname,
                 pseudo: user.pseudo,
                 email: user.email,
                 password: user.password
@@ -33,7 +35,7 @@ const initDb = () => {
             Post.create({
                 text: post.text,
                 userId: post.userId,
-                usersLiked : post.usersLiked
+                usersLiked: post.usersLiked
             }).then(post => console.log(post.toJSON()))
         })
         console.log('La base de donnée a bien été initialisée !')
