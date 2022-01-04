@@ -2,6 +2,10 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
     try {
+        if(!req.headers.authorization){
+            const message = 'Un token est nécessaire pour cette action'
+            return res.status(401).json({ message })
+        }
         const token = req.headers.authorization.split(' ')[1];
         const decodedToken = jwt.verify(token, 'GROUPOMANIA_SECRET_TOKEN');
         const userId = decodedToken.userId;
