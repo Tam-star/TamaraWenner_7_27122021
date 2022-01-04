@@ -35,12 +35,20 @@ exports.getPostById = (req, res, next) => {
 
 exports.createPost = (req, res, next) => {
   try {
+    const postObject = req.file ? {
+      ...JSON.parse(req.body.post),
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    } : req.body
+
     //Si l'utilisateur indique un id dans son POST, on le supprime
     //pour que cela n'interfère pas avec l'auto-incrémentation de la base de donnée
-    // if (req.body.id) {
-    //   delete req.body.id
-    // }
-    Post.create({ ...JSON.parse(req.body.post), imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` })
+    if (postObject.id) {
+      delete postObject.id
+    }
+
+    Post.create({
+      ...postObject
+    })
       .then(post => {
         const message = `Le post a bien été créé.`
         res.json({ message, data: post })
@@ -67,16 +75,20 @@ exports.createPost = (req, res, next) => {
 
 
 exports.modifyPost = (req, res, next) => {
+
+  const postObject = req.file ? {
+    ...JSON.parse(req.body.post),
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+  } : req.body
+
   //Si l'utilisateur indique un id dans son POST, on le supprime
   //pour que cela n'interfère pas avec l'auto-incrémentation de la base de donnée
-  if (req.body.id) {
-    delete req.body.id
+  if (postObject.id) {
+    delete postObject.id
   }
-  if (req.body.userId) {
-    return res.status(400).json({ message: 'Vous ne pouvez pas modifier l\'identifiant utilisateur' })
-  }
+
   const id = req.params.id
-  Post.update(req.body, {
+  Post.update(postObject, {
     where: { id: id }
   })
     .then(_ => {
@@ -101,20 +113,25 @@ exports.modifyPost = (req, res, next) => {
 }
 
 exports.deletePost = (req, res, next) => {
-  Post.findByPk(req.params.id).then(post => {
-    if (post === null) {
-      const message = 'Le post demandé n\'existe pas. Réessayez avec un autre identifiant'
-      return res.status(404).json({ message })
-    }
-    const postDeleted = post;
-    return Post.destroy({
-      where: { id: post.id }
-    })
-      .then(_ => {
-        const message = `Le post avec l'identifiant n°${postDeleted.id} a bien été supprimé.`
-        res.json({ message, data: postDeleted })
+  Post.findByPk(req.params.id)
+    .then(post => {
+      if (post === null) {
+        const message = 'Le post demandé n\'existe pas. Réessayez avec un autre identifiant'
+        return res.status(404).json({ message })
+      }
+      const postDeleted = post;
+      const filename = post.imageUrl.split('/images/')[1]
+      fs.unlink(`images/${filename}`, () => {
+        return Post.destroy({
+          where: { id: post.id }
+        })
+          .then(_ => {
+            const message = `Le post avec l'identifiant n°${postDeleted.id} a bien été supprimé.`
+            res.json({ message, data: postDeleted })
+          })
       })
-  })
+
+    })
     .catch(error => {
       const message = 'Le post n\'a pas pu être supprimé. Réessayez dans quelques instants'
       res.status(500).json({ message, data: error })
