@@ -1,10 +1,14 @@
-.login-container{
+.login-container, .signup-container{
     margin : auto;
     background-color : $secondary-color;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    & p{
+        text-align: center;
+        color : $primary-color;
+    }
     & form{
         margin : 50px 0 150px 0;
         display : flex;

@@ -2,10 +2,6 @@ import React from 'react';
 import { signUp } from '../API-functions';
 
 export default function Subscription() {
-    
-    function redirectToNewsFeed(){
-        window.location.href = `./newsfeed`
-    }
 
     const register = (event) => {
         event.preventDefault()
@@ -17,15 +13,19 @@ export default function Subscription() {
             "password": document.getElementById("password").value
         }
         signUp(myRequest).then((response) => {
-            console.log(JSON.stringify(response))
-            setTimeout(redirectToNewsFeed, 3000);
-        })   
+            if(response.error){
+                return document.getElementsByClassName("message")[0].innerHTML = `Nous n'avons pas pu vous inscrire : </br>${JSON.stringify(response.error).replace(/"/g, '')}`
+            }
+            document.getElementsByClassName("message")[0].innerHTML = `${JSON.stringify(response.message).replace(/"/g, '')} </br> Vous pouvez désormais vous connecter à votre compte`
+
+        })
     }
 
     return (
-        <section className='center-container login-container'>
+        <section className='center-container signup-container'>
             <h1>Inscription</h1>
-            <form>
+            <p className="message"></p>
+            <form action="" method="post" onSubmit={register}>
                 <label htmlFor="last-name">
                     Votre nom :
                 </label>
@@ -46,7 +46,7 @@ export default function Subscription() {
                     Votre mot de passe :
                 </label>
                 <input type={'password'} id="password" name="password" ></input>
-                <input type="submit" value="Valider" onClick={register}></input>
+                <input type="submit" value="Valider"></input>
             </form>
         </section>
     )
