@@ -119,7 +119,7 @@ exports.login = (req, res, next) => {
       return bcrypt.compare(req.body.password, user.password)
         .then(valid => {
           if (!valid) {
-            return res.status(401).json({ error: 'Incorrect password !' });
+            return res.status(401).json({ error: 'Le mot de passe est incorrect' });
           }
           const message = `L\'utilisateur ${user.pseudo} est bien connecté.`
           //res.json({ message, data: user })

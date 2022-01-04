@@ -25,29 +25,29 @@ const initDb = () => {
     return sequelize.sync({ force: true }).then(_ => {
 
         users.map(user => {
-            bcrypt.hash(user.password, 10)
-                .then(hash => {
+            //bcrypt.hash(user.password, 10)
+               // .then(hash => {
                     User.create({
                         lastname: user.lastname,
                         firstname: user.firstname,
                         pseudo: user.pseudo,
                         email: user.email,
-                        password: hash
+                        password: user.password
                     }).then(user => console.log(user.toJSON()))
                     .catch(error => console.log(error))
-                })
+                //})
                 .catch(error => console.log(error))
 
         })
 
-        // posts.map(post => {
-        //     Post.create({
-        //         text: post.text,
-        //         userId: post.userId,
-        //         usersLiked: post.usersLiked
-        //     }).then(post => console.log(post.toJSON()))
-        //     .catch(error => console.log(error))
-        // })
+        posts.map(post => {
+            Post.create({
+                text: post.text,
+                userId: post.userId,
+                usersLiked: post.usersLiked
+            }).then(post => console.log(post.toJSON()))
+            .catch(error => console.log(error))
+        })
         console.log('La base de donnée a bien été initialisée !')
     })
 }
