@@ -4,44 +4,42 @@ import Header from '../components/header';
 import ContactContainer from '../components/contact-container';
 import CenterContainer from '../components/center-container';
 import LeftContainer from '../components/left-container';
-import NewPost from '../components/newpost';
-import PostContainer from '../components/post-container';
-import ProfileContainer from '../components/profile-container';
-import { getAllPosts } from '../API-functions'
+import { getUserInfo } from '../API-functions'
 
 
 function NewsFeed() {
 
-  const [centerState, setCenterState] = React.useState(
-    <>
-      <NewPost />
-      <PostContainer />
-    </>)
-
-
+  const [centerState, setCenterState] = React.useState('journal')
 
   const changeCenterContainer = event => {
     if (event.target.textContent.includes('Profil')) {
-      setCenterState(<ProfileContainer />)
+      setCenterState('profil')
     }
     else if (event.target.textContent.includes('Journal')) {
-      setCenterState(<>
-        <NewPost />
-        <PostContainer />
-      </>)
+      setCenterState('journal')
     }
     else {
       console.log("lien non encore valide")
     }
   }
 
+  const [user, setUser] = React.useState([])
+
+  React.useEffect(() => {
+    getUserInfo(4)
+    .then((response) => {
+        setUser(response.data)
+        console.log('useEffect used : '+ JSON.stringify(response.data))
+    })
+    .catch((error) => console.error(error))
+  }, [])
 
   return (
     <div className="App">
       <Header />
       <main className='main-container'>
-        <LeftContainer connected={true} changeCenterContainer={changeCenterContainer} />
-        <CenterContainer element={centerState} />
+        <LeftContainer connected={true} changeCenterContainer={changeCenterContainer} user= {user} />
+        <CenterContainer centerElement={centerState} user={user} />
         <div className='right-container'>
           <h2>CONTACT</h2>
           <ContactContainer />

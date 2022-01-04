@@ -39,6 +39,22 @@ export function login(request) {
         })
 }
 
+export function getUserInfo(id) {
+    const url = 'http://localhost:3000/api/users/'+id;
+    const options = {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json',
+            'authorization' : 'Bearer '+ sessionStorage.getItem('groupomania-token')
+        }
+    }
+    return fetch(url, options)
+        .then(reponse => reponse.json())
+        .catch(err => console.log("Something is wrong : ", err))
+}
+
+
 
 export function getAllPosts() {
     const url = 'http://localhost:3000/api/posts';
@@ -47,7 +63,7 @@ export function getAllPosts() {
         headers: {
             Accept: 'application/json',
             'Content-type': 'application/json',
-            'authorization' : 'Bearer '+ sessionStorage.getItem('groupomania')
+            'authorization' : 'Bearer '+ sessionStorage.getItem('groupomania-token')
         }
     }
     return fetch(url, options)
