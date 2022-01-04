@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     bio: {
       type: DataTypes.TEXT
     }, 
-    image: {
+    imageUrl: {
       type: DataTypes.STRING
     }
   }, {

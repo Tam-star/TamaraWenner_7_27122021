@@ -1,6 +1,7 @@
 const { User } = require('../config/db')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 exports.getAllUsers = (req, res, next) => {
   User.findAll()
@@ -29,12 +30,27 @@ exports.getUserById = (req, res, next) => {
 }
 
 exports.modifyUser = (req, res, next) => {
+
+  const userObject = req.file ? {
+    ...JSON.parse(req.body.user),
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+  } : req.body
+
+  //Si l'utilisateur indique un id dans son POST, on le supprime
+  //pour que cela n'interfère pas avec l'auto-incrémentation de la base de donnée
+  if (userObject.id) {
+    delete userObject.id
+  }
   const id = req.params.id
-  User.update(req.body, {
+  User.update(userObject, {
     where: { id: id }
   })
     .then(_ => {
       return User.findByPk(id).then(user => {
+        if (user === null) {
+          const message = 'L\'utilisateur demandé n\'existe pas. Réessayez avec un autre identifiant'
+          return res.status(404).json({ message })
+        }
         const message = `L\'utilisateur ${user.pseudo} a bien été modifié.`
         res.json({ message, data: user })
       })
@@ -48,14 +64,21 @@ exports.modifyUser = (req, res, next) => {
 
 exports.deleteUser = (req, res, next) => {
   User.findByPk(req.params.id).then(user => {
+    if (user === null) {
+      const message = 'L\'utilisateur demandé n\'existe pas. Réessayez avec un autre identifiant'
+      return res.status(404).json({ message })
+    }
     const userDeleted = user;
-    return User.destroy({
-      where: { id: user.id }
-    })
-      .then(_ => {
-        const message = `L'utilisateur avec l'identifiant n°${userDeleted.id} a bien été supprimé.`
-        res.json({ message, data: userDeleted })
+    const filename = user.imageUrl.split('/images/')[1]
+    fs.unlink(`images/${filename}`, () => {
+      return User.destroy({
+        where: { id: user.id }
       })
+        .then(_ => {
+          const message = `L'utilisateur avec l'identifiant n°${userDeleted.id} a bien été supprimé.`
+          res.json({ message, data: userDeleted })
+        })
+    })
   })
     .catch(error => {
       const message = 'L\'utilisateur n\'a pas pu être supprimé. Réessayez dans quelques instants'

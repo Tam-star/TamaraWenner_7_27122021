@@ -1,7 +1,6 @@
 const { Post, User } = require('../config/db')
 const { ValidationError, ForeignKeyConstraintError } = require('sequelize')
 const fs = require('fs');
-const { create } = require('domain');
 
 exports.getAllPosts = (req, res, next) => {
   Post.findAll()
