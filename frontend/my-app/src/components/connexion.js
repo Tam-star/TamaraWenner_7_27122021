@@ -16,6 +16,8 @@ export default function Connexion() {
                 return document.getElementsByClassName("message")[0].innerHTML = `${JSON.stringify(response.error).replace(/"/g, '')}`
             }
             document.getElementsByClassName("message")[0].innerHTML = `Vous êtes connecté`
+            console.log('my token : '+ JSON.stringify(response.token))
+            sessionStorage.setItem('groupomania', JSON.stringify(response.token).replace(/"/g, ''));
             //Just for development, it will redirect directly for production
             setTimeout(redirectToNewsFeed, 3000);
         })

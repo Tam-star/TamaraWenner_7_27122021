@@ -6,9 +6,6 @@ import ProfileContainer from './profile-container';
 export default function CenterContainer({element}) {
     return (
         <section className='center-container'>
-            {/* <ProfileContainer/> 
-            <NewPost/>
-            <PostContainer/> */}
             {element}
            
         </section>

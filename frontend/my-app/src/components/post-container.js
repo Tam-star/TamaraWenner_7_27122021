@@ -1,10 +1,23 @@
 import React from 'react';
 import maleAvatar from '../assets/male-avatar-profile.jpg';
 import postPicture from '../assets/post-picture.jpg';
+import { getAllPosts } from '../API-functions';
 
 export default function PostContainer() {
+
+    const [postsList, setPostsList] = React.useState([])
+
+    React.useEffect(() => {
+        getAllPosts()
+        .then((response) => {
+            setPostsList(response.data)
+        })
+        .catch((error) => console.error(error))
+      }, [])
+
     return (
         <section>
+            {postsList.map( post =>  <Post key={post.id} text={post.text} picture={post.imageUrl} /> )}
             <Post picture={postPicture} text={`This was one of the most epic journey I've ever done in my whole life. I am so happy to be here to talk about it`}/>
             <Post text={'Coucou'} />
             <Post picture={postPicture}/>

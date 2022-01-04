@@ -40,13 +40,14 @@ export function login(request) {
 }
 
 
-function getAllPosts() {
+export function getAllPosts() {
     const url = 'http://localhost:3000/api/posts';
     const options = {
         method: 'GET',
         headers: {
             Accept: 'application/json',
-            'Content-type': 'application/json'
+            'Content-type': 'application/json',
+            'authorization' : 'Bearer '+ sessionStorage.getItem('groupomania')
         }
     }
     return fetch(url, options)

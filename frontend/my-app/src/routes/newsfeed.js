@@ -7,6 +7,7 @@ import LeftContainer from '../components/left-container';
 import NewPost from '../components/newpost';
 import PostContainer from '../components/post-container';
 import ProfileContainer from '../components/profile-container';
+import { getAllPosts } from '../API-functions'
 
 
 function NewsFeed() {
@@ -17,9 +18,11 @@ function NewsFeed() {
       <PostContainer />
     </>)
 
+
+
   const changeCenterContainer = event => {
     if (event.target.textContent.includes('Profil')) {
-      setCenterState(<ProfileContainer/>)
+      setCenterState(<ProfileContainer />)
     }
     else if (event.target.textContent.includes('Journal')) {
       setCenterState(<>
