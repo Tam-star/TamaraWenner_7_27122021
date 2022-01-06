@@ -16,7 +16,7 @@ export default function PostContainer({ userConnected }) {
     }, [])
 
     return (
-        <section>
+        <section className='post-container'>
             {postsList.map(post => <Post sameUser={ userConnected.id===post.userId ? true : false }
                 key={post.id} text={post.text} picture={post.imageUrl} timeOfCreation={getTimeAmount(post.created)} userId={post.userId} />)}
         </section>
@@ -40,9 +40,6 @@ function Post({ text, picture, timeOfCreation, userId, sameUser}) {
                 else {
                     setUserProfilePicture(maleAvatar)
                 }
-                // if (userConnected.id === userId) {
-                //     setSameUser(true)
-                // }
             })
             .catch((error) => console.error(error))
     }, [userId])
@@ -69,6 +66,14 @@ function Post({ text, picture, timeOfCreation, userId, sameUser}) {
                 <p>{text}</p>
                 {picture ? <img src={picture} alt='Profil' /> : ''}
             </main>
+            <footer className='post__footer'>
+                <nav className='post__footer__menu'>
+                    <ul>
+                        <li><i className="fas fa-thumbs-up"></i>J'aime</li>
+                        <li><i className="far fa-comment"></i>Commenter</li>
+                    </ul>
+                </nav>
+            </footer>
         </article>
     )
 }

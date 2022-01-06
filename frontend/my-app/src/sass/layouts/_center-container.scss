@@ -39,6 +39,13 @@
     }
 }
 
+
+.post-container{
+    display: flex;
+    flex-direction: column-reverse; //To get the last post first
+}
+
+
 .post{
     @include card-style();
     &__header{
@@ -90,8 +97,6 @@
                     border-bottom: none;
                 }
             }
-            
-
         }
     }
     &__main{
@@ -101,6 +106,27 @@
             max-width : 100%;
             max-height : 400px;
         }
+    }
+    &__footer{
+        &__menu{
+            & ul{
+                display : flex;
+                margin : 20px 0 0 0;
+                padding : 0;
+                & li {
+                    list-style-type: none;
+                    margin-right : 30px;
+                    cursor : pointer;
+                    &:hover {
+                        color : $primary-color;
+                    }
+                    & i {
+                        margin-right: 5px;
+                    }
+                }
+            }
+        }
+        
     }
 }
 
