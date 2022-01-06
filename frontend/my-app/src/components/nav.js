@@ -16,8 +16,8 @@ export default function Nav({ connected, handleClick }) {
         <nav className='menu'>
             <ul>
                 <li className='menu__element'><i className="fas fa-home"></i> Home</li>
-                <li className='menu__element'><i className="fas fa-user-friends"></i> People</li>
-                <li className='menu__element'><i className="fas fa-images"></i> Photos</li>
+                {/* <li className='menu__element'><i className="fas fa-user-friends"></i> People</li>
+                <li className='menu__element'><i className="fas fa-images"></i> Photos</li> */}
                 <li className='menu__element' onClick={handleClick}><i className="far fa-newspaper"></i> Journal</li>
                 <li className='menu__element' onClick={handleClick}><i className="fas fa-user"></i> Profil</li>
                 <li className='menu__element' onClick={handleClick}><i className="fas fa-cog"></i> Paramètres</li>
