@@ -15,21 +15,6 @@ const posts = [
         text: "Blabla",
         userId: 1
     },
-    {
-        id: 4,
-        text: "Blabla",
-        userId: 1
-    },
-    {
-        id: 5,
-        text: "Blabla",
-        userId: 1
-    },
-    {
-        id: 6,
-        text: "Blabla",
-        userId: 1
-    },
 ];
 
 module.exports = posts

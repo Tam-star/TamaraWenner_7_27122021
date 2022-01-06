@@ -122,17 +122,16 @@ exports.login = (req, res, next) => {
             return res.status(401).json({ error: 'Le mot de passe est incorrect' });
           }
           const message = `L\'utilisateur ${user.pseudo} est bien connecté.`
-          //res.json({ message, data: user })
-          res.status(200).json({
-            userId: user.id,
-            token: jwt.sign(
-              { userId: user.id },
-              'GROUPOMANIA_SECRET_TOKEN',
-              { expiresIn: '24h' }
-            )
-          })
+         
+          //On place le token dans un cookie
+          res.cookie('groupomania-jwt', jwt.sign(
+            { userId: user.id },
+            'GROUPOMANIA_SECRET_TOKEN',
+            { expiresIn: '24h' }
+          ), { maxAge: 1000 * 60 * 60 * 24, httpOnly: true })
+
+          res.status(200).json({ message })
         })
-      //Check password with bcrypt, utilisation du jwt token
     })
     .catch(error => {
       const message = 'L\'utilisateur n\'a pas pu être loggé. Réessayez dans quelques instants'
