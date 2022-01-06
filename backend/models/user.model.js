@@ -7,17 +7,29 @@ module.exports = (sequelize, DataTypes) => {
     },
     lastname: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: 'Le nom ne peut pas être vide' },
+        notNull: { msg: 'Le nom ne peut pas être null' }
+      }
     },
     firstname: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: 'Le prénom ne peut pas être vide' },
+        notNull: { msg: 'Le prénom ne peut pas être null' }
+      }
     },
     pseudo: {
       type: DataTypes.STRING,
       allowNull: false,
       unique:{
         msg: 'Ce pseudo est déjà pris'
+      },
+      validate: {
+        notEmpty: { msg: 'Le pseudo ne peut pas être vide' },
+        notNull: { msg: 'Le pseudo ne peut pas être null' }
       }
     },
     email: {
@@ -25,11 +37,19 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique:{
         msg: 'Cet email est déjà pris'
+      },
+      validate: {
+        notEmpty: { msg: 'L\'email ne peut pas être vide' },
+        notNull: { msg: 'L\'email ne peut pas être null' }
       }
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: 'Le mot de passe ne peut pas être vide' },
+        notNull: { msg: 'Le mot de passe ne peut pas être null' }
+      }
     },
     bio: {
       type: DataTypes.TEXT

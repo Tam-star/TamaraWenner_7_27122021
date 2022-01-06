@@ -85,24 +85,31 @@ exports.modifyPost = (req, res, next) => {
   if (postObject.id) {
     delete postObject.id
   }
+  console.log('postObjet : ', postObject)
 
   const id = req.params.id
-  Post.update(postObject, {
-    where: { id: id }
-  })
-    .then(_ => {
-      return Post.findByPk(id).then(post => {
-        if (post === null) {
-          const message = 'Le post demandé n\'existe pas. Réessayez avec un autre identifiant'
-          return res.status(404).json({ message })
-        }
-        const message = `Le post a bien été modifié.`
-        res.json({ message, data: post })
+  Post.findByPk(id)
+    .then(post => {
+      if (post === null) {
+        const message = 'Le post demandé n\'existe pas. Réessayez avec un autre identifiant'
+        return res.status(404).json({ message })
+      }
+      //Check if the person modifying the post is the one who created it
+      if (post.userId != req.auth.userId) {
+        const message = `Vous n'êtes pas autorisé à modifier ce post`
+        return res.status(401).json({ message })
+      }
+      Post.update(postObject, {
+        where: { id: id }
       })
+        .then(_ => {
+          const message = `Le post a bien été modifié.`
+          res.json({ message })
+        })
     })
     .catch(error => {
       if (error instanceof ValidationError) {
-        const message = `Vous avez fait une erreur dans la modification de ce post`
+        const message = `Mauvaise requête`
         return res.status(400).json({ message, data: error })
       }
       const message = `Le post n'a pas pu être créé, réessayez dans quelques instants`
