@@ -7,15 +7,20 @@
     display : flex;
     justify-content: space-between;
     align-items: center;
-    & img {
-        @include profile-image();
+    &__post-picture {
+        height : fit-content;
+        width : fit-content;
+        max-width : 100%;
+        max-height : 300px;
     }
-    & form{
-        width : 60%;
+    &__form{
+        flex : 1;
+        padding : 0 20px;
+        display : flex;
+        flex-direction: column;
         & textarea{
             resize: none;
             height : auto;
-            width : 100%;
             border : none;
             padding : 10px;
             border-radius: 15px;
@@ -24,8 +29,12 @@
                 border : 3px solid $secondary-color;
             }
         }
+        &__file-div{
+            margin-top : 20px;
+            display : flex;
+        }
     }
-    & button {
+    &__validate{
         background-color: $primary-color;
         font-weight : bold;
         color : white;
@@ -100,11 +109,13 @@
         }
     }
     &__main{
-        & img {
+        display : flex;
+        flex-direction: column;
+        &__post-picture {
             height : fit-content;
             width : fit-content;
             max-width : 100%;
-            max-height : 400px;
+            max-height : 300px;
         }
     }
     &__footer{

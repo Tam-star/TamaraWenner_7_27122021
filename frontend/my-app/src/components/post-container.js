@@ -64,7 +64,7 @@ function Post({ text, picture, timeOfCreation, userId, sameUser}) {
             </header>
             <main className='post__main'>
                 <p>{text}</p>
-                {picture ? <img src={picture} alt='Profil' /> : ''}
+                {picture ? <img src={picture} className='post__main__post-picture' alt='Profil' /> : ''}
             </main>
             <footer className='post__footer'>
                 <nav className='post__footer__menu'>

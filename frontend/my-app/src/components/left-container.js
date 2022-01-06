@@ -8,7 +8,7 @@ export default function LeftContainer({ connected, changeCenterContainer, user }
             {connected ?
                 <aside className='profile-aside'>
                     <img src={maleAvatar} alt='Profil' />
-                    <p>{user.pseudo}</p>
+                    <p>Bonjour {user.pseudo} !</p>
                 </aside> 
                 : ''}
             <Nav connected={connected} handleClick={changeCenterContainer} />
