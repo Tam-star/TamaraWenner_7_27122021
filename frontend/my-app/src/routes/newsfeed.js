@@ -4,7 +4,7 @@ import Header from '../components/header';
 import ContactContainer from '../components/contact-container';
 import CenterContainer from '../components/center-container';
 import LeftContainer from '../components/left-container';
-import { getUserInfo } from '../API-functions'
+import { getUserInfo, logout } from '../API-functions'
 
 
 function NewsFeed() {
@@ -18,6 +18,13 @@ function NewsFeed() {
     else if (event.target.textContent.includes('Journal')) {
       setCenterState('journal')
     }
+    else if (event.target.textContent.includes('Déconnexion')){
+      logout()
+      .then((data) => {
+        console.log('data from logout : ',data)
+        window.location.href = `./home`
+      })
+    }
     else {
       console.log("lien non encore valide")
     }
@@ -26,7 +33,7 @@ function NewsFeed() {
   const [user, setUser] = React.useState([])
 
   React.useEffect(() => {
-    getUserInfo(4)
+    getUserInfo()
     .then((response) => {
         setUser(response.data)
         console.log('useEffect used : '+ JSON.stringify(response.data))

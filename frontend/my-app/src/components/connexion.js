@@ -1,6 +1,6 @@
 import React from 'react';
 import { login } from '../API-functions'
-import { redirectToNewsFeed } from '../functions';
+//import { redirectToNewsFeed } from '../functions';
 
 export default function Connexion() {
 
@@ -16,11 +16,10 @@ export default function Connexion() {
                 return document.getElementsByClassName("message")[0].innerHTML = `${JSON.stringify(response.error).replace(/"/g, '')}`
             }
             document.getElementsByClassName("message")[0].innerHTML = `Vous êtes connecté`
-            console.log('my token : '+ JSON.stringify(response.token))
-            sessionStorage.setItem('groupomania-userId', JSON.stringify(response.userId).replace(/"/g, ''));
-            sessionStorage.setItem('groupomania-token', JSON.stringify(response.token).replace(/"/g, ''));
+            console.log('my message : '+ JSON.stringify(response.message))
             //Just for development, it will redirect directly for production
-            setTimeout(redirectToNewsFeed, 3000);
+            //setTimeout(redirectToNewsFeed, 3000);
+            window.location.href = `./newsfeed`
         })
         .catch((error) => {
             document.getElementsByClassName("message")[0].innerHTML = `Une erreur s'est produite : ${error}`

@@ -21,7 +21,7 @@ export default function Nav({ connected, handleClick }) {
                 <li className='menu__element' onClick={handleClick}><i className="far fa-newspaper"></i> Journal</li>
                 <li className='menu__element' onClick={handleClick}><i className="fas fa-user"></i> Profil</li>
                 <li className='menu__element' onClick={handleClick}><i className="fas fa-cog"></i> Paramètres</li>
-                <li className='menu__element menu__element--no-border'><i className="fas fa-unlink"></i> Déconnexion</li>
+                <li className='menu__element menu__element--no-border' onClick={handleClick}><i className="fas fa-unlink"></i> Déconnexion</li>
             </ul>
         </nav>
     )

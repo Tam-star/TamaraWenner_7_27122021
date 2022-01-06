@@ -27,8 +27,9 @@ export function login(request) {
         method: 'POST',
         headers: {
             Accept: 'application/json',
-            'Content-type': 'application/json'
+            'Content-type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(request)
     }
     return fetch(url, options)
@@ -39,15 +40,34 @@ export function login(request) {
         })
 }
 
-export function getUserInfo(id) {
-    const url = 'http://localhost:3000/api/users/'+id;
+export function logout() {
+    const url = 'http://localhost:3000/api/users/logout';
+    const options = {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json',
+        },
+        credentials: 'include'
+    }
+    return fetch(url, options)
+        .then(reponse => reponse.json())
+        .catch(error => {
+            console.log("Il y a erreur", error)
+            error.json()
+        })
+}
+
+export function getUserInfo() {
+    const url = 'http://localhost:3000/api/users/user-info';
     const options = {
         method: 'GET',
         headers: {
             Accept: 'application/json',
             'Content-type': 'application/json',
             'authorization' : 'Bearer '+ sessionStorage.getItem('groupomania-token')
-        }
+        },
+        credentials: "include"
     }
     return fetch(url, options)
         .then(reponse => reponse.json())
@@ -64,7 +84,8 @@ export function getAllPosts() {
             Accept: 'application/json',
             'Content-type': 'application/json',
             'authorization' : 'Bearer '+ sessionStorage.getItem('groupomania-token')
-        }
+        },
+        credentials: "include"
     }
     return fetch(url, options)
         .then(reponse => reponse.json())
