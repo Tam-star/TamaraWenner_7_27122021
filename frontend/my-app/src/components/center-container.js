@@ -9,7 +9,7 @@ export default function CenterContainer({ centerElement, user }) {
             {/* {element} */}
             {centerElement === 'journal' ? <>
                 <NewPost />
-                <PostContainer />
+                <PostContainer userConnected={user}/>
             </> : ''}
             {centerElement === 'profil' ? <ProfileContainer user= {user}/> :''}
 
