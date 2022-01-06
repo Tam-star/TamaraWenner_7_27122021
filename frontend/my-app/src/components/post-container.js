@@ -1,7 +1,7 @@
 import React from 'react';
 import maleAvatar from '../assets/male-avatar-profile.jpg';
 import postPicture from '../assets/post-picture.jpg';
-import { getAllPosts } from '../API-functions';
+import { getAllPosts, getUserInfo } from '../API-functions';
 import { getTimeAmount} from '../functions';
 
 export default function PostContainer() {
@@ -18,31 +18,44 @@ export default function PostContainer() {
 
     return (
         <section>
-            {postsList.map( post =>  <Post key={post.id} text={post.text} picture={post.imageUrl} timeOfCreation={getTimeAmount(post.created)} /> )}
-            {/* <Post picture={postPicture} text={`This was one of the most epic journey I've ever done in my whole life. I am so happy to be here to talk about it`}/>
-            <Post text = {`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`}/> */}
+            {postsList.map( post =>  <Post key={post.id} text={post.text} picture={post.imageUrl} timeOfCreation={getTimeAmount(post.created)}  userId={post.userId} /> )}
         </section>
     )
 }
 
-function Post({ text, picture, timeOfCreation }) {
-    // React.useEffect(() => {
-    //     console.log(timeOfCreation)
-    //     getTimeAmount(timeOfCreation)
-    //   }, [])
+function Post({ text, picture, timeOfCreation, userId }) {
+
+    const [userPseudo, setUserPseudo] = React.useState('')
+    const [userProfilePicture, setUserProfilePicture] = React.useState('')
+
+
+    React.useEffect(() => {
+        getUserInfo(userId)
+        .then((response) => {
+            setUserPseudo(response.data.pseudo)
+            if(response.data.imageUrl!==null){
+                setUserProfilePicture(response.data.imageUrl)
+            }
+            else{
+                setUserProfilePicture(maleAvatar)
+            }
+        })
+        .catch((error) => console.error(error))
+      }, [userId])
+
 
     return (
         <article className='post'>
             <header className='post__header'>
-                <img src={maleAvatar} className='profile-picture' alt='Profil' />
+                <img src={userProfilePicture} className='profile-picture' alt='Profil' />
                 <div>
-                    <p className='post__header__user'>Laura Fisher</p>
+                    <p className='post__header__user'>{userPseudo}</p>
                     <p>{timeOfCreation}</p>
                 </div>
             </header>
             <main className='post__main'>
                 <p>{text}</p>
-                {picture ? <img src={picture} className='profile-picture' alt='Profil' /> : ''}
+                {picture ? <img src={picture} alt='Profil' /> : ''}
             </main>
         </article>
     )

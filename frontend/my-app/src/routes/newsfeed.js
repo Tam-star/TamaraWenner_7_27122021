@@ -4,7 +4,7 @@ import Header from '../components/header';
 import ContactContainer from '../components/contact-container';
 import CenterContainer from '../components/center-container';
 import LeftContainer from '../components/left-container';
-import { getUserInfo, logout } from '../API-functions'
+import { getUserConnectedInfo, logout } from '../API-functions'
 
 
 function NewsFeed() {
@@ -33,7 +33,7 @@ function NewsFeed() {
   const [user, setUser] = React.useState([])
 
   React.useEffect(() => {
-    getUserInfo()
+    getUserConnectedInfo()
     .then((response) => {
         setUser(response.data)
         console.log('useEffect used : '+ JSON.stringify(response.data))

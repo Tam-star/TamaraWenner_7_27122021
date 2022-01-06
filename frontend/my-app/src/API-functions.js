@@ -58,14 +58,13 @@ export function logout() {
         })
 }
 
-export function getUserInfo() {
+export function getUserConnectedInfo() {
     const url = 'http://localhost:3000/api/users/user-info';
     const options = {
         method: 'GET',
         headers: {
             Accept: 'application/json',
-            'Content-type': 'application/json',
-            'authorization' : 'Bearer '+ sessionStorage.getItem('groupomania-token')
+            'Content-type': 'application/json'
         },
         credentials: "include"
     }
@@ -74,6 +73,21 @@ export function getUserInfo() {
         .catch(err => console.log("Something is wrong : ", err))
 }
 
+
+export function getUserInfo(id) {
+    const url = 'http://localhost:3000/api/users/'+id;
+    const options = {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        credentials: "include"
+    }
+    return fetch(url, options)
+        .then(reponse => reponse.json())
+        .catch(err => console.log("Something is wrong : ", err))
+}
 
 
 export function getAllPosts() {
