@@ -1,6 +1,7 @@
 const { Post, User } = require('../config/db')
 const { ValidationError, ForeignKeyConstraintError } = require('sequelize')
 const fs = require('fs');
+const { post } = require('../routes/comment.route');
 
 exports.getAllPosts = (req, res, next) => {
   Post.findAll()
@@ -10,7 +11,7 @@ exports.getAllPosts = (req, res, next) => {
     })
     .catch(error => {
       const message = 'La liste des posts n\'a pas pu être récupérée. Réessayez dans quelques instants'
-      res.status(500).json({ message, data: error })
+      res.status(500).json({ message })
       console.log(`Il y a eu une erreur : ${error}`)
     })
 }
@@ -27,7 +28,7 @@ exports.getPostById = (req, res, next) => {
     })
     .catch(error => {
       const message = 'Le post n\'a pas pu être récupéré. Réessayez dans quelques instants'
-      res.status(500).json({ message, data: error })
+      res.status(500).json({ message })
       console.log(`Il y a eu une erreur : ${error}`)
     })
 }
@@ -44,6 +45,15 @@ exports.createPost = (req, res, next) => {
     if (postObject.id) {
       delete postObject.id
     }
+    //To prevent someone from putting a 1000 likes on his or her post
+    if (postObject.usersLiked) {
+      delete postObject.usersLiked
+    }
+    //Check if the token is the same as the post userID, so no one can write under another identity
+    if (postObject.userId != req.auth.userId) {
+      const message = `Veuillez utiliser votre identifiant pour créer ce post`
+      return res.status(401).json({ message })
+    }
 
     Post.create({
       ...postObject
@@ -54,15 +64,14 @@ exports.createPost = (req, res, next) => {
       })
       .catch(error => {
         if (error instanceof ValidationError) {
-          const message = `Vous avez fait une erreur dans la création de ce post`
-          return res.status(400).json({ message, data: error })
+          return res.status(400).json({ message: error.message })
         }
         if (error instanceof ForeignKeyConstraintError) {
           const message = `L'userId n'appartient à aucun de nos utilisateurs`
-          return res.status(400).json({ message, data: error })
+          return res.status(400).json({ message })
         }
         const message = `Le post n'a pas pu être créé, réessayez dans quelques instants`
-        res.status(500).json({ message, data: error })
+        res.status(500).json({ message })
         console.log(`Il y a eu une erreur : ${error}`)
       })
   }
@@ -85,7 +94,10 @@ exports.modifyPost = (req, res, next) => {
   if (postObject.id) {
     delete postObject.id
   }
-  console.log('postObjet : ', postObject)
+  //To prevent someone from putting a 1000 likes on his or her post
+  if (postObject.usersLiked) {
+    delete postObject.usersLiked
+  }
 
   const id = req.params.id
   Post.findByPk(id)
@@ -99,21 +111,34 @@ exports.modifyPost = (req, res, next) => {
         const message = `Vous n'êtes pas autorisé à modifier ce post`
         return res.status(401).json({ message })
       }
-      Post.update(postObject, {
-        where: { id: id }
-      })
-        .then(_ => {
-          const message = `Le post a bien été modifié.`
-          res.json({ message })
+      if (post.imageUrl) {
+        const filename = post.imageUrl.split('/images/')[1]
+        fs.unlink(`images/${filename}`, () => {
+          return Post.update(postObject, {
+            where: { id: id }
+          })
+            .then(_ => {
+              const message = `Le post a bien été modifié.`
+              res.json({ message })
+            })
         })
+      }
+      else {
+        return Post.update(postObject, {
+          where: { id: id }
+        })
+          .then(_ => {
+            const message = `Le post a bien été modifié.`
+            res.json({ message })
+          })
+      }
     })
     .catch(error => {
       if (error instanceof ValidationError) {
-        const message = `Mauvaise requête`
-        return res.status(400).json({ message, data: error })
+        return res.status(400).json({ message: error.message })
       }
-      const message = `Le post n'a pas pu être créé, réessayez dans quelques instants`
-      res.status(500).json({ message, data: error })
+      const message = `Le post n'a pas pu être modifié, réessayez dans quelques instants`
+      res.status(500).json({ message })
       console.log(`Il y a eu une erreur : ${error}`)
     })
 }
@@ -125,9 +150,27 @@ exports.deletePost = (req, res, next) => {
         const message = 'Le post demandé n\'existe pas. Réessayez avec un autre identifiant'
         return res.status(404).json({ message })
       }
+      //Check if the person modifying the post is the one who created it
+      if (post.userId != req.auth.userId) {
+        const message = `Vous n'êtes pas autorisé à modifier ce post`
+        return res.status(401).json({ message })
+      }
       const postDeleted = post;
-      const filename = post.imageUrl.split('/images/')[1]
-      fs.unlink(`images/${filename}`, () => {
+      //In case there is a post picture
+      if (post.imageUrl) {
+        const filename = post.imageUrl.split('/images/')[1]
+        fs.unlink(`images/${filename}`, () => {
+          return Post.destroy({
+            where: { id: post.id }
+          })
+            .then(_ => {
+              const message = `Le post avec l'identifiant n°${postDeleted.id} a bien été supprimé.`
+              res.json({ message, data: postDeleted })
+            })
+        })
+      }
+      //In case there is not a post picture
+      else {
         return Post.destroy({
           where: { id: post.id }
         })
@@ -135,8 +178,7 @@ exports.deletePost = (req, res, next) => {
             const message = `Le post avec l'identifiant n°${postDeleted.id} a bien été supprimé.`
             res.json({ message, data: postDeleted })
           })
-      })
-
+      }
     })
     .catch(error => {
       const message = 'Le post n\'a pas pu être supprimé. Réessayez dans quelques instants'

@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 module.exports = (req, res, next) => {
     try {
         if(!req.cookies['groupomania-jwt']){
-            const message = 'Un token est nécessaire pour cette action'
+            const message = 'Vous n\'êtes pas autorisé à effectuer cette action'
             return res.status(401).json({ message })
         }
         //On récupère le token dans le cookie directement plutôt que dans le header

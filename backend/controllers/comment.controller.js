@@ -88,28 +88,35 @@ exports.modifyComment = (req, res, next) => {
   }
 
   const id = req.params.id
-  Comment.update(commentObject, {
-    where: { id: id }
-  })
-    .then(_ => {
-      return Comment.findByPk(id).then(comment => {
-        if (comment === null) {
-          const message = 'Le commentaire demandé n\'existe pas. Réessayez avec un autre identifiant'
-          return res.status(404).json({ message })
-        }
+  Comment.findByPk(id)
+  .then(comment => {
+    if (comment === null) {
+      const message = 'Le commentaire demandé n\'existe pas. Réessayez avec un autre identifiant'
+      return res.status(404).json({ message })
+    }
+    //Check if the person modifying the post is the one who created it
+    if (comment.userId != req.auth.userId) {
+      const message = `Vous n'êtes pas autorisé à modifier ce commentaire`
+      return res.status(401).json({ message })
+    }
+    Comment.update(commentObject, {
+      where: { id: id }
+    })
+      .then(_ => {
         const message = `Le commentaire a bien été modifié.`
-        res.json({ message, data: comment })
+        res.json({ message })
       })
-    })
-    .catch(error => {
-      if (error instanceof ValidationError) {
-        const message = `Vous avez fait une erreur dans la modification de ce commentaire`
-        return res.status(400).json({ message, data: error })
-      }
-      const message = `Le commentaire n'a pas pu être créé, réessayez dans quelques instants`
-      res.status(500).json({ message, data: error })
-      console.log(`Il y a eu une erreur : ${error}`)
-    })
+  })
+  .catch(error => {
+    if (error instanceof ValidationError) {
+      const message = `Mauvaise requête`
+      return res.status(400).json({ message, data: error })
+    }
+    const message = `Le commentaire n'a pas pu être créé, réessayez dans quelques instants`
+    res.status(500).json({ message, data: error })
+    console.log(`Il y a eu une erreur : ${error}`)
+  })
+
 }
 
 exports.deleteComment = (req, res, next) => {

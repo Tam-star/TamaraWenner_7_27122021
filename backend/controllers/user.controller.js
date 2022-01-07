@@ -2,7 +2,7 @@ const { User } = require('../config/db')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
-const { ValidationError, ForeignKeyConstraintError, UniqueConstraintError } = require('sequelize');
+const { ValidationError, UniqueConstraintError } = require('sequelize');
 const { errorMonitor } = require('stream');
 
 exports.getAllUsers = (req, res, next) => {
@@ -18,6 +18,7 @@ exports.getAllUsers = (req, res, next) => {
     })
 }
 
+//The person who is connected has access to all his or her data
 exports.getUserConnected = (req, res, next) => {
   User.findByPk(req.auth.userId)
     .then(user => {
@@ -31,15 +32,27 @@ exports.getUserConnected = (req, res, next) => {
     })
 }
 
+//To get info from other persons
 exports.getUserById = (req, res, next) => {
   User.findByPk(req.params.id)
     .then(user => {
+      if (!user) {
+        return res.status(404).json({ error: 'Cet utilisateur n\'existe pas.' })
+      }
+      //We don't return the password of the person
+      const data = {
+        "lastname": user.lastname,
+        "firstname": user.firstname,
+        "pseudo": user.pseudo,
+        "bio": user.bio,
+        "imageUrl": user.imageUrl,
+      }
       const message = 'L\'utilisateur a bien été récupéré.'
-      res.json({ message, data: user })
+      res.json({ message, data })
     })
     .catch(error => {
       const message = 'L\'utilisateur n\'a pas pu être récupéré. Réessayez dans quelques instants'
-      res.status(500).json({ message, data: error })
+      res.status(500).json({ message })
       console.log(`Il y a eu une erreur : ${error}`)
     })
 }
@@ -68,13 +81,30 @@ exports.modifyUser = (req, res, next) => {
         const message = `Vous n'êtes pas autorisé à modifier cet utilisateur`
         return res.status(401).json({ message })
       }
-      User.update(userObject, {
-        where: { id: id }
-      })
-        .then(_ => {
-          const message = `L\'utilisateur ${user.pseudo} a bien été modifié.`
-          res.json({ message, data: user })
+
+      //In case there is a profile picture
+      if (user.imageUrl) {
+        const filename = user.imageUrl.split('/images/')[1]
+        fs.unlink(`images/${filename}`, () => {
+          return User.update(userObject, {
+            where: { id: id }
+          })
+            .then(_ => {
+              const message = `L\'utilisateur ${user.pseudo} a bien été modifié.`
+              res.json({ message })
+            })
         })
+      }
+      //In case there is not a profile picture
+      else {
+        return User.update(userObject, {
+          where: { id: id }
+        })
+          .then(_ => {
+            const message = `L\'utilisateur ${user.pseudo} a bien été modifié.`
+            res.json({ message })
+          })
+      }
     })
     .catch(error => {
       const message = 'L\'utilisateur n\'a pas pu être modifié. Réessayez dans quelques instants'
@@ -89,17 +119,36 @@ exports.deleteUser = (req, res, next) => {
       const message = 'L\'utilisateur demandé n\'existe pas. Réessayez avec un autre identifiant'
       return res.status(404).json({ message })
     }
+    //Check with token if it belongs to the right user
+    if (user.id != req.auth.userId) {
+      const message = `Vous n'êtes pas autorisé à modifier cet utilisateur`
+      return res.status(401).json({ message })
+    }
     const userDeleted = user;
-    const filename = user.imageUrl.split('/images/')[1]
-    fs.unlink(`images/${filename}`, () => {
+    //In case there is a profile picture
+    if (user.imageUrl) {
+      const filename = user.imageUrl.split('/images/')[1]
+      fs.unlink(`images/${filename}`, () => {
+        return User.destroy({
+          where: { id: user.id }
+        })
+          .then(_ => {
+            const message = `L'utilisateur ${userDeleted.pseudo} a bien été supprimé.`
+            res.json({ message })
+          })
+      })
+    }
+    //In case there is not a profile picture
+    else {
       return User.destroy({
         where: { id: user.id }
       })
         .then(_ => {
-          const message = `L'utilisateur avec l'identifiant n°${userDeleted.id} a bien été supprimé.`
-          res.json({ message, data: userDeleted })
+          const message = `L'utilisateur ${userDeleted.pseudo} a bien été supprimé.`
+          res.json({ message })
         })
-    })
+    }
+
   })
     .catch(error => {
       const message = 'L\'utilisateur n\'a pas pu être supprimé. Réessayez dans quelques instants'
@@ -125,7 +174,8 @@ exports.signUp = (req, res, next) => {
       })
         .then(user => {
           const message = `L\'utilisateur ${req.body.pseudo} a bien été créé.`
-          res.json({ message, data: user })
+          console.log('Data user : ', user.toJSON())
+          res.json({ message })
         })
     })
     .catch(error => {
@@ -143,10 +193,12 @@ exports.signUp = (req, res, next) => {
 }
 
 exports.login = (req, res, next) => {
-  if(!req.body.email){
+  //Check if there is an email in request
+  if (!req.body.email) {
     const message = `Un email est nécessaire`
     return res.status(400).json({ message })
   }
+  //Check if there is a password in request
   if (!req.body.password) {
     const message = `Un mot de passe est nécessaire`
     return res.status(400).json({ message })
@@ -175,13 +227,14 @@ exports.login = (req, res, next) => {
     })
     .catch(error => {
       const message = 'L\'utilisateur n\'a pas pu être loggé. Réessayez dans quelques instants'
-      res.status(500).json({ message, data: error })
+      res.status(500).json({ message })
       console.log(`Il y a eu une erreur : ${error}`)
     })
 
 }
 
 exports.logout = (req, res, next) => {
+  //On supprime le cookie de connexion chez le client
   res.clearCookie('groupomania-jwt')
   res.status(200).json({ message: 'Vous êtes déconnecté' })
 }
