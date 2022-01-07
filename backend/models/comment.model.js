@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         postId: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            validate: {
+                notEmpty: { msg: 'Le postId ne peut pas être vide' },
+                notNull: { msg: 'Le postId ne peut pas être null' }
+            },
             references: {
                 model: 'posts', // 'posts' refers to table name
                 key: 'id', // 'id' refers to column name in posts table
@@ -20,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
         userId: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            validate: {
+                notEmpty: { msg: 'L\'userId ne peut pas être vide' },
+                notNull: { msg: 'L\'userId ne peut pas être null' }
+            },
             references: {
                 model: 'users', // 'users' refers to table name
                 key: 'id', // 'id' refers to column name in users table

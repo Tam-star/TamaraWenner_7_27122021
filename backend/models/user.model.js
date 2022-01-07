@@ -40,7 +40,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       validate: {
         notEmpty: { msg: 'L\'email ne peut pas être vide' },
-        notNull: { msg: 'L\'email ne peut pas être null' }
+        notNull: { msg: 'L\'email ne peut pas être null' },
+        isEmail: {msg: 'L\'email n\'est pas valide'}
       }
     },
     password: {

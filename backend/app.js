@@ -14,6 +14,7 @@ const sequelize = require('./config/db.js')
 //Routes
 const userRoutes = require('./routes/user.route')
 const postRoutes = require('./routes/post.route')
+const commentRoutes = require ('./routes/comment.route')
 
 app.use(morgan('dev'))
    .use(cookieParser())
@@ -33,6 +34,7 @@ sequelize.initDb()
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/users', userRoutes)
 app.use('/api/posts', postRoutes)
+app.use('/api/comments', commentRoutes)
 
 //In case the endpoint does not exist
 app.use(({ res }) => {

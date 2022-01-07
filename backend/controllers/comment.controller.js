@@ -3,10 +3,11 @@ const { ValidationError, ForeignKeyConstraintError } = require('sequelize')
 const fs = require('fs');
 //const { create } = require('domain');
 
-exports.getAllComments = (req, res, next) => {
-  Comment.findAll()
+//Get all comments for one post 
+exports.getAllCommentsForOnePost = (req, res, next) => {
+  Comment.findAll({ where : {postId : req.params.postId} })
     .then(comments => {
-      const message = 'La liste des commentaires a bien été récupérée.'
+      const message = `La liste des commentaires pour le post n°${req.params.postId} a bien été récupérée.`
       res.json({ message, data: comments })
     })
     .catch(error => {
@@ -55,19 +56,20 @@ exports.createComment = (req, res, next) => {
       })
       .catch(error => {
         if (error instanceof ValidationError) {
-          const message = `Vous avez fait une erreur dans la création de ce commentaire`
-          return res.status(400).json({ message, data: error })
+          return res.status(400).json({ message : error.message })
         }
         if (error instanceof ForeignKeyConstraintError) {
-          const message = `L'userId n'appartient à aucun de nos utilisateurs`
-          return res.status(400).json({ message, data: error })
+          const message = `L'userId ou le postId n'existe pas`
+          return res.status(400).json({ message })
         }
         const message = `Le commentaire n'a pas pu être créé, réessayez dans quelques instants`
-        res.status(500).json({ message, data: error })
+        res.status(500).json({ message })
         console.log(`Il y a eu une erreur : ${error}`)
       })
   }
   catch (e) {
+    const message = `Le commentaire n'a pas pu être créé, réessayez dans quelques instants`
+    res.status(500).json({ message })
     console.log(`Il y a eu une erreur : ${e.message}`)
   }
 
@@ -85,6 +87,10 @@ exports.modifyComment = (req, res, next) => {
   //pour que cela n'interfère pas avec l'auto-incrémentation de la base de donnée
   if (commentObject.id) {
     delete commentObject.id
+  }
+  //Interdiction de modifier le postId
+  if (commentObject.postId) {
+    delete commentObject.postId
   }
 
   const id = req.params.id
@@ -109,11 +115,10 @@ exports.modifyComment = (req, res, next) => {
   })
   .catch(error => {
     if (error instanceof ValidationError) {
-      const message = `Mauvaise requête`
-      return res.status(400).json({ message, data: error })
+      return res.status(400).json({ message : error.message })
     }
     const message = `Le commentaire n'a pas pu être créé, réessayez dans quelques instants`
-    res.status(500).json({ message, data: error })
+    res.status(500).json({ message })
     console.log(`Il y a eu une erreur : ${error}`)
   })
 
