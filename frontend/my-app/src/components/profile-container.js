@@ -1,7 +1,7 @@
 import React from 'react';
 import maleAvatar from '../assets/male-avatar-profile.jpg';
 
-export default function ProfileContainer({user}) {
+export default function ProfileContainer({user, handleClick}) {
     return (
         <section className='profile-container'>
             <img src={maleAvatar} className='profile-picture' alt='Profil' />
@@ -12,6 +12,8 @@ export default function ProfileContainer({user}) {
                 <p>Email :  {user.email}</p>
                 <p>Bio :  {user.bio}</p>
             </div>
+            <i title='Modifier son profil' className="fas fa-pen profile-container__modify-icon" onClick={handleClick}></i>
         </section>
     )
 }
+

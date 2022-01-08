@@ -31,7 +31,7 @@ export default function NewPost() {
                 <textarea name="textarea" placeholder='Vous pouvez écrire ici.' onChange={autoResize}></textarea>
                 <div className='new-post__form__file-div'>
                     <label htmlFor="imageInput">Choisissez une image : </label>
-                    <input type="file" id="imageInput" name="imageInput" onChange={handleFileChange}></input>
+                    <input type="file" id="imageInput" name="imageInput" accept="image/png, image/gif, image/jpeg" onChange={handleFileChange}></input>
                 </div>
                 {picture ? <img className='new-post__post-picture' src={picture} alt='Post picture' /> : ''}
                 {picture ?  <button onClick={handleFileRemove}>Supprimer l'image</button> : ''}
