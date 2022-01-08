@@ -1,0 +1,23 @@
+.main-footer{
+    //background-color : $fourth-color;
+    display: flex;
+    justify-content: space-between;
+    padding : 30px;
+    & ul{
+        & li {
+            list-style-type: none;
+            padding : 2px;
+            & a {
+                text-decoration: none;
+                color : black;
+                &:hover{
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+    &__logo{
+        width : 150px;
+        fill : $tertiary-color;
+    }
+}

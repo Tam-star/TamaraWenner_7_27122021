@@ -1,4 +1,4 @@
-.login-container, .signup-container{
+.login-container, .signup-container, .welcome-container{
     margin : auto;
     background-color : $secondary-color;
     display: flex;
@@ -23,3 +23,18 @@
         }
     }
 }
+
+.welcome-container{
+    height : 60vh;
+    & h1 {
+        font-size: 60px;
+        margin-top : 0;
+    }
+    &__logo{
+        width : 200px;
+    }
+    &__company-name{
+        color : $primary-color;
+    }
+}
+

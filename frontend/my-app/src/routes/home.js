@@ -3,6 +3,7 @@ import React from 'react';
 import Header from '../components/header';
 import LeftContainer from '../components/left-container';
 import { Outlet } from 'react-router-dom';
+import Footer from '../components/footer';
 
 function Home() {
 
@@ -17,6 +18,7 @@ function Home() {
           <p>Pour partager du contenu avec tes collègues de GROUPOMANIA</p>
         </section>
       </main>
+      <Footer/>
     </div>
   );
 }

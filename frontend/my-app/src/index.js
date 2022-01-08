@@ -11,12 +11,14 @@ import Subscription from './components/subscription';
 import Connexion from './components/connexion';
 import Dashboard from './routes/dashboard';
 import CenterContainer from './components/center-container';
+import Welcome from './components/welcome';
 
 
 ReactDOM.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Home />} >
+        <Route index element={ <Welcome /> } />
         <Route path="signup" element={<Subscription />} />
         <Route path="login" element={<Connexion />} />
       </Route>

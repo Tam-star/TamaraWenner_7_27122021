@@ -6,7 +6,8 @@
 @import 'layouts/left-container';
 @import 'layouts/center-container';
 @import 'layouts/right-container';
-@import 'pages/login';
+@import 'layouts/footer';
+@import 'pages/home';
 
 body{
     font-family: 'Poppins', sans-serif;
@@ -17,7 +18,6 @@ body{
     display: flex;
     justify-content: space-between;
     background-color: $fourth-color;
-    //height : 500px;
 }
 
 
