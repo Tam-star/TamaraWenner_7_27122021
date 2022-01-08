@@ -70,7 +70,7 @@ exports.modifyUser = (req, res, next) => {
     delete userObject.id
   }
   //To prevent someone from updating his or her rights (becoming a moderator)
-  if(userObject.rights){
+  if (userObject.rights) {
     delete userObject.rights
   }
 
@@ -223,7 +223,10 @@ exports.login = (req, res, next) => {
 
           //On place le token dans un cookie
           res.cookie('groupomania-jwt', jwt.sign(
-            { userId: user.id },
+            {
+              userId: user.id,
+              userRights: user.rights
+            },
             'GROUPOMANIA_SECRET_TOKEN',
             { expiresIn: '24h' }
           ), { maxAge: 1000 * 60 * 60 * 24, httpOnly: true })

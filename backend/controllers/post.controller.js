@@ -151,7 +151,7 @@ exports.deletePost = (req, res, next) => {
         return res.status(404).json({ message })
       }
       //Check if the person modifying the post is the one who created it
-      if (post.userId != req.auth.userId) {
+      if (post.userId != req.auth.userId && req.auth.userRights!= 'moderator') {
         const message = `Vous n'êtes pas autorisé à modifier ce post`
         return res.status(401).json({ message })
       }

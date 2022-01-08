@@ -131,6 +131,11 @@ exports.deleteComment = (req, res, next) => {
         const message = 'Le commentaire demandé n\'existe pas. Réessayez avec un autre identifiant'
         return res.status(404).json({ message })
       }
+       //Check if the person modifying the comment is the one who created it
+       if (comment.userId != req.auth.userId && req.auth.userRights!= 'moderator') {
+        const message = `Vous n'êtes pas autorisé à modifier ce commentaire`
+        return res.status(401).json({ message })
+      }
       const commentDeleted = comment;
       const filename = comment.imageUrl.split('/images/')[1]
       fs.unlink(`images/${filename}`, () => {

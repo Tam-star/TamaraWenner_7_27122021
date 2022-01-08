@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
     try {
-        if(!req.cookies['groupomania-jwt']){
+        if (!req.cookies['groupomania-jwt']) {
             const message = 'Vous n\'êtes pas autorisé à effectuer cette action'
             return res.status(401).json({ message })
         }
@@ -10,7 +10,12 @@ module.exports = (req, res, next) => {
         const token = req.cookies['groupomania-jwt']
         const decodedToken = jwt.verify(token, 'GROUPOMANIA_SECRET_TOKEN');
         const userId = decodedToken.userId;
-        req.auth = { userId: userId };
+        const userRights = decodedToken.userRights;
+        req.auth = {
+            userId: userId,
+            userRights: userRights
+        };
+        console.log(req.auth)
         if (req.body.userId && req.body.userId !== userId) {
             console.log('Invalid user ID')
             throw new Error('Invalid user ID');
@@ -18,8 +23,8 @@ module.exports = (req, res, next) => {
         } else {
             next();
         }
-    } catch (error){
-        res.status(401).json({ message : error.message })
+    } catch (error) {
+        res.status(401).json({ message: error.message })
     }
 };
 
