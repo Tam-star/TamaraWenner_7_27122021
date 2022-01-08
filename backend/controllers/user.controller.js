@@ -69,6 +69,11 @@ exports.modifyUser = (req, res, next) => {
   if (userObject.id) {
     delete userObject.id
   }
+  //To prevent someone from updating his or her rights (becoming a moderator)
+  if(userObject.rights){
+    delete userObject.rights
+  }
+
   const id = req.params.id
   User.findByPk(id)
     .then(user => {
@@ -159,6 +164,7 @@ exports.deleteUser = (req, res, next) => {
 
 
 exports.signUp = (req, res, next) => {
+  //To prevent error with bcrypt hash
   if (!req.body.password) {
     const message = `Un mot de passe est nécessaire`
     return res.status(400).json({ message })

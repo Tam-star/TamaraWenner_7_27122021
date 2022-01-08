@@ -52,6 +52,11 @@ module.exports = (sequelize, DataTypes) => {
         notNull: { msg: 'Le mot de passe ne peut pas être null' }
       }
     },
+    rights : {
+      type : DataTypes.ENUM('regular','moderator', 'superadmin'),
+      allowNull: false,
+      defaultValue : 'regular'
+    },
     bio: {
       type: DataTypes.TEXT
     }, 
