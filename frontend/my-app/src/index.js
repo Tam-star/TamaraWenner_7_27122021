@@ -5,24 +5,26 @@ import {
   Routes,
   Route
 } from "react-router-dom";
-//import App from './App';
-import NewsFeed from "./routes/newsfeed"
 import Home from "./routes/home"
 import reportWebVitals from './reportWebVitals';
+import Subscription from './components/subscription';
+import Connexion from './components/connexion';
+import Dashboard from './routes/dashboard';
+import CenterContainer from './components/center-container';
 
-// ReactDOM.render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>,
-//   document.getElementById('root')
-// );
 
 ReactDOM.render(
   <BrowserRouter>
-     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="home" element={<Home />} />
-      <Route path="newsfeed" element={<NewsFeed />} />
+    <Routes>
+      <Route path="/" element={<Home />} >
+        <Route path="signup" element={<Subscription />} />
+        <Route path="login" element={<Connexion />} />
+      </Route>
+      <Route path="/dashboard" element={<Dashboard />} >
+        <Route path="/dashboard/profile" element={<CenterContainer centerElement='profil' />} />
+        <Route path="/dashboard/newsfeed" element={<CenterContainer centerElement='newsfeed' />} />
+        <Route path="/dashboard/settings" element={<div>Ici seront les settings</div>} />
+      </Route>
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')

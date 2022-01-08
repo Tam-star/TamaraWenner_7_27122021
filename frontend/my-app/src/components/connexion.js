@@ -1,8 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { login } from '../API-functions'
 //import { redirectToNewsFeed } from '../functions';
 
 export default function Connexion() {
+
+    const navigate = useNavigate();
 
     const connect = (event) => {
         event.preventDefault()
@@ -15,11 +18,9 @@ export default function Connexion() {
             if(response.error){
                 return document.getElementsByClassName("message")[0].innerHTML = `${JSON.stringify(response.error).replace(/"/g, '')}`
             }
-            document.getElementsByClassName("message")[0].innerHTML = `Vous êtes connecté`
+            document.getElementsByClassName("message")[0].innerHTML = `Vous êtes connecté. Vous allez être redirigé vers votre dashboard`
             console.log('my message : '+ JSON.stringify(response.message))
-            //Just for development, it will redirect directly for production
-            //setTimeout(redirectToNewsFeed, 3000);
-            window.location.href = `./newsfeed`
+            navigate("../dashboard/newsfeed");
         })
         .catch((error) => {
             document.getElementsByClassName("message")[0].innerHTML = `Une erreur s'est produite : ${error}`
