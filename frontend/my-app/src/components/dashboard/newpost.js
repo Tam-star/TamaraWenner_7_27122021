@@ -1,7 +1,9 @@
 import React from 'react';
-import maleAvatar from '../assets/male-avatar-profile.jpg';
+import maleAvatar from '../../assets/male-avatar-profile.jpg';
 
 export default function NewPost() {
+
+    const fileInput = React.useRef()
 
     const [picture, setPicture] = React.useState()
 
@@ -12,7 +14,7 @@ export default function NewPost() {
     }
 
     const handleFileChange = event => {
-        const [file] = document.getElementById('imageInput').files
+        const [file] = fileInput.current.files
         if (file) {
             setPicture(URL.createObjectURL(file))
         }
@@ -20,7 +22,7 @@ export default function NewPost() {
 
     const handleFileRemove = event => {
         event.preventDefault()
-        document.getElementById('imageInput').value = ""
+        fileInput.current.value = ""
         setPicture(null)
     }
 
@@ -31,7 +33,7 @@ export default function NewPost() {
                 <textarea name="textarea" placeholder='Vous pouvez écrire ici.' onChange={autoResize}></textarea>
                 <div className='new-post__form__file-div'>
                     <label htmlFor="imageInput">Choisissez une image : </label>
-                    <input type="file" id="imageInput" name="imageInput" accept="image/png, image/gif, image/jpeg" onChange={handleFileChange}></input>
+                    <input ref={fileInput} type="file" id="imageInput" name="imageInput" accept="image/png, image/gif, image/jpeg" onChange={handleFileChange}></input>
                 </div>
                 {picture ? <img className='new-post__post-picture' src={picture} alt='Post picture' /> : ''}
                 {picture ?  <button onClick={handleFileRemove}>Supprimer l'image</button> : ''}

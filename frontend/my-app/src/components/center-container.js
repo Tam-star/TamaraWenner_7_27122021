@@ -1,9 +1,10 @@
 import React from 'react';
 import { useOutletContext } from 'react-router-dom';
-import NewPost from './newpost';
-import PostContainer from './post-container';
-import ProfileChange from './profile-change';
-import ProfileContainer from './profile-container';
+import NewPost from './dashboard/newpost';
+import PostContainer from './dashboard/post-container';
+import ProfileChange from './dashboard/profile-change';
+import ProfileContainer from './dashboard/profile-container';
+import SettingsContainer from './dashboard/settings';
 
 export default function CenterContainer({ centerElement }) {
     const [showModifyProfile, setShowModifyProfile] = React.useState(false)
@@ -26,6 +27,10 @@ export default function CenterContainer({ centerElement }) {
                 <>
                     <NewPost />
                     <PostContainer userConnected={user} />
+                </> : ''}
+            {centerElement === 'settings' ?
+                <>
+                    <SettingsContainer />
                 </> : ''}
 
 

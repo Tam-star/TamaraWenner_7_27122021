@@ -1,4 +1,4 @@
-import logo from '../assets/icon-transparent-blue.svg';
+import logo from '../../assets/icon-transparent-blue.svg';
 
 export default function Welcome() {
     return (

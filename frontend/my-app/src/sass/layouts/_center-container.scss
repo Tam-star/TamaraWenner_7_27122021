@@ -207,7 +207,40 @@
     }
 }
 
-
 .no-allowed-change{
     color : grey;
+}
+
+
+.settings-container{
+    @include card-style();
+}
+
+.react-switch{
+    width : 180px;
+    font-weight: bold;
+    &__mode{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        height : 100%;
+        width: max-content;
+        position : absolute;
+    }
+    &__uncheckedIcon{
+        color : $primary-color;
+        padding-right : 2px;
+        right : 40px;
+    }
+    &__checkedIcon{
+        left : 40px;
+        color : white;
+        margin-left: 5px;
+    }
+    &__HandleIcon{
+        fill : $secondary-color;
+        height : 100%;
+        width : 100%;
+    }
 }

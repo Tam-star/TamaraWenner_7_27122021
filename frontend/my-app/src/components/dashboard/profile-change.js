@@ -1,12 +1,14 @@
 import React from 'react';
-import maleAvatar from '../assets/male-avatar-profile.jpg';
+import maleAvatar from '../../assets/male-avatar-profile.jpg';
 
 export default function ProfileChange({ user, handleClick }) {
+
+    const fileInput = React.useRef()
 
     const [picture, setPicture] = React.useState()
 
     const handleFileChange = event => {
-        const [file] = document.getElementById('imageInput').files
+        const [file] = fileInput.current.files
         if (file) {
             setPicture(URL.createObjectURL(file))
         }
@@ -14,7 +16,7 @@ export default function ProfileChange({ user, handleClick }) {
 
     const handleFileRemove = event => {
         event.preventDefault()
-        document.getElementById('imageInput').value = ""
+        fileInput.current.value = ""
         setPicture(null)
     }
 
@@ -28,7 +30,7 @@ export default function ProfileChange({ user, handleClick }) {
                     <img src={maleAvatar} alt='Profil' />
                     <div>
                         <label htmlFor="imageInput">Modifier votre photo de profil : </label>
-                        <input type="file" id="imageInput" name="imageInput" accept="image/png, image/gif, image/jpeg" onChange={handleFileChange}></input>
+                        <input type="file" id="imageInput" name="imageInput" accept="image/png, image/gif, image/jpeg" ref={fileInput} onChange={handleFileChange}></input>
                         {picture ? <img src={picture} alt='Photo de profil chargée' /> : ''}
                         {picture ?  <button onClick={handleFileRemove}>Supprimer l'image</button> : ''}
                     </div>

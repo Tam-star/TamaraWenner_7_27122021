@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../API-functions'
+import { login } from '../../API-functions'
 //import { redirectToNewsFeed } from '../functions';
 
 export default function Connexion() {

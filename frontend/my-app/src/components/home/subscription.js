@@ -1,5 +1,5 @@
 import React from 'react';
-import { signUp } from '../API-functions';
+import { signUp } from '../../API-functions';
 
 export default function Subscription() {
 

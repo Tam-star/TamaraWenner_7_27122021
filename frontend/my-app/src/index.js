@@ -7,11 +7,11 @@ import {
 } from "react-router-dom";
 import Home from "./routes/home"
 import reportWebVitals from './reportWebVitals';
-import Subscription from './components/subscription';
-import Connexion from './components/connexion';
+import Subscription from './components/home/subscription';
+import Connexion from './components/home/connexion';
 import Dashboard from './routes/dashboard';
 import CenterContainer from './components/center-container';
-import Welcome from './components/welcome';
+import Welcome from './components/home/welcome';
 
 
 ReactDOM.render(
@@ -25,7 +25,7 @@ ReactDOM.render(
       <Route path="/dashboard" element={<Dashboard />} >
         <Route path="/dashboard/profile" element={<CenterContainer centerElement='profil' />} />
         <Route path="/dashboard/newsfeed" element={<CenterContainer centerElement='newsfeed' />} />
-        <Route path="/dashboard/settings" element={<div>Ici seront les settings</div>} />
+        <Route path="/dashboard/settings" element={<CenterContainer centerElement='settings' />} />
       </Route>
     </Routes>
   </BrowserRouter>,
