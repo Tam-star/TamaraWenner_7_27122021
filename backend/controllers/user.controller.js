@@ -64,33 +64,89 @@ exports.modifyUser = (req, res, next) => {
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   } : req.body
 
-  //Si l'utilisateur indique un id dans son POST, on le supprime
-  //pour que cela n'interfère pas avec l'auto-incrémentation de la base de donnée
   if (userObject.id) {
-    delete userObject.id
+    delete userObject.id // To prevent interfering with auto-increment
   }
-  //To prevent someone from updating his or her rights (becoming a moderator)
   if (userObject.rights) {
-    delete userObject.rights
+    delete userObject.rights //To prevent someone from updating his or her rights (becoming a moderator)
   }
 
   const id = req.params.id
-  User.findByPk(id)
-    .then(user => {
-      if (user === null) {
-        const message = 'L\'utilisateur demandé n\'existe pas. Réessayez avec un autre identifiant'
-        return res.status(404).json({ message })
-      }
-      //Check with token if it belongs to the right user
-      if (user.id != req.auth.userId) {
-        const message = `Vous n'êtes pas autorisé à modifier cet utilisateur`
-        return res.status(401).json({ message })
-      }
 
-      //In case there is a profile picture
-      if (user.imageUrl) {
-        const filename = user.imageUrl.split('/images/')[1]
-        fs.unlink(`images/${filename}`, () => {
+  if (userObject.password) {
+    bcrypt.hash(userObject.password, 10).then(hash => {
+      userObject.password = hash
+      User.findByPk(id)
+        .then(user => {
+          if (user === null) {
+            const message = 'L\'utilisateur demandé n\'existe pas. Réessayez avec un autre identifiant'
+            return res.status(404).json({ message })
+          }
+          //Check with token if it belongs to the right user
+          if (user.id != req.auth.userId) {
+            const message = `Vous n'êtes pas autorisé à modifier cet utilisateur`
+            return res.status(401).json({ message })
+          }
+
+          //In case there is a profile picture
+          if (user.imageUrl && req.file) {
+            const filename = user.imageUrl.split('/images/')[1]
+            fs.unlink(`images/${filename}`, () => {
+              return User.update(userObject, {
+                where: { id: id }
+              })
+                .then(_ => {
+                  const message = `L\'utilisateur ${user.pseudo} a bien été modifié.`
+                  res.json({ message })
+                })
+            })
+          }
+          //In case there is not a profile picture
+          else {
+            return User.update(userObject, {
+              where: { id: id }
+            })
+              .then(_ => {
+                const message = `L\'utilisateur ${user.pseudo} a bien été modifié.`
+                res.json({ message })
+              })
+          }
+        })
+        .catch(error => {
+          const message = 'L\'utilisateur n\'a pas pu être modifié. Réessayez dans quelques instants'
+          res.status(500).json({ message, data: error })
+          console.log(`Il y a eu une erreur : ${error}`)
+        })
+    })
+  } else {
+
+    User.findByPk(id)
+      .then(user => {
+        if (user === null) {
+          const message = 'L\'utilisateur demandé n\'existe pas. Réessayez avec un autre identifiant'
+          return res.status(404).json({ message })
+        }
+        //Check with token if it belongs to the right user
+        if (user.id != req.auth.userId) {
+          const message = `Vous n'êtes pas autorisé à modifier cet utilisateur`
+          return res.status(401).json({ message })
+        }
+
+        //In case there is a profile picture
+        if (user.imageUrl) {
+          const filename = user.imageUrl.split('/images/')[1]
+          fs.unlink(`images/${filename}`, () => {
+            return User.update(userObject, {
+              where: { id: id }
+            })
+              .then(_ => {
+                const message = `L\'utilisateur ${user.pseudo} a bien été modifié.`
+                res.json({ message })
+              })
+          })
+        }
+        //In case there is not a profile picture
+        else {
           return User.update(userObject, {
             where: { id: id }
           })
@@ -98,24 +154,15 @@ exports.modifyUser = (req, res, next) => {
               const message = `L\'utilisateur ${user.pseudo} a bien été modifié.`
               res.json({ message })
             })
-        })
-      }
-      //In case there is not a profile picture
-      else {
-        return User.update(userObject, {
-          where: { id: id }
-        })
-          .then(_ => {
-            const message = `L\'utilisateur ${user.pseudo} a bien été modifié.`
-            res.json({ message })
-          })
-      }
-    })
-    .catch(error => {
-      const message = 'L\'utilisateur n\'a pas pu être modifié. Réessayez dans quelques instants'
-      res.status(500).json({ message, data: error })
-      console.log(`Il y a eu une erreur : ${error}`)
-    })
+        }
+      })
+      .catch(error => {
+        const message = 'L\'utilisateur n\'a pas pu être modifié. Réessayez dans quelques instants'
+        res.status(500).json({ message, data: error })
+        console.log(`Il y a eu une erreur : ${error}`)
+      })
+
+  }
 }
 
 exports.deleteUser = (req, res, next) => {
@@ -139,6 +186,7 @@ exports.deleteUser = (req, res, next) => {
         })
           .then(_ => {
             const message = `L'utilisateur ${userDeleted.pseudo} a bien été supprimé.`
+            res.clearCookie('groupomania-jwt')
             res.json({ message })
           })
       })
@@ -150,6 +198,7 @@ exports.deleteUser = (req, res, next) => {
       })
         .then(_ => {
           const message = `L'utilisateur ${userDeleted.pseudo} a bien été supprimé.`
+          res.clearCookie('groupomania-jwt')
           res.json({ message })
         })
     }

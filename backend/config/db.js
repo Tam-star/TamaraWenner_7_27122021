@@ -22,7 +22,7 @@ const Comment = CommentModel(sequelize, DataTypes)
 // Post.belongsTo(User, {foreignKey: 'userId', targetKey: 'id'});
 
 const initDb = () => {
-    return sequelize.sync({force : true}).then(_ => {
+    return sequelize.sync().then(_ => {
 
         // users.map(user => {
         //     //bcrypt.hash(user.password, 10)

@@ -15,7 +15,6 @@ module.exports = (req, res, next) => {
             userId: userId,
             userRights: userRights
         };
-        console.log(req.auth)
         if (req.body.userId && req.body.userId !== userId) {
             console.log('Invalid user ID')
             throw new Error('Invalid user ID');

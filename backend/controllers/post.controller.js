@@ -4,6 +4,13 @@ const fs = require('fs');
 const { post } = require('../routes/comment.route');
 
 exports.getAllPosts = (req, res, next) => {
+  if (req.query.userId) {
+    return Post.findAll({ where: { userId: req.query.userId } })
+      .then(posts => {
+        const message = `La liste des posts de l'user ${req.query.userId } a bien été récupérée.`
+        res.json({ message, data: posts })
+      })
+  }
   Post.findAll()
     .then(posts => {
       const message = 'La liste des posts a bien été récupérée.'
@@ -77,6 +84,8 @@ exports.createPost = (req, res, next) => {
   }
   catch (e) {
     console.log(`Il y a eu une erreur : ${e.message}`)
+    const message = `Le post n'a pas pu être créé, réessayez dans quelques instants`
+    res.status(500).json({ message })
   }
 
 }
@@ -89,14 +98,13 @@ exports.modifyPost = (req, res, next) => {
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   } : req.body
 
-  //Si l'utilisateur indique un id dans son POST, on le supprime
-  //pour que cela n'interfère pas avec l'auto-incrémentation de la base de donnée
+  console.log(JSON.stringify(postObject))
+
   if (postObject.id) {
-    delete postObject.id
+    delete postObject.id //To prevent interfering with auto-increment
   }
-  //To prevent someone from putting a 1000 likes on his or her post
   if (postObject.usersLiked) {
-    delete postObject.usersLiked
+    delete postObject.usersLiked //To prevent someone from putting a 1000 likes on his or her post
   }
 
   const id = req.params.id
@@ -111,7 +119,7 @@ exports.modifyPost = (req, res, next) => {
         const message = `Vous n'êtes pas autorisé à modifier ce post`
         return res.status(401).json({ message })
       }
-      if (post.imageUrl) {
+      if (post.imageUrl && req.file) {
         const filename = post.imageUrl.split('/images/')[1]
         fs.unlink(`images/${filename}`, () => {
           return Post.update(postObject, {
@@ -151,7 +159,7 @@ exports.deletePost = (req, res, next) => {
         return res.status(404).json({ message })
       }
       //Check if the person modifying the post is the one who created it
-      if (post.userId != req.auth.userId && req.auth.userRights!= 'moderator') {
+      if (post.userId != req.auth.userId && req.auth.userRights != 'moderator') {
         const message = `Vous n'êtes pas autorisé à modifier ce post`
         return res.status(401).json({ message })
       }
