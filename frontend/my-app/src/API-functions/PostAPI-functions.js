@@ -42,6 +42,38 @@ export function createPostWithJSON(request) {
         .catch(err => console.log("Something is wrong : ", err))
 }
 
+
+export function updatePostWithFormData(formData, id) {
+    const url = 'http://localhost:3000/api/posts/'+id;
+    const options = {
+        method: 'PUT',
+        credentials: "include",
+        body : formData
+    }
+    return fetch(url, options)
+        .then(reponse => reponse.json())
+        .catch(err => console.log("Something is wrong : ", err))
+}
+
+export function updatePostWithJSON(request, id) {
+    const url = 'http://localhost:3000/api/posts/'+id;
+    const options = {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json',
+        },
+        credentials: "include",
+        body : JSON.stringify(request)
+    }
+    return fetch(url, options)
+        .then(reponse => reponse.json())
+        .catch(err => console.log("Something is wrong : ", err))
+}
+
+
+
+
 export function deletePost(id) {
     const url = 'http://localhost:3000/api/posts/'+id;
     const options = {

@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import maleAvatar from '../../../assets/male-avatar-profile.jpg';
 import { getUserInfo } from '../../../API-functions/UserAPI-functions';
-import { deletePost } from '../../../API-functions/PostAPI-functions';
+import { updatePostWithFormData, updatePostWithJSON, deletePost } from '../../../API-functions/PostAPI-functions';
 
 
 const customStyles = {
@@ -38,7 +38,7 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
 
     //Modal for deleting
     // const [modalIsOpen, setIsOpen] = React.useState(false);
-    
+
 
     // function openModal() {
     //     setIsOpen(true);
@@ -57,7 +57,7 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
     const handleFileChange = event => {
         const [file] = fileInput.current.files
         if (file) {
-            setModifyingPicture(URL.createObjectURL(file))   
+            setModifyingPicture(URL.createObjectURL(file))
         }
     }
 
@@ -65,6 +65,46 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
         event.preventDefault()
         fileInput.current.value = ""
         setModifyingPicture(null)
+    }
+
+    const handleUpdatePost = event => {
+        event.preventDefault()
+        console.log("hellloe there")
+        if (fileInput.current.files[0]) {
+            console.log('formData')
+            const formData = new FormData();
+            formData.append("post", `{"text" : "${textInput.current.value}", "userId" : ${userId}}`);
+            formData.append('image', fileInput.current.files[0], fileInput.current.files[0].name)
+            console.log(formData.getAll('image'))
+            updatePostWithFormData(formData, postId).then(() => {
+                handleUpdate()
+                fileInput.current.value = ""
+                textInput.current.value = ''
+                //setModifyingPost(false)
+            })
+        }
+        else {
+            console.log('JSON')
+            let request = {}
+            if(modifyingPicture){
+                request = {
+                    text: textInput.current.value,
+                    userId: userId
+                }
+            } else {
+                request = {
+                    text: textInput.current.value,
+                    userId: userId,
+                    imageUrl : null
+                }
+            }
+            
+            updatePostWithJSON(request, postId).then(() => {
+                handleUpdate()
+                textInput.current.value = ''
+                setModifyingPost(false)
+            })
+        }
     }
 
     //Deleting Post
@@ -109,7 +149,7 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
                             {modifyingPicture ? <img className='new-post__post-picture' src={modifyingPicture} alt='Post picture' /> : ''}
                             {modifyingPicture ? <button onClick={handleFileRemove}>Supprimer l'image</button> : ''}
                         </form>
-                        <button className='modifying-post__validate' ><i className="fas fa-edit"></i>Update it!</button>
+                        <button className='modifying-post__validate' onClick={handleUpdatePost} ><i className="fas fa-edit"></i>Update it!</button>
                     </main>
                 </> :
                 <>

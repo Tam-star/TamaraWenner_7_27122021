@@ -50,7 +50,6 @@ export default function NewPost({ userConnected, handleUpdate }) {
                 textInput.current.value = ''
             })
         }
-
     }
 
     return (
