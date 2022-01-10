@@ -54,6 +54,7 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
             const formData = new FormData();
             formData.append("post", `{"text" : "${textInput.current.value}", "userId" : ${userId}}`);
             formData.append('image', fileInput.current.files[0], fileInput.current.files[0].name)
+            console.log(formData.getAll('post'))
             setModifyingPost(false)
             updatePostWithFormData(formData, postId).then(() => {
                 handleUpdate()

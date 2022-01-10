@@ -9,10 +9,15 @@ import SettingsContainer from './dashboard/settings/settings-container';
 export default function CenterContainer({ centerElement }) {
     const [showModifyProfile, setShowModifyProfile] = React.useState(false)
     const [postUpdate, setPostUpdate] = React.useState(false)
+    const [userUpdate, setUserUpdate] = React.useState(false)
 
     const handlePostUpdate = () => {
         setPostUpdate(!postUpdate)
     }
+
+    const handleUserUpdate = () => {
+        setUserUpdate(!userUpdate)
+    }    
 
     const handleModifyProfileContainer = (event) => {
         event.preventDefault()

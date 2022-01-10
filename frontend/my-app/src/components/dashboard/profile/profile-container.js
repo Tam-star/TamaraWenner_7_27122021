@@ -4,7 +4,7 @@ import maleAvatar from '../../../assets/male-avatar-profile.jpg';
 export default function ProfileContainer({user, handleClick}) {
     return (
         <section className='profile-container'>
-            <img src={maleAvatar} className='profile-picture' alt='Profil' />
+            <img src={user.imageUrl ? user.imageUrl : maleAvatar} className='profile-picture' alt='Profil' />
             <div>
                 <p>Nom : {user.lastname}</p>
                 <p>Prénom :  {user.firstname}</p>

@@ -54,7 +54,7 @@ export default function NewPost({ userConnected, handleUpdate }) {
 
     return (
         <div className='new-post'>
-            <img src={maleAvatar} className='profile-picture' alt='Profil' />
+            <img src={userConnected.imageUrl ? userConnected.imageUrl : maleAvatar} className='profile-picture' alt='Profil' />
             <form className='new-post__form'>
                 <textarea ref={textInput} name="textarea" placeholder='Vous pouvez écrire ici.' onChange={autoResize}></textarea>
                 <div className='new-post__form__file-div'>

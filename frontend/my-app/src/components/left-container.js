@@ -7,7 +7,7 @@ export default function LeftContainer({ connected, user }) {
         <section className='left-container'>
             {connected ?
                 <aside className='profile-aside'>
-                    <img src={maleAvatar} alt='Profil' />
+                    <img src={user.imageUrl ? user.imageUrl : maleAvatar} alt='Profil' />
                     <p>Bonjour {user.pseudo} !</p>
                 </aside> 
                 : ''}
