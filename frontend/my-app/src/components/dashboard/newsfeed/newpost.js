@@ -1,6 +1,6 @@
 import React from 'react';
-import { createPostWithFormData, createPostWithJSON } from '../../API-functions/PostAPI-functions';
-import maleAvatar from '../../assets/male-avatar-profile.jpg';
+import { createPostWithFormData, createPostWithJSON } from '../../../API-functions/PostAPI-functions';
+import maleAvatar from '../../../assets/male-avatar-profile.jpg';
 
 export default function NewPost({ userConnected, handleUpdate }) {
 

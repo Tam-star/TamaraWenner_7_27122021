@@ -1,5 +1,4 @@
 import React from 'react';
-import maleAvatar from '../../assets/male-avatar-profile.jpg';
 import Switch from 'react-switch';
 
 export default function SettingsContainer({ user, handleClick }) {

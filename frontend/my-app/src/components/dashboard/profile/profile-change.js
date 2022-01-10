@@ -1,5 +1,5 @@
 import React from 'react';
-import maleAvatar from '../../assets/male-avatar-profile.jpg';
+import maleAvatar from '../../../assets/male-avatar-profile.jpg';
 
 export default function ProfileChange({ user, handleClick }) {
 

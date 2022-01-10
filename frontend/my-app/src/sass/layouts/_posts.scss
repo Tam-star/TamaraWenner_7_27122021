@@ -1,0 +1,136 @@
+.new-post {
+    @include card-style;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &__post-picture {
+        @include post-picture();
+    }
+    &__form {
+        @include post-form();
+        & textarea {
+            @include textarea-post();
+            &:focus {
+                outline: none;
+                border: 3px solid $secondary-color;
+            }
+        }
+        &__file-div {
+            margin-top: 20px;
+            display: flex;
+        }
+    }
+    &__validate {
+        @include post-validate-button();
+    }
+}
+
+.post-container {
+    display: flex;
+    flex-direction: column-reverse; //To get the last post first
+}
+
+.post {
+    @include card-style();
+    &__header {
+        display: flex;
+        position: relative;
+        //background-color: aqua;
+        & img {
+            margin-right: 20px;
+            border-radius: 10px;
+        }
+        & p {
+            margin: 0;
+        }
+        &__user {
+            font-weight: bold;
+        }
+        &__icon-menu {
+            position: absolute;
+            right: 10px;
+            &:hover + nav {
+                display: block;
+                opacity: 100%;
+            }
+        }
+        &__menu {
+            display: none;
+            position: absolute;
+            right: 25px;
+            border: 1px dashed black;
+            border-radius: 20px;
+            padding: 10px;
+            &:hover {
+                display: block;
+                opacity: 100%;
+            }
+            & ul {
+                padding: 0;
+                margin: 0;
+            }
+            &__element {
+                border-bottom: 1px $primary-color solid;
+                list-style-type: none;
+                cursor: pointer;
+                padding: 5px;
+                &:hover {
+                    background-color: $secondary-color;
+                }
+                &--no-border {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+    &__main {
+        display: flex;
+        flex-direction: column;
+        position : relative;
+        &__post-picture {
+            @include post-picture();
+        }
+    }
+    &__footer {
+        &__menu {
+            & ul {
+                display: flex;
+                margin: 20px 0 0 0;
+                padding: 0;
+                & li {
+                    list-style-type: none;
+                    margin-right: 30px;
+                    cursor: pointer;
+                    &:hover {
+                        color: $primary-color;
+                    }
+                    & i {
+                        margin-right: 5px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.modifying-post {
+    &__close-icon{
+        position: absolute;
+        right: 10px;
+        cursor : pointer;
+    }
+    &__form {
+        @include post-form();
+        & textarea {
+            @include textarea-post();
+            outline: none;
+            margin-top : 20px;
+            border: 3px solid $secondary-color;
+        }
+    }
+    &__validate {
+        @include post-validate-button();
+        margin: 20px auto auto auto;
+        width: 200px;
+    }
+}
