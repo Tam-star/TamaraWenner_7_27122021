@@ -1,11 +1,41 @@
 import React from 'react';
 import Switch from 'react-switch';
+import Modal from 'react-modal';
+import { useNavigate } from 'react-router-dom';
+import { deleteUser } from '../../../API-functions/UserAPI-functions';
+import { deletePost, getAllPostsOfUser } from '../../../API-functions/PostAPI-functions';
 
-export default function SettingsContainer({ user, handleClick }) {
+export default function SettingsContainer({ user }) {
+    const navigate = useNavigate();
+
+    //Switch Light Mode / Dark Mode
     const [checked, setChecked] = React.useState(false);
     const handleChange = nextChecked => {
         setChecked(nextChecked);
     };
+
+    //Deleting User
+    const [modalIsOpen, setIsOpen] = React.useState(false);
+    function openModal() {
+        setIsOpen(true);
+    }
+    function closeModal() {
+        setIsOpen(false);
+    }
+    const handleDeleteUser = (event) => {
+        getAllPostsOfUser(user.id).then((response) => {
+            response.data.map(post => {
+                deletePost(post.id)
+            })
+            console.log('tous les posts de l utilisateur ont été supprimés')
+            deleteUser(user.id).then(() => {
+                console.log('cookie d authentification supprimé')
+                navigate("../../");
+
+            })
+
+        })
+    }
     return (
         <section className='settings-container'>
             <h2>Paramètres</h2>
@@ -42,8 +72,22 @@ export default function SettingsContainer({ user, handleClick }) {
                     </svg>
                 }
             />
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                className={'delete-modal'}
+            >
+                <i className="fas fa-times profile-change__icon" onClick={closeModal}></i>
+                <h2 style={{ color: 'red' }}>Supprimer votre compte</h2>
+                <p>Êtes-vous sûr de vouloir supprimer votre compte ?</p>
+                <p>Toutes vos données et vos posts seront perdus.</p>
+                <div>
+                    <button onClick={handleDeleteUser}>Oui</button>
+                    <button onClick={closeModal}>Non</button>
+                </div>
+            </Modal>
             <h3>Suppression du compte</h3>
-            <button>Je souhaite supprimer mon compte définitivement</button>
+            <button onClick={openModal}>Je souhaite supprimer mon compte définitivement</button>
         </section>
     )
 }

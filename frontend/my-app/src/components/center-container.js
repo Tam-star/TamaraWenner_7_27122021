@@ -35,7 +35,7 @@ export default function CenterContainer({ centerElement }) {
                 </> : ''}
             {centerElement === 'settings' ?
                 <>
-                    <SettingsContainer />
+                    <SettingsContainer user={user} />
                 </> : ''}
 
 

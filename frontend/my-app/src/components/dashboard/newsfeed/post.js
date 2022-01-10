@@ -138,8 +138,7 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
                     <Modal
                         isOpen={modalIsOpen}
                         onRequestClose={closeModal}
-                        //style={customStyles}
-                        className={'delete-post-modal'}
+                        className={'delete-modal'}
                         >
                         <i className="fas fa-times profile-change__icon" onClick={closeModal}></i>
                         <h2>Supprimer le post</h2>

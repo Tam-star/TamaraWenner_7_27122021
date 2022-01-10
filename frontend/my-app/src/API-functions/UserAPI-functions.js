@@ -90,4 +90,19 @@ export function getUserInfo(id) {
 }
 
 
+export function deleteUser(id) {
+    const url = 'http://localhost:3000/api/users/'+id;
+    const options = {
+        method: 'DELETE',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        credentials: "include"
+    }
+    return fetch(url, options)
+        .then(reponse => reponse.json())
+        .catch(err => console.log("Something is wrong : ", err))
+}
+
 
