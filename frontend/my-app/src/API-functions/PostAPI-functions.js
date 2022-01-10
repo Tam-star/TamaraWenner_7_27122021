@@ -14,7 +14,6 @@ export function getAllPosts() {
 }
 
 
-
 export function createPostWithFormData(formData) {
     const url = 'http://localhost:3000/api/posts';
     const options = {
@@ -37,6 +36,21 @@ export function createPostWithJSON(request) {
         },
         credentials: "include",
         body : JSON.stringify(request)
+    }
+    return fetch(url, options)
+        .then(reponse => reponse.json())
+        .catch(err => console.log("Something is wrong : ", err))
+}
+
+export function deletePost(id) {
+    const url = 'http://localhost:3000/api/posts/'+id;
+    const options = {
+        method: 'DELETE',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json',
+        },
+        credentials: "include"
     }
     return fetch(url, options)
         .then(reponse => reponse.json())

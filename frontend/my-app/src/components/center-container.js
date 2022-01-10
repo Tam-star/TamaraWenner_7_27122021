@@ -8,6 +8,11 @@ import SettingsContainer from './dashboard/settings-container';
 
 export default function CenterContainer({ centerElement }) {
     const [showModifyProfile, setShowModifyProfile] = React.useState(false)
+    const [postUpdate, setPostUpdate] = React.useState(false)
+
+    const handlePostUpdate = () => {
+        setPostUpdate(!postUpdate)
+    }
 
     const handleModifyProfileContainer = (event) => {
         event.preventDefault()
@@ -25,8 +30,8 @@ export default function CenterContainer({ centerElement }) {
                 </> : ''}
             {centerElement === 'newsfeed' ?
                 <>
-                    <NewPost  userConnected={user} />
-                    <PostContainer userConnected={user} />
+                    <NewPost userConnected={user} handleUpdate={handlePostUpdate} />
+                    <PostContainer userConnected={user} postUpdate={postUpdate} handleUpdate={handlePostUpdate} />
                 </> : ''}
             {centerElement === 'settings' ?
                 <>

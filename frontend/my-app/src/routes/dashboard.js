@@ -16,7 +16,7 @@ function Dashboard() {
     getUserConnectedInfo()
     .then((response) => {
         setUser(response.data)
-        console.log('useEffect used : '+ JSON.stringify(response.data))
+        //console.log('useEffect used : '+ JSON.stringify(response.data))
     })
     .catch((error) => console.error(error))
   }, [])

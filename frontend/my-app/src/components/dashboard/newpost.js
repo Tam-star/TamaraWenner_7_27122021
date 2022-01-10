@@ -1,8 +1,8 @@
 import React from 'react';
-import { createPost, createPostWithFormData, createPostWithJSON } from '../../API-functions/PostAPI-functions';
+import { createPostWithFormData, createPostWithJSON } from '../../API-functions/PostAPI-functions';
 import maleAvatar from '../../assets/male-avatar-profile.jpg';
 
-export default function NewPost({ userConnected }) {
+export default function NewPost({ userConnected, handleUpdate }) {
 
     const fileInput = React.useRef()
     const textInput = React.useRef()
@@ -33,15 +33,24 @@ export default function NewPost({ userConnected }) {
             const formData = new FormData();
             formData.append("post", `{"text" : "${textInput.current.value}", "userId" : ${userConnected.id}}`);
             formData.append('image', fileInput.current.files[0], fileInput.current.files[0].name)
-            createPostWithFormData(formData)
+            createPostWithFormData(formData).then(() => {
+                handleUpdate()
+                fileInput.current.value = ""
+                setPicture(null)
+                textInput.current.value = ''
+            })
         }
         else {
             const request = {
                 text: textInput.current.value,
                 userId: userConnected.id
             }
-            createPostWithJSON(request)
+            createPostWithJSON(request).then(() => {
+                handleUpdate()
+                textInput.current.value = ''
+            })
         }
+
     }
 
     return (
