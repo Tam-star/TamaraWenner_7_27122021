@@ -8,10 +8,8 @@ export default function PostContainer({ userConnected, postUpdate, handleUpdate 
     const [postsList, setPostsList] = React.useState([])
 
     React.useEffect(() => {
-        console.log('use effect for posts')
         getAllPosts()
             .then((response) => {
-                console.log(response.data)
                 setPostsList(response.data)
             })
             .catch((error) => console.error(error))

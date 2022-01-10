@@ -5,26 +5,18 @@ import { getUserInfo } from '../../../API-functions/UserAPI-functions';
 import { updatePostWithFormData, updatePostWithJSON, deletePost } from '../../../API-functions/PostAPI-functions';
 
 
-const customStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-    },
-};
-
 Modal.setAppElement('#root');
 
 export default function Post({ postId, text, picture, timeOfCreation, userId, sameUser, handleUpdate }) {
 
     const [userPseudo, setUserPseudo] = React.useState('')
     const [userProfilePicture, setUserProfilePicture] = React.useState('')
+    //Modify post
     const [modifyingPost, setModifyingPost] = React.useState(false)
     const [modifyingText, setModifyingText] = React.useState(text)
     const [modifyingPicture, setModifyingPicture] = React.useState(picture)
+    //Deleting post
+    const [modalIsOpen, setIsOpen] = React.useState(false);
 
     const handleModifyingPost = (event) => {
         setModifyingPost(true)
@@ -35,17 +27,6 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
     }
     const fileInput = React.useRef()
     const textInput = React.useRef()
-
-    //Modal for deleting
-    // const [modalIsOpen, setIsOpen] = React.useState(false);
-
-
-    // function openModal() {
-    //     setIsOpen(true);
-    // }
-    // function closeModal() {
-    //     setIsOpen(false);
-    // }
 
     const handleTextArea = event => {
         event.preventDefault();
@@ -69,22 +50,16 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
 
     const handleUpdatePost = event => {
         event.preventDefault()
-        console.log("hellloe there")
         if (fileInput.current.files[0]) {
-            console.log('formData')
             const formData = new FormData();
             formData.append("post", `{"text" : "${textInput.current.value}", "userId" : ${userId}}`);
             formData.append('image', fileInput.current.files[0], fileInput.current.files[0].name)
-            console.log(formData.getAll('image'))
+            setModifyingPost(false)
             updatePostWithFormData(formData, postId).then(() => {
                 handleUpdate()
-                fileInput.current.value = ""
-                textInput.current.value = ''
-                //setModifyingPost(false)
             })
         }
         else {
-            console.log('JSON')
             let request = {}
             if(modifyingPicture){
                 request = {
@@ -101,13 +76,18 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
             
             updatePostWithJSON(request, postId).then(() => {
                 handleUpdate()
-                textInput.current.value = ''
                 setModifyingPost(false)
             })
         }
     }
 
     //Deleting Post
+    function openModal() {
+        setIsOpen(true);
+    }
+    function closeModal() {
+        setIsOpen(false);
+    }
     const handleDeletePost = (event) => {
         deletePost(postId).then(() => handleUpdate())
     }
@@ -130,6 +110,7 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
     return (
         <article className='post'>
             {modifyingPost ?
+             // Se déclenche lorsque l'on clique sur Modifier
                 <>
                     <header className='post__header'>
                         <img src={userProfilePicture} className='profile-picture' alt='Profil' />
@@ -153,6 +134,21 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
                     </main>
                 </> :
                 <>
+                {/* Se déclenche lorsque l'on appuie sur Supprimer */}
+                    <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={closeModal}
+                        //style={customStyles}
+                        className={'delete-post-modal'}
+                        >
+                        <i className="fas fa-times profile-change__icon" onClick={closeModal}></i>
+                        <h2>Supprimer le post</h2>
+                        <p>Êtes-vous sûr de vouloir supprimer ce post ?</p>
+                        <div>
+                            <button onClick={handleDeletePost}>Oui</button>
+                            <button onClick={closeModal}>Non</button>
+                        </div>
+                    </Modal>
                     <header className='post__header'>
                         <img src={userProfilePicture} className='profile-picture' alt='Profil' />
                         <div>
@@ -163,7 +159,7 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
                         <nav className="post__header__menu">
                             <ul>
                                 {sameUser ? <li className="post__header__menu__element" onClick={handleModifyingPost}>Modifier</li> : ''}
-                                {sameUser ? <li className="post__header__menu__element" onClick={handleDeletePost}>Supprimer</li> : ''}
+                                {sameUser ? <li className="post__header__menu__element" onClick={openModal}>Supprimer</li> : ''}
                                 <li className="post__header__menu__element post__header__menu__element--no-border">Signaler</li>
                             </ul>
                         </nav>
@@ -189,39 +185,3 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
 
     )
 }
-
-//   {/* <Modal
-//                 isOpen={modalIsOpen}
-//                 onRequestClose={closeModal}
-//                 style={customStyles}
-//                 contentLabel="Example Modal"
-//             >
-//                 <i className="fas fa-times profile-change__icon" onClick={closeModal}></i>
-//                 <h2>Supprimer le post</h2>
-//                 <p>Êtes-vous sûr de vouloir supprimer ce post ?</p>
-//             </Modal> */}
-//             {/* Modal for modifying */}
-//             {/* <Modal
-//                 className='modifying-post-modal'
-//                 //overlayClassName="modifying-post-overlay-modal"
-//                 isOpen={modalIsOpen}
-//                 onRequestClose={closeModal}
-//                 //style={customStyles}
-//                 contentLabel="Example Modal"
-//             >
-//                 <i className="fas fa-times modal-close-icon" onClick={closeModal}></i>
-//                 <h2>Modifiez votre post</h2>
-//                 <div className='new-post'>
-//                     <img src={maleAvatar} className='profile-picture' alt='Profil' />
-//                     <form className='new-post__form'>
-//                         <textarea ref={textInputModal} name="textarea" value={modalText} onChange={autoResize}></textarea>
-//                         <div className='new-post__form__file-div'>
-//                             <label htmlFor="imageInput">Choisissez une image : </label>
-//                             <input ref={fileInputModal} type="file" id="imageInput" name="imageInput" accept="image/png, image/gif, image/jpeg" onChange={handleFileChange}></input>
-//                         </div>
-//                         {modalPicture ? <img className='new-post__post-picture' src={modalPicture} alt='Post picture' /> : ''}
-//                         {modalPicture ? <button onClick={handleFileRemove}>Supprimer l'image</button> : ''}
-//                     </form>
-//                     <button className='new-post__validate' ><i className="fas fa-edit"></i>Update it!</button>
-//                 </div>
-//             </Modal> */}
