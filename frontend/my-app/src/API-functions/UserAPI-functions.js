@@ -20,7 +20,7 @@ export function signUp(request) {
         })
 }
 
-//New user
+//User logged in
 export function login(request) {
     const url = 'http://localhost:3000/api/users/login';
     const options = {
@@ -90,18 +90,4 @@ export function getUserInfo(id) {
 }
 
 
-export function getAllPosts() {
-    const url = 'http://localhost:3000/api/posts';
-    const options = {
-        method: 'GET',
-        headers: {
-            Accept: 'application/json',
-            'Content-type': 'application/json',
-            'authorization' : 'Bearer '+ sessionStorage.getItem('groupomania-token')
-        },
-        credentials: "include"
-    }
-    return fetch(url, options)
-        .then(reponse => reponse.json())
-        .catch(err => console.log("Something is wrong : ", err))
-}
+

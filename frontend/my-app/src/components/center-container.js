@@ -4,7 +4,7 @@ import NewPost from './dashboard/newpost';
 import PostContainer from './dashboard/post-container';
 import ProfileChange from './dashboard/profile-change';
 import ProfileContainer from './dashboard/profile-container';
-import SettingsContainer from './dashboard/settings';
+import SettingsContainer from './dashboard/settings-container';
 
 export default function CenterContainer({ centerElement }) {
     const [showModifyProfile, setShowModifyProfile] = React.useState(false)
@@ -25,7 +25,7 @@ export default function CenterContainer({ centerElement }) {
                 </> : ''}
             {centerElement === 'newsfeed' ?
                 <>
-                    <NewPost />
+                    <NewPost  userConnected={user} />
                     <PostContainer userConnected={user} />
                 </> : ''}
             {centerElement === 'settings' ?

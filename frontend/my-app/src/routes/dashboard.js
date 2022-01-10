@@ -3,7 +3,7 @@ import React from 'react';
 import Header from '../components/header';
 import ContactContainer from '../components/contact-container';
 import LeftContainer from '../components/left-container';
-import { getUserConnectedInfo } from '../API-functions'
+import { getUserConnectedInfo } from '../API-functions/UserAPI-functions'
 import { Outlet } from 'react-router-dom';
 import Footer from '../components/footer';
 

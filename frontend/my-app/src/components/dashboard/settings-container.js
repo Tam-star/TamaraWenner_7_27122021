@@ -13,7 +13,6 @@ export default function SettingsContainer({ user, handleClick }) {
             <h3>Mode</h3>
             <p>Light Mode / Dark Mode</p>
             <Switch
-                //style={{width:'170px'}}
                 onChange={handleChange}
                 onColor="#18315a"
                 offColor='#e6e6e6'

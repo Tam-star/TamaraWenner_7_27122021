@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { logout } from '../API-functions';
+import { logout } from '../API-functions/UserAPI-functions';
 
 export default function Nav({ connected }) {
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import maleAvatar from '../../assets/male-avatar-profile.jpg';
-import { getAllPosts, getUserInfo } from '../../API-functions';
+import { getUserInfo } from '../../API-functions/UserAPI-functions';
+import { getAllPosts } from '../../API-functions/PostAPI-functions';
 import { getTimeAmount } from '../../functions';
 
 export default function PostContainer({ userConnected }) {

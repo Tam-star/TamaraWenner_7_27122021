@@ -1,16 +1,17 @@
 import React from 'react';
+import { createPost, createPostWithFormData, createPostWithJSON } from '../../API-functions/PostAPI-functions';
 import maleAvatar from '../../assets/male-avatar-profile.jpg';
 
-export default function NewPost() {
+export default function NewPost({ userConnected }) {
 
     const fileInput = React.useRef()
+    const textInput = React.useRef()
 
     const [picture, setPicture] = React.useState()
 
     const autoResize = event => {
         event.target.style.height = 'auto';
         event.target.style.height = `${event.target.scrollHeight - 18}px`
-        console.log('scroll height : ' + event.target.scrollHeight + 'px')
     }
 
     const handleFileChange = event => {
@@ -26,20 +27,36 @@ export default function NewPost() {
         setPicture(null)
     }
 
+    const handleCreatePost = event => {
+        event.preventDefault()
+        if (fileInput.current.files[0]) {
+            const formData = new FormData();
+            formData.append("post", `{"text" : "${textInput.current.value}", "userId" : ${userConnected.id}}`);
+            formData.append('image', fileInput.current.files[0], fileInput.current.files[0].name)
+            createPostWithFormData(formData)
+        }
+        else {
+            const request = {
+                text: textInput.current.value,
+                userId: userConnected.id
+            }
+            createPostWithJSON(request)
+        }
+    }
+
     return (
         <div className='new-post'>
             <img src={maleAvatar} className='profile-picture' alt='Profil' />
             <form className='new-post__form'>
-                <textarea name="textarea" placeholder='Vous pouvez écrire ici.' onChange={autoResize}></textarea>
+                <textarea ref={textInput} name="textarea" placeholder='Vous pouvez écrire ici.' onChange={autoResize}></textarea>
                 <div className='new-post__form__file-div'>
                     <label htmlFor="imageInput">Choisissez une image : </label>
                     <input ref={fileInput} type="file" id="imageInput" name="imageInput" accept="image/png, image/gif, image/jpeg" onChange={handleFileChange}></input>
                 </div>
                 {picture ? <img className='new-post__post-picture' src={picture} alt='Post picture' /> : ''}
-                {picture ?  <button onClick={handleFileRemove}>Supprimer l'image</button> : ''}
-               
+                {picture ? <button onClick={handleFileRemove}>Supprimer l'image</button> : ''}
             </form>
-            <button className='new-post__validate'><i className="fas fa-link"></i>Post it!</button>
+            <button className='new-post__validate' onClick={handleCreatePost}><i className="fas fa-link"></i>Post it!</button>
         </div>
     )
 

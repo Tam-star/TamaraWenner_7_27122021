@@ -14,6 +14,7 @@
         max-height : 300px;
     }
     &__form{
+        position : relative;
         flex : 1;
         padding : 0 20px;
         display : flex;
@@ -41,6 +42,7 @@
         border : none;
         border-radius: 15px;
         padding : 10px;
+        cursor : pointer;
         & i {
             margin-right : 10px;
         }
