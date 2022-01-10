@@ -4,10 +4,12 @@ import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import { deleteUser } from '../../../API-functions/UserAPI-functions';
 import { deletePost, getAllPostsOfUser } from '../../../API-functions/PostAPI-functions';
+import { UserContext } from '../../../UserContext';
 
-export default function SettingsContainer({ user }) {
+export default function SettingsContainer() {
     const navigate = useNavigate();
 
+    const [user] = React.useContext(UserContext)
     //Switch Light Mode / Dark Mode
     const [checked, setChecked] = React.useState(false);
     const handleChange = nextChecked => {
@@ -23,18 +25,17 @@ export default function SettingsContainer({ user }) {
         setIsOpen(false);
     }
     const handleDeleteUser = (event) => {
-        getAllPostsOfUser(user.id).then((response) => {
-            response.data.map(post => {
-                deletePost(post.id)
-            })
-            console.log('tous les posts de l utilisateur ont été supprimés')
-            deleteUser(user.id).then(() => {
-                console.log('cookie d authentification supprimé')
-                navigate("../../");
+        getAllPostsOfUser(user.id)
+            .then((response) => {
+                response.data.map(post => deletePost(post.id))
+                console.log('tous les posts de l utilisateur ont été supprimés')
+                deleteUser(user.id).then(() => {
+                    console.log('cookie d authentification supprimé')
+                    navigate("../../");
+
+                })
 
             })
-
-        })
     }
     return (
         <section className='settings-container'>

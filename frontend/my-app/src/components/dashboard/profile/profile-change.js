@@ -1,7 +1,6 @@
 import React from 'react';
-import maleAvatar from '../../../assets/male-avatar-profile.jpg';
-import { updateUserWithFormData, updateUserWithJSON } from '../../../API-functions/UserAPI-functions';
-
+import { getUserConnectedInfo, updateUserWithFormData, updateUserWithJSON } from '../../../API-functions/UserAPI-functions';
+import { UserContext } from '../../../UserContext';
 
 
 function reducer(state, action) {
@@ -21,9 +20,10 @@ function reducer(state, action) {
     }
 }
 
-export default function ProfileChange({ user, handleClick }) {
+export default function ProfileChange({ handleClick }) {
 
-    const [picture, setPicture] = React.useState()
+    const [user, setUser] = React.useContext(UserContext)
+    const [picture, setPicture] = React.useState(user.imageUrl)
     const [state, dispatch] = React.useReducer(reducer,
         {
             lastname: user.lastname,
@@ -57,21 +57,46 @@ export default function ProfileChange({ user, handleClick }) {
             formData.append('image', fileInput.current.files[0], fileInput.current.files[0].name)
             console.log(formData.getAll('user'))
             updateUserWithFormData(formData, user.id).then(() => {
+                handleClick(event)  //Close the modify-profile container
+                getUserConnectedInfo()
+                    .then((response) => {
+                        setUser(response.data)
+                    })
+                    .catch((error) => console.error(error))
                 console.log('profile updated')
             })
         }
         else {
             let request = {}
             if (picture) {
-                request = state
+                request = state.password !== "" ? { ...state } :
+                    {
+                        lastname: state.lastname,
+                        firstname: state.firstname,
+                        pseudo: state.pseudo,
+                        bio: state.bio,
+                    }
             } else {
-                request = {
+                request = state.password !== "" ? {
                     ...state,
                     imageUrl: null
-                }
+                } :
+                    {
+                        lastname: state.lastname,
+                        firstname: state.firstname,
+                        pseudo: state.pseudo,
+                        bio: state.bio,
+                        imageUrl: null
+                    }
             }
-
+            console.log('request', request)
             updateUserWithJSON(request, user.id).then(() => {
+                handleClick(event) //close the modify-profile container
+                getUserConnectedInfo()
+                    .then((response) => {
+                        setUser(response.data)
+                    })
+                    .catch((error) => console.error(error))
                 console.log('profile updated')
             })
         }
@@ -84,7 +109,6 @@ export default function ProfileChange({ user, handleClick }) {
             <p className='no-allowed-change' title='Vous ne pouvez pas modifier votre email'>Email :  {user.email}</p>
             <form className='profile-change__form' action="" method="post" >
                 <div className='profile-change__form__picture' >
-                    <img src={maleAvatar} alt='Profil' />
                     <div>
                         <label htmlFor="imageInput">Modifier votre photo de profil : </label>
                         <input type="file" id="imageInput" name="imageInput" accept="image/png, image/gif, image/jpeg" ref={fileInput} onChange={handleFileChange}></input>

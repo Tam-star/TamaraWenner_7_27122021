@@ -1,15 +1,12 @@
 import React from 'react';
 import Nav from './nav';
-import maleAvatar from '../assets/male-avatar-profile.jpg';
+import AsideCard from './aside-card';
 
-export default function LeftContainer({ connected, user }) {
+export default function LeftContainer({ connected }) {
     return (
         <section className='left-container'>
             {connected ?
-                <aside className='profile-aside'>
-                    <img src={user.imageUrl ? user.imageUrl : maleAvatar} alt='Profil' />
-                    <p>Bonjour {user.pseudo} !</p>
-                </aside> 
+                <AsideCard />
                 : ''}
             <Nav connected={connected} />
         </section>

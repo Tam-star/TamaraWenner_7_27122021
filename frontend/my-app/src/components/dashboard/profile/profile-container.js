@@ -1,7 +1,10 @@
 import React from 'react';
 import maleAvatar from '../../../assets/male-avatar-profile.jpg';
+import { UserContext } from '../../../UserContext';
 
-export default function ProfileContainer({user, handleClick}) {
+export default function ProfileContainer({ handleClick }) {
+    const [user] = React.useContext(UserContext)
+
     return (
         <section className='profile-container'>
             <img src={user.imageUrl ? user.imageUrl : maleAvatar} className='profile-picture' alt='Profil' />
