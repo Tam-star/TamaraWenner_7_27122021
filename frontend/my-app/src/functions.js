@@ -1,6 +1,14 @@
+import React from "react";
+import { UserContext } from "./UserContext";
+
 export function redirectToNewsFeed() {
     window.location.href = `./newsfeed`
 }
+
+
+export function useAuth() {
+    return React.useContext(UserContext);
+  }
 
 export function getTimeAmount(timestamp) {
     

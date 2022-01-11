@@ -8,18 +8,18 @@ import Footer from '../components/footer';
 function Home() {
 
   return (
-    <div className="App">
+    <>
       <Header />
       <main className='main-container'>
         <LeftContainer connected={false} />
-        <Outlet/>
+        <Outlet />
         <section className='right-container info'>
           <h2>Pourquoi s'inscrire ?</h2>
           <p>Pour partager du contenu avec tes collègues de GROUPOMANIA</p>
         </section>
       </main>
-      <Footer/>
-    </div>
+      <Footer />
+    </>
   );
 }
 

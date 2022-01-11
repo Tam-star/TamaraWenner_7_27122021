@@ -1,9 +1,9 @@
 import React from 'react';
 import maleAvatar from '../../../assets/male-avatar-profile.jpg';
-import { UserContext } from '../../../UserContext';
+import { useAuth } from '../../../functions';
 
 export default function ProfileContainer({ handleClick }) {
-    const [user] = React.useContext(UserContext)
+    const [user] = useAuth()
 
     return (
         <section className='profile-container'>

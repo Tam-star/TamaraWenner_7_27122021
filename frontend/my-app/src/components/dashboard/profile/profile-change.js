@@ -1,6 +1,6 @@
 import React from 'react';
 import { getUserConnectedInfo, updateUserWithFormData, updateUserWithJSON } from '../../../API-functions/UserAPI-functions';
-import { UserContext } from '../../../UserContext';
+import { useAuth } from '../../../functions';
 
 
 function reducer(state, action) {
@@ -22,7 +22,7 @@ function reducer(state, action) {
 
 export default function ProfileChange({ handleClick }) {
 
-    const [user, setUser] = React.useContext(UserContext)
+    const [user, setUser] = useAuth()
     const [picture, setPicture] = React.useState(user.imageUrl)
     const [state, dispatch] = React.useReducer(reducer,
         {

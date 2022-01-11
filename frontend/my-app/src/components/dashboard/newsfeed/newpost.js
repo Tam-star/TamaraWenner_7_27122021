@@ -1,13 +1,13 @@
 import React from 'react';
 import { createPostWithFormData, createPostWithJSON } from '../../../API-functions/PostAPI-functions';
 import maleAvatar from '../../../assets/male-avatar-profile.jpg';
-import { UserContext } from '../../../UserContext';
+import { useAuth } from '../../../functions';
 
 export default function NewPost({ handleUpdate }) {
 
     const fileInput = React.useRef()
     const textInput = React.useRef()
-    const [userConnected] = React.useContext(UserContext)
+    const [userConnected] = useAuth()
     const [picture, setPicture] = React.useState()
 
     const autoResize = event => {

@@ -1,34 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-  BrowserRouter,
-  Routes,
-  Route
+  BrowserRouter
 } from "react-router-dom";
-import Home from "./routes/home"
+import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Subscription from './components/home/subscription';
-import Connexion from './components/home/connexion';
-import Dashboard from './routes/dashboard';
-import CenterContainer from './components/center-container';
-import Welcome from './components/home/welcome';
 
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Home />} >
-        <Route index element={ <Welcome /> } />
-        <Route path="signup" element={<Subscription />} />
-        <Route path="login" element={<Connexion />} />
-      </Route>
-      <Route path="/dashboard" element={<Dashboard />} >
-        <Route path="/dashboard/profile" element={<CenterContainer centerElement='profil' />} />
-        <Route path="/dashboard/newsfeed" element={<CenterContainer centerElement='newsfeed' />} />
-        <Route path="/dashboard/settings" element={<CenterContainer centerElement='settings' />} />
-      </Route>
-    </Routes>
-  </BrowserRouter>,
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>,
   document.getElementById('root')
 );
 
