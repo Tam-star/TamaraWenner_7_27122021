@@ -1,6 +1,6 @@
 import React from "react";
-import { UserContext } from "../UserContext";
-import maleAvatar from '../assets/male-avatar-profile.jpg';
+import { UserContext } from "../../Contexts/UserContext";
+import maleAvatar from '../../assets/male-avatar-profile.jpg';
 
 
 export default function AsideCard() {

@@ -1,12 +1,12 @@
 import React from 'react';
 import { getAllPosts } from '../../../API-functions/PostAPI-functions';
-import { getTimeAmount, useAuth } from '../../../functions';
+import { getTimeAmount,  useUserContext } from '../../../functions';
 import Post from './post';
 
 export default function PostContainer({ postUpdate, handleUpdate }) {
 
     const [postsList, setPostsList] = React.useState([])
-    const [userConnected] = useAuth()
+    const [userConnected] = useUserContext()
 
     React.useEffect(() => {
         getAllPosts()

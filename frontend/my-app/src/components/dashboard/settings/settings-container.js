@@ -4,12 +4,12 @@ import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import { deleteUser } from '../../../API-functions/UserAPI-functions';
 import { deletePost, getAllPostsOfUser } from '../../../API-functions/PostAPI-functions';
-import { useAuth } from '../../../functions';
+import {  useUserContext } from '../../../functions';
 
 export default function SettingsContainer() {
     const navigate = useNavigate();
 
-    const [user] = useAuth()
+    const [user] = useUserContext()
     //Switch Light Mode / Dark Mode
     const [checked, setChecked] = React.useState(false);
     const handleChange = nextChecked => {

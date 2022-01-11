@@ -1,12 +1,12 @@
 import React from "react";
-import { UserContext } from "./UserContext";
+import { UserContext } from "./Contexts/UserContext";
 
 export function redirectToNewsFeed() {
     window.location.href = `./newsfeed`
 }
 
 
-export function useAuth() {
+export function useUserContext() {
     return React.useContext(UserContext);
   }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { getUserConnectedInfo } from './API-functions/UserAPI-functions';
+import { getUserConnectedInfo } from '../API-functions/UserAPI-functions';
 
 export const UserContext = React.createContext()
 

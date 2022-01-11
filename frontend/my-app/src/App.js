@@ -1,37 +1,38 @@
 import './sass/App.scss';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {
-  BrowserRouter,
   Routes,
   Route
 } from "react-router-dom";
-import Home from "./routes/home"
-import reportWebVitals from './reportWebVitals';
+import Home from "./routes/home";
 import Subscription from './components/home/subscription';
 import Connexion from './components/home/connexion';
 import Dashboard from './routes/dashboard';
 import CenterContainer from './components/center-container';
 import Welcome from './components/home/welcome';
-import { UserProvider } from './UserContext';
+import { AuthProvider, RequireAuth } from './Contexts/AuthContext';
 
 function App() {
   return (
     <div className="App">
-      <UserProvider>
+      <AuthProvider>
         <Routes>
           <Route path="/" element={<Home />} >
             <Route index element={<Welcome />} />
             <Route path="signup" element={<Subscription />} />
             <Route path="login" element={<Connexion />} />
           </Route>
-          <Route path="/dashboard" element={<Dashboard />} >
-            <Route path="/dashboard/profile" element={<CenterContainer centerElement='profil' />} />
-            <Route path="/dashboard/newsfeed" element={<CenterContainer centerElement='newsfeed' />} />
-            <Route path="/dashboard/settings" element={<CenterContainer centerElement='settings' />} />
+          <Route path="dashboard/:userId"
+            element={
+              <RequireAuth>
+                <Dashboard />
+              </RequireAuth>} >
+            <Route path="profile" element={<CenterContainer centerElement='profil' />} />
+            <Route path="newsfeed" element={<CenterContainer centerElement='newsfeed' />} />
+            <Route path="settings" element={<CenterContainer centerElement='settings' />} />
           </Route>
         </Routes>
-      </UserProvider>
+      </AuthProvider>
     </div>
   );
 }
