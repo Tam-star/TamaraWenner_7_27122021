@@ -18,19 +18,6 @@ exports.getAllUsers = (req, res, next) => {
     })
 }
 
-//The person who is connected has access to all his or her data
-exports.getUserConnected = (req, res, next) => {
-  User.findByPk(req.auth.userId)
-    .then(user => {
-      const message = 'L\'utilisateur a bien été récupéré.'
-      res.json({ message, data: user })
-    })
-    .catch(error => {
-      const message = 'L\'utilisateur n\'a pas pu être récupéré. Réessayez dans quelques instants'
-      res.status(500).json({ message, data: error })
-      console.log(`Il y a eu une erreur : ${error}`)
-    })
-}
 
 //To get info from other persons
 exports.getUserById = (req, res, next) => {
@@ -39,16 +26,8 @@ exports.getUserById = (req, res, next) => {
       if (!user) {
         return res.status(404).json({ error: 'Cet utilisateur n\'existe pas.' })
       }
-      //We don't return the password of the person
-      const data = {
-        "lastname": user.lastname,
-        "firstname": user.firstname,
-        "pseudo": user.pseudo,
-        "bio": user.bio,
-        "imageUrl": user.imageUrl,
-      }
       const message = 'L\'utilisateur a bien été récupéré.'
-      res.json({ message, data })
+      res.json({ message, data : user })
     })
     .catch(error => {
       const message = 'L\'utilisateur n\'a pas pu être récupéré. Réessayez dans quelques instants'
@@ -56,6 +35,7 @@ exports.getUserById = (req, res, next) => {
       console.log(`Il y a eu une erreur : ${error}`)
     })
 }
+
 
 exports.modifyUser = (req, res, next) => {
 
@@ -269,7 +249,8 @@ exports.login = (req, res, next) => {
             return res.status(401).json({ error: 'Le mot de passe est incorrect' });
           }
           const message = `L\'utilisateur ${user.pseudo} est bien connecté.`
-
+          //On renvoie le userId
+          const data = {userId : user.id}
           //On place le token dans un cookie
           res.cookie('groupomania-jwt', jwt.sign(
             {
@@ -280,7 +261,7 @@ exports.login = (req, res, next) => {
             { expiresIn: '24h' }
           ), { maxAge: 1000 * 60 * 60 * 24, httpOnly: true })
 
-          res.status(200).json({ message })
+          res.status(200).json({ message, data })
         })
     })
     .catch(error => {

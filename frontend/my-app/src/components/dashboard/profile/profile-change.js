@@ -1,5 +1,5 @@
 import React from 'react';
-import { getUserConnectedInfo, updateUserWithFormData, updateUserWithJSON } from '../../../API-functions/UserAPI-functions';
+import {  updateUserWithFormData, updateUserWithJSON } from '../../../API-functions/UserAPI-functions';
 import {  useUserContext } from '../../../functions';
 
 
@@ -22,7 +22,7 @@ function reducer(state, action) {
 
 export default function ProfileChange({ handleClick }) {
 
-    const [user, setUser] = useUserContext()
+    const [user, handleUser] = useUserContext()
     const [picture, setPicture] = React.useState(user.imageUrl)
     const [state, dispatch] = React.useReducer(reducer,
         {
@@ -58,11 +58,7 @@ export default function ProfileChange({ handleClick }) {
             console.log(formData.getAll('user'))
             updateUserWithFormData(formData, user.id).then(() => {
                 handleClick(event)  //Close the modify-profile container
-                getUserConnectedInfo()
-                    .then((response) => {
-                        setUser(response.data)
-                    })
-                    .catch((error) => console.error(error))
+                handleUser()
                 console.log('profile updated')
             })
         }
@@ -92,11 +88,7 @@ export default function ProfileChange({ handleClick }) {
             console.log('request', request)
             updateUserWithJSON(request, user.id).then(() => {
                 handleClick(event) //close the modify-profile container
-                getUserConnectedInfo()
-                    .then((response) => {
-                        setUser(response.data)
-                    })
-                    .catch((error) => console.error(error))
+                handleUser()
                 console.log('profile updated')
             })
         }

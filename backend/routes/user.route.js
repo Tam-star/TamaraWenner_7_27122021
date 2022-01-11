@@ -5,7 +5,6 @@ const multer = require('../middlewares/multer-config');
 const userCtrl = require('../controllers/user.controller')
 
 router.get('/', auth, userCtrl.getAllUsers)
-router.get('/user-info', auth, userCtrl.getUserConnected)
 router.get('/logout', userCtrl.logout)
 router.get('/:id', auth, userCtrl.getUserById)
 router.post('/signup', userCtrl.signUp)
