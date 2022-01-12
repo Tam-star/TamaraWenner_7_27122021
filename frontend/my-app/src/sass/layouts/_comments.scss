@@ -11,10 +11,21 @@
 
 .comment {
     display: flex;
+    align-items: center;
     margin: 10px 10px 5px 10px;
-    padding: 10px;
+    padding: 0 10px;
     position : relative;
     background-color: $fourth-color;
+    &__text{
+        &__pseudo{
+            font-weight: bold;
+            //font-size : 15px;
+        }
+        &__datetime{
+            font-style: italic;
+            font-size: 12px;
+        }
+    }
     & img {
         @include profile-image();
         margin-right: 10px;
@@ -22,10 +33,27 @@
     &__menu{
         position : absolute;
         right : 10px;
+        top : 15px;
         cursor: pointer;
         & i {
-            margin : 5px;
+            margin-right : 5px;
         }
+    }
+    &__modifying{
+        flex : 1;
+        padding-bottom: 10px;
+        &__form{
+            display: flex;
+            & textarea{
+                @include textarea-post();
+                flex : 1;
+            }
+            &__validate{
+                @include post-validate-button();
+                margin-left : 10px;
+            }
+        }
+       
     }
 }
 

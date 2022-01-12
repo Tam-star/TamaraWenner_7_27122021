@@ -28,12 +28,6 @@ export default function NewComment({ postId, handleUpdate }) {
             <img src={user.imageUrl ? user.imageUrl : maleAvatar} className='profile-picture' alt='Profil' />
             <form className='new-comment__form'>
                 <textarea ref={textInput} name="textarea" placeholder='Vous pouvez écrire ici.' onChange={autoResize}></textarea>
-                {/* <div className='new-comment__form__file-div'>
-                    <label htmlFor="imageInput">Choisissez une image : </label>
-                    <input ref={fileInput} type="file" id="imageInput" name="imageInput" accept="image/png, image/gif, image/jpeg" onChange={handleFileChange}></input>
-                </div> */}
-                {/* {picture ? <img className='new-comment__comment-picture' src={picture} alt='Comment picture' /> : ''}
-                {picture ? <button onClick={handleFileRemove}>Supprimer l'image</button> : ''} */}
                 <button type="submit" className='new-comment__form__validate' onClick={handleCreateComment} >Post</button>
             </form>
         </div>

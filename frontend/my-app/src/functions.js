@@ -27,7 +27,7 @@ export function getTimeAmount(timestamp) {
         if(minutes>60){
             const hours = Math.round(minutes/60)
             if(hours>24){
-                const days = hours/24
+                const days = Math.round(hours/24)
                 return `Il y a ${days} jours`
             }
             return `Il y a ${hours} heures`

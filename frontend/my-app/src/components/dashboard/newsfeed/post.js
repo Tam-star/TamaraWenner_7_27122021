@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import maleAvatar from '../../../assets/male-avatar-profile.jpg';
+import { autoResize } from "../../../functions";
 import { getUserInfo } from '../../../API-functions/UserAPI-functions';
 import { updatePostWithFormData, updatePostWithJSON, deletePost } from '../../../API-functions/PostAPI-functions';
 import CommentContainer from './comment-container';
@@ -33,8 +34,7 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
 
     const handleTextArea = event => {
         event.preventDefault();
-        event.target.style.height = 'auto';
-        event.target.style.height = `${event.target.scrollHeight - 18}px`
+        autoResize(event)
         setModifyingText(event.target.value)
     }
 
