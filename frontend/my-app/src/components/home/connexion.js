@@ -22,8 +22,9 @@ export default function Connexion() {
                 return document.getElementsByClassName("message")[0].innerHTML = `${JSON.stringify(response.error).replace(/"/g, '')}`
             }
             setAuth(true) //On autorise l'accès aux routes suivantes
+            sessionStorage.setItem('userId', response.data.userId );
             document.getElementsByClassName("message")[0].innerHTML = `Vous êtes connecté. Vous allez être redirigé vers votre dashboard`
-            console.log('my message : '+ JSON.stringify(response.message))
+            //console.log('my message : '+ JSON.stringify(response.message))
             console.log('my data:' +JSON.stringify(response.data))
             navigate(`../dashboard/${response.data.userId}/newsfeed`);
         })

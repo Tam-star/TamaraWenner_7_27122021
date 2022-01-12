@@ -119,4 +119,3 @@ export function deleteUser(id) {
         .catch(err => console.log("Something is wrong : ", err))
 }
 
-

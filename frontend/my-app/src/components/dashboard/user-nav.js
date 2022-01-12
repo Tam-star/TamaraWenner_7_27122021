@@ -1,17 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../API-functions/UserAPI-functions';
 import { useUserContext } from '../../functions';
 
 export default function UserNav() {
-
+    
+    const navigate = useNavigate();
     const [user] = useUserContext()
 
     const disconnect = (event) => {
+        sessionStorage.clear();
         logout()
             .then((data) => {
                 console.log('data from logout : ', data)
                 window.location.href = `../login`
+                navigate('../login')
             })
     }
 
