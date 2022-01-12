@@ -26,8 +26,38 @@ exports.getUserById = (req, res, next) => {
       if (!user) {
         return res.status(404).json({ error: 'Cet utilisateur n\'existe pas.' })
       }
-      const message = 'L\'utilisateur a bien été récupéré.'
-      res.json({ message, data : user })
+      console.log('auth', req.auth.userId)
+      //Depending on which user is asking, we don't send the same information
+      if (req.auth.userId == req.params.id) {
+        console.log("sameuser")
+        const message = 'L\'utilisateur a bien été récupéré.'
+        const myData = {
+          id : user.id,
+          lastname: user.lastname,
+          firstname: user.firstname,
+          pseudo: user.pseudo,
+          email: user.email,
+          bio: user.bio,
+          imageUrl: user.imageUrl,
+          sameUser: true
+        }
+        res.json({ message, data: myData })
+      }
+      else {
+        console.log("otheruser")
+        const message = 'L\'utilisateur a bien été récupéré.'
+        const dataOfOtherUser = {
+          id : user.id,
+          lastname: user.lastname,
+          firstname: user.firstname,
+          pseudo: user.pseudo,
+          bio: user.bio,
+          imageUrl: user.imageUrl,
+          sameUser: false
+        }
+        res.json({ message, data: dataOfOtherUser })
+      }
+
     })
     .catch(error => {
       const message = 'L\'utilisateur n\'a pas pu être récupéré. Réessayez dans quelques instants'
@@ -250,7 +280,7 @@ exports.login = (req, res, next) => {
           }
           const message = `L\'utilisateur ${user.pseudo} est bien connecté.`
           //On renvoie le userId
-          const data = {userId : user.id}
+          const data = { userId: user.id }
           //On place le token dans un cookie
           res.cookie('groupomania-jwt', jwt.sign(
             {
