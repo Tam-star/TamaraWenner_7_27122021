@@ -1,0 +1,58 @@
+.comment-container {
+    background-color: $secondary-color;
+    border-radius: 0 0 20px 20px;
+    margin-top: 20px;
+    padding-bottom: 10px;
+    &__list{
+        display: flex;
+        flex-direction: column-reverse;
+    }
+}
+
+.comment {
+    display: flex;
+    margin: 10px 10px 5px 10px;
+    padding: 10px;
+    position : relative;
+    background-color: $fourth-color;
+    & img {
+        @include profile-image();
+        margin-right: 10px;
+    }
+    &__menu{
+        position : absolute;
+        right : 10px;
+        cursor: pointer;
+        & i {
+            margin : 5px;
+        }
+    }
+}
+
+.new-comment {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: $fourth-color;
+    // position: relative;
+    // top:0;
+    // left : -20px;
+    &__form {
+        //background-color: darkmagenta;
+        position: relative;
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        padding: 0 10px;
+        display: flex;
+        & textarea {
+            flex : 1;
+            @include textarea-post();
+        }
+        &__validate{
+            @include post-validate-button();
+            margin-left : 10px;
+        }
+    }
+}

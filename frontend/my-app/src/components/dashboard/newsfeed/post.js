@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import maleAvatar from '../../../assets/male-avatar-profile.jpg';
 import { getUserInfo } from '../../../API-functions/UserAPI-functions';
 import { updatePostWithFormData, updatePostWithJSON, deletePost } from '../../../API-functions/PostAPI-functions';
+import CommentContainer from './comment-container';
 
 
 Modal.setAppElement('#root');
@@ -17,6 +18,8 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
     const [modifyingPicture, setModifyingPicture] = React.useState(picture)
     //Deleting post
     const [modalIsOpen, setIsOpen] = React.useState(false);
+    //Comment section
+    const [addComment, setAddComment] = React.useState(false)
 
     const handleModifyingPost = (event) => {
         setModifyingPost(true)
@@ -62,7 +65,7 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
         }
         else {
             let request = {}
-            if(modifyingPicture){
+            if (modifyingPicture) {
                 request = {
                     text: textInput.current.value,
                     userId: userId
@@ -71,10 +74,10 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
                 request = {
                     text: textInput.current.value,
                     userId: userId,
-                    imageUrl : null
+                    imageUrl: null
                 }
             }
-            
+
             updatePostWithJSON(request, postId).then(() => {
                 handleUpdate()
                 setModifyingPost(false)
@@ -92,6 +95,13 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
     const handleDeletePost = (event) => {
         deletePost(postId).then(() => handleUpdate())
     }
+
+
+    //Manage Comment Section
+    const handleAddComment= () => {
+        setAddComment(!addComment)
+    }
+
 
     React.useEffect(() => {
         getUserInfo(userId)
@@ -111,7 +121,7 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
     return (
         <article className='post'>
             {modifyingPost ?
-             // Se déclenche lorsque l'on clique sur Modifier
+                // Se déclenche lorsque l'on clique sur Modifier
                 <>
                     <header className='post__header'>
                         <img src={userProfilePicture} className='profile-picture' alt='Profil' />
@@ -135,12 +145,12 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
                     </main>
                 </> :
                 <>
-                {/* Se déclenche lorsque l'on appuie sur Supprimer */}
+                    {/* Se déclenche lorsque l'on appuie sur Supprimer */}
                     <Modal
                         isOpen={modalIsOpen}
                         onRequestClose={closeModal}
                         className={'delete-modal'}
-                        >
+                    >
                         <i className="fas fa-times profile-change__icon" onClick={closeModal}></i>
                         <h2>Supprimer le post</h2>
                         <p>Êtes-vous sûr de vouloir supprimer ce post ?</p>
@@ -172,9 +182,10 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
                         <nav className='post__footer__menu'>
                             <ul>
                                 <li><i className="fas fa-thumbs-up"></i>J'aime</li>
-                                <li><i className="far fa-comment"></i>Commenter</li>
+                                <li  onClick={handleAddComment}><i className="far fa-comment"></i>Commenter</li>
                             </ul>
                         </nav>
+                        <CommentContainer postId={postId} addComment={addComment} />
                     </footer>
                 </>}
 

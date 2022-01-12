@@ -1,7 +1,7 @@
 import React from 'react';
 import { createPostWithFormData, createPostWithJSON } from '../../../API-functions/PostAPI-functions';
 import maleAvatar from '../../../assets/male-avatar-profile.jpg';
-import { useUserContext } from '../../../functions';
+import { useUserContext, autoResize } from '../../../functions';
 
 export default function NewPost({ handleUpdate }) {
 
@@ -9,11 +9,6 @@ export default function NewPost({ handleUpdate }) {
     const textInput = React.useRef()
     const [userConnected] = useUserContext()
     const [picture, setPicture] = React.useState()
-
-    const autoResize = event => {
-        event.target.style.height = 'auto';
-        event.target.style.height = `${event.target.scrollHeight - 18}px`
-    }
 
     const handleFileChange = event => {
         const [file] = fileInput.current.files
