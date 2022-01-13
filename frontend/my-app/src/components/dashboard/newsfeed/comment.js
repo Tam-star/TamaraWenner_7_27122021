@@ -3,8 +3,11 @@ import maleAvatar from '../../../assets/male-avatar-profile.jpg';
 import { deleteComment, updateCommentWithJSON } from "../../../API-functions/CommentAPI-functions";
 import { getUserInfo } from "../../../API-functions/UserAPI-functions";
 import { autoResize } from "../../../functions";
+import { useThemeContext } from "../../../Contexts/ThemeContext";
 
 export default function Comment({ text, commentId, userId, sameUser, handleUpdate, timeOfCreation }) {
+
+    const [mode] = useThemeContext()
 
     const [userPseudo, setUserPseudo] = React.useState('')
     const [userPicture, setUserPicture] = React.useState()
@@ -51,7 +54,7 @@ export default function Comment({ text, commentId, userId, sameUser, handleUpdat
     }, [])
 
     return (
-        <div className='comment'>
+        <div className={mode==='dark' ? 'comment comment--dark':'comment'}>
             {sameUser ?
                 <nav className="comment__menu">
                     <i title="Modifier" className="fas fa-edit" onClick={handleModifyComment}></i>

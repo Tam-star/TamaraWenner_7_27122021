@@ -1,13 +1,15 @@
 import React from 'react';
 import maleAvatar from '../../../assets/male-avatar-profile.jpg';
+import { useThemeContext } from '../../../Contexts/ThemeContext';
 import { useUserContext } from '../../../Contexts/UserContext';
 
 
 export default function ProfileContainer({ handleClick }) {
     const [user] = useUserContext()
+    const [mode] = useThemeContext()
 
     return (
-        <section className='profile-container'>
+        <section className={mode==='dark' ? 'profile-container profile-container--dark' : 'profile-container'}>
             <img src={user.imageUrl ? user.imageUrl : maleAvatar} className='profile-picture' alt='Profil' />
             <div>
                 <p>Nom : {user.lastname}</p>

@@ -1,9 +1,13 @@
 .show-profile-modal{
-    @include card-style();
+    @include card-style(white);
     position: absolute;
     top: 40%; left: 50%; /* à 50%/50% du parent référent */
     transform: translate(-50%, -50%); /* décalage de 50% de sa propre taille */
     padding : 20px;
+    &--dark {
+        @include card-style($tertiary-color);
+        color: $fourth-color;
+    }
     & h2 {
         text-align: center;
     }
@@ -19,11 +23,15 @@
 
 
 .delete-modal{
-    @include card-style();
+    @include card-style(white);
     position: absolute;
     top: 40%; left: 50%; /* à 50%/50% du parent référent */
     transform: translate(-50%, -50%); /* décalage de 50% de sa propre taille */
     border : 8px double $secondary-color;
+    &--dark {
+        @include card-style($tertiary-color);
+        color: $fourth-color;
+    }
     & h2 {
         text-align: center;
     }

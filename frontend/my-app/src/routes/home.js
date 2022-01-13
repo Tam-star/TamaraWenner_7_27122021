@@ -12,13 +12,9 @@ function Home() {
     <>
       <Header />
       <main className='main-container'>
-        <LeftContainer connected={false} />
+        <LeftContainer  />
         <Outlet />
-        {/* <section className='right-container info'>
-          <h2>Pourquoi s'inscrire ?</h2>
-          <p>Pour partager du contenu avec tes collègues de GROUPOMANIA</p>
-        </section> */}
-        <RightContainer connected={false}/>
+        <RightContainer />
       </main>
       <Footer />
     </>

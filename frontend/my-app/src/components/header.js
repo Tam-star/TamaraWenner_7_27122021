@@ -1,19 +1,19 @@
 import React from 'react';
-import maleAvatar from '../assets/male-avatar-profile.jpg';
+import { useThemeContext } from '../Contexts/ThemeContext';
+import SearchBar from './dashboard/searchbar';
 
-export default function Header() {
+export default function Header({ connected = false }) {
+
+    const [mode] = useThemeContext()
+
     return (
-        <header className='main-header'>
+        <header className={mode==='dark' ? 'main-header main-header--dark' :'main-header'}>
             {/* <img src={logo} className='main-header__logo' /> */}
-            <div className='main-header__logo'></div>
-            <div className='main-header__right-container'>
-                <form className='main-header__form'>
-                    <i className="fas fa-search main-header__form__icon"></i>
-                    <input></input>
-                </form>
+            <div className={mode==='dark' ? 'main-header__logo main-header__logo--dark' :'main-header__logo'}></div>
+            {connected ?
+                <SearchBar />
+                : ''}
 
-                <img src={maleAvatar} className='main-header__avatar' alt='Profil' />
-            </div>
         </header>
     )
 

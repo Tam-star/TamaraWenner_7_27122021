@@ -1,8 +1,8 @@
-@mixin card-style {
+@mixin card-style($background) {
     margin: 20px;
     padding: 20px;
     border-radius: 15px;
-    background-color: white;
+    background-color: $background;
     box-shadow: 4px 4px 5px  rgb(180, 180, 180);
 }
 

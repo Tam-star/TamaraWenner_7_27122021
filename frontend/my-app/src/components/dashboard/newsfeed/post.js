@@ -5,11 +5,14 @@ import { autoResize } from "../../../functions";
 import { getUserInfo } from '../../../API-functions/UserAPI-functions';
 import { updatePostWithFormData, updatePostWithJSON, deletePost } from '../../../API-functions/PostAPI-functions';
 import CommentContainer from './comment-container';
+import { useThemeContext } from '../../../Contexts/ThemeContext';
 
 
 Modal.setAppElement('#root');
 
 export default function Post({ postId, text, picture, timeOfCreation, userId, sameUser, handleUpdate }) {
+
+    const[mode] = useThemeContext()
 
     const [userPseudo, setUserPseudo] = React.useState('')
     const [userProfilePicture, setUserProfilePicture] = React.useState('')
@@ -119,7 +122,7 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
 
 
     return (
-        <article className='post'>
+        <article className={mode==='dark' ? 'post post--dark':'post'}>
             {modifyingPost ?
                 // Se déclenche lorsque l'on clique sur Modifier
                 <>
@@ -185,7 +188,7 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
                                 <li  onClick={handleAddComment}><i className="far fa-comment"></i>Commenter</li>
                             </ul>
                         </nav>
-                        <CommentContainer postId={postId} addComment={addComment} />
+                        <CommentContainer postId={postId} addComment={addComment} handleAddComment={handleAddComment} />
                     </footer>
                 </>}
 

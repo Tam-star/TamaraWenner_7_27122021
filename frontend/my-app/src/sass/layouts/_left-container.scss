@@ -1,40 +1,59 @@
-.left-container{
+.left-container {
     width: 20vw;
 }
 
 .profile-aside {
-    @include card-style();
-    display : flex;
+    @include card-style(white);
+    display: flex;
     justify-content: space-between;
     & img {
         @include profile-image();
     }
+    &--dark {
+        @include card-style($tertiary-color);
+        color: $fourth-color;
+    }
 }
 
-.left-menu{
-    @include card-style();
-    & ul{
-        padding : 0;
+.left-menu {
+    @include card-style(white);
+    &--dark {
+        @include card-style($tertiary-color);
+        color: $fourth-color;
     }
-    &__link{
-       color : black;
-    text-decoration: none;
+    & ul {
+        padding: 0;
+    }
+    &__link {
+        color: black;
+        text-decoration: none;
+        &--dark{
+            color:white;
+        }
     }
     &__element {
         cursor: pointer;
-        list-style-type:none;
-        padding : 15px;
-        font-weight : bold;
+        list-style-type: none;
+        padding: 15px;
+        font-weight: bold;
         border-bottom: 1px $secondary-color solid;
-        &--no-border{
+        &--no-border {
             border-bottom: none;
         }
-        &:hover{
+        &:hover {
             background-color: $secondary-color;
         }
-        & i{
+        & i {
             margin-right: 15px;
-            color : $primary-color;
+            color: $primary-color;
+        }
+        &--dark{
+            &:hover i{
+               color: $primary-color;
+            }
+            & i {
+                color: $secondary-color;
+            }
         }
     }
 }

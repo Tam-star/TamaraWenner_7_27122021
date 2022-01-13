@@ -4,6 +4,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    &--dark{
+        background-color: $tertiary-color;
+    }
     &__right-container{
         display: flex;
         justify-content: flex-end;
@@ -14,9 +17,13 @@
     &__logo{
         width : 350px;
         height : 100px;
+        margin-left : 30px;
         background-image: url("../../assets/icon-left-font.png");
         background-position: center;
         background-size: cover;
+        &--dark{
+            background-image: url("../../assets/icon-left-font-monochrome-white.png");
+        }
     }
     &__form{
         color : black;

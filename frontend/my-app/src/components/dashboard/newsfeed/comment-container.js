@@ -5,7 +5,7 @@ import { useUserContext } from '../../../Contexts/UserContext';
 import Comment from './comment';
 import NewComment from './new-comment';
 
-export default function CommentContainer({ postId, addComment }) {
+export default function CommentContainer({ postId, addComment, handleAddComment }) {
 
     const [userConnected] = useUserContext()
 
@@ -36,7 +36,7 @@ export default function CommentContainer({ postId, addComment }) {
     if (showCommentSection) {
         return (
             <section className='comment-container'>
-                {addComment ? <NewComment postId={postId} handleUpdate={handleCommentUpdate} /> : ''}
+                {addComment ? <NewComment postId={postId} handleUpdate={handleCommentUpdate} handleAddComment={handleAddComment} /> : ''}
                 <div className='comment-container__list'>
                     {commentsList.map(comment =>
                         <Comment sameUser={userConnected.id === comment.userId ? true : false}

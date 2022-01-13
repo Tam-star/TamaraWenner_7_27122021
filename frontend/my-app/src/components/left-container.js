@@ -3,7 +3,7 @@ import AsideCard from './dashboard/aside-card';
 import UserNav from './dashboard/user-nav';
 import HomeNav from './home/home-nav';
 
-export default function LeftContainer({ connected }) {
+export default function LeftContainer({ connected = false }) {
     return (
         <section className='left-container'>
             {connected ?

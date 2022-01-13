@@ -11,28 +11,31 @@ import Dashboard from './routes/dashboard';
 import CenterContainer from './components/center-container';
 import Welcome from './components/home/welcome';
 import { AuthProvider, RequireAuth } from './Contexts/AuthContext';
+import { ThemeProvider } from './Contexts/ThemeContext';
 
 function App() {
   return (
     <div className="App">
-      <AuthProvider>
-        <Routes>
-          <Route path="/" element={<Home />} >
-            <Route index element={<Welcome />} />
-            <Route path="signup" element={<Subscription />} />
-            <Route path="login" element={<Connexion />} />
-          </Route>
-          <Route path="dashboard/:userId"
-            element={
-              <RequireAuth>
-                <Dashboard />
-              </RequireAuth>} >
-            <Route path="profile" element={<CenterContainer centerElement='profil' />} />
-            <Route path="newsfeed" element={<CenterContainer centerElement='newsfeed' />} />
-            <Route path="settings" element={<CenterContainer centerElement='settings' />} />
-          </Route>
-        </Routes>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Home />} >
+              <Route index element={<Welcome />} />
+              <Route path="signup" element={<Subscription />} />
+              <Route path="login" element={<Connexion />} />
+            </Route>
+            <Route path="dashboard/:userId"
+              element={
+                <RequireAuth>
+                  <Dashboard />
+                </RequireAuth>} >
+              <Route path="profile" element={<CenterContainer centerElement='profil' />} />
+              <Route path="newsfeed" element={<CenterContainer centerElement='newsfeed' />} />
+              <Route path="settings" element={<CenterContainer centerElement='settings' />} />
+            </Route>
+          </Routes>
+        </AuthProvider>
+      </ThemeProvider>
     </div>
   );
 }

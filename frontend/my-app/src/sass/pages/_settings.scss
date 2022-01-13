@@ -1,6 +1,10 @@
 
 .settings-container{
-    @include card-style();
+    @include card-style(white);
+    &--dark {
+        @include card-style($tertiary-color);
+        color: $fourth-color;
+    }
 }
 
 .react-switch{

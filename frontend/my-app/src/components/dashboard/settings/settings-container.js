@@ -5,15 +5,24 @@ import { useNavigate } from 'react-router-dom';
 import { deleteUser } from '../../../API-functions/UserAPI-functions';
 import { deletePost, getAllPostsOfUser } from '../../../API-functions/PostAPI-functions';
 import { useUserContext } from '../../../Contexts/UserContext';
+import { useThemeContext } from '../../../Contexts/ThemeContext';
 
 export default function SettingsContainer() {
+  
     const navigate = useNavigate();
-
+    const [mode, setMode] = useThemeContext()
     const [user] = useUserContext()
     //Switch Light Mode / Dark Mode
-    const [checked, setChecked] = React.useState(false);
+    const [checked, setChecked] = React.useState(mode==='light' ? false : true);
     const handleChange = nextChecked => {
         setChecked(nextChecked);
+        if (checked) {
+            setMode('light')
+            localStorage.setItem('mode', 'light');
+        } else {
+            setMode('dark')
+            localStorage.setItem('mode', 'dark');
+        }
     };
 
     //Deleting User
@@ -38,13 +47,13 @@ export default function SettingsContainer() {
             })
     }
     return (
-        <section className='settings-container'>
+        <section className={mode==='dark' ? 'settings-container settings-container--dark' :  'settings-container'}>
             <h2>Paramètres</h2>
             <h3>Mode</h3>
             <p>Light Mode / Dark Mode</p>
             <Switch
                 onChange={handleChange}
-                onColor="#18315a"
+                onColor="#000000"
                 offColor='#e6e6e6'
                 onHandleColor="#e6e6e6"
                 offHandleColor="#ffffff"

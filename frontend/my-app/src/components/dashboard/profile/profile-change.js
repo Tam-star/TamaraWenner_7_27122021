@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import {  updateUserWithFormData, updateUserWithJSON } from '../../../API-functions/UserAPI-functions';
+import { useThemeContext } from '../../../Contexts/ThemeContext';
 import { useUserContext } from '../../../Contexts/UserContext';
 
 
@@ -25,6 +26,7 @@ function reducer(state, action) {
 
 export default function ProfileChange({ handleClick }) {
 
+    const [mode] = useThemeContext()
     const [user, handleUser] = useUserContext()
     const [picture, setPicture] = React.useState(user.imageUrl)
     const [state, dispatch] = React.useReducer(reducer,
@@ -53,6 +55,7 @@ export default function ProfileChange({ handleClick }) {
     const handleUpdateUser = event => {
         event.preventDefault()
         if (fileInput.current.files[0]) {
+            console.log('formdata')
             const formData = new FormData();
             formData.append(
                 "user",
@@ -66,8 +69,10 @@ export default function ProfileChange({ handleClick }) {
             })
         }
         else {
+            console.log('json')
             let request = {}
             if (picture) {
+                console.log('picture')
                 request = state.password !== "" ? { ...state } :
                     {
                         lastname: state.lastname,
@@ -98,7 +103,7 @@ export default function ProfileChange({ handleClick }) {
     }
 
     return (
-        <section className='profile-change'>
+        <section className={ mode==='dark' ? 'profile-change profile-change--dark' :'profile-change'}>
             <i className="fas fa-times profile-change__icon" onClick={handleClick}></i>
             <h2>Modifier votre profil</h2>
             <p className='no-allowed-change' title='Vous ne pouvez pas modifier votre email'>Email :  {user.email}</p>

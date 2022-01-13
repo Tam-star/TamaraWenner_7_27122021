@@ -3,8 +3,11 @@ import { createPostWithFormData, createPostWithJSON } from '../../../API-functio
 import maleAvatar from '../../../assets/male-avatar-profile.jpg';
 import { autoResize } from '../../../functions';
 import { useUserContext } from '../../../Contexts/UserContext';
+import { useThemeContext } from '../../../Contexts/ThemeContext';
 
 export default function NewPost({ handleUpdate }) {
+
+    const [mode] = useThemeContext()
 
     const fileInput = React.useRef()
     const textInput = React.useRef()
@@ -50,7 +53,7 @@ export default function NewPost({ handleUpdate }) {
     }
 
     return (
-        <div className='new-post'>
+        <div className={ mode==='dark' ? 'new-post new-post--dark':'new-post'}>
             <img src={userConnected.imageUrl ? userConnected.imageUrl : maleAvatar} className='profile-picture' alt='Profil' />
             <form className='new-post__form'>
                 <textarea ref={textInput} name="textarea" placeholder='Vous pouvez écrire ici.' onChange={autoResize}></textarea>

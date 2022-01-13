@@ -5,7 +5,7 @@ import { createCommentWithJSON } from "../../../API-functions/CommentAPI-functio
 import maleAvatar from '../../../assets/male-avatar-profile.jpg';
 
 
-export default function NewComment({ postId, handleUpdate }) {
+export default function NewComment({ postId, handleUpdate, handleAddComment }) {
 
     const textInput = React.useRef()
     const [user] = React.useContext(UserContext)
@@ -20,6 +20,7 @@ export default function NewComment({ postId, handleUpdate }) {
         createCommentWithJSON(request).then(() => {
             handleUpdate()
             textInput.current.value = ''
+            handleAddComment()
         })
     }
 
