@@ -98,7 +98,7 @@ exports.modifyUser = (req, res, next) => {
             return res.status(401).json({ message })
           }
 
-          //In case there is a profile picture
+          //In case there is a replacing profile picture
           if (user.imageUrl && req.file) {
             const filename = user.imageUrl.split('/images/users/')[1]
             fs.unlink(`images/users/${filename}`, () => {
@@ -111,7 +111,7 @@ exports.modifyUser = (req, res, next) => {
                 })
             })
           }
-          //In case there is not a profile picture
+          //In case there is no profile picture
           else {
             return User.update(userObject, {
               where: { id: id }
@@ -143,7 +143,7 @@ exports.modifyUser = (req, res, next) => {
         }
 
         //In case there is a profile picture
-        if (user.imageUrl) {
+        if (user.imageUrl && req.file) {
           const filename = user.imageUrl.split('/images/users/')[1]
           fs.unlink(`images/users/${filename}`, () => {
             return User.update(userObject, {

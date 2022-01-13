@@ -3,13 +3,12 @@ const multer = require('multer')
 const MIME_TYPES = {
     'image/jpg': 'jpg',
     'image/jpeg': 'jpg',
-    'image/png': 'png',
-    'image/gif' : 'gif'
+    'image/png': 'png'
 }
 
 const uploadFilter = function (req, file, cb) {
     const extension = MIME_TYPES[file.mimetype]
-    if (extension === 'png' || extension === 'jpg' || extension === 'gif') {
+    if (extension === 'png' || extension === 'jpg' ) {
         cb(null, true)   
     }
     else {
