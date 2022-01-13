@@ -7,10 +7,12 @@
 @import 'layouts/center-container';
 @import 'layouts/right-container';
 @import 'layouts/footer';
-@import 'layouts/comments';
-@import 'layouts/posts';
-@import 'layouts/settings';
 @import 'layouts/modals';
+@import 'pages/posts/comments';
+@import 'pages/posts/posts';
+@import 'pages/profile';
+@import 'pages/settings';
+@import 'pages/contacts';
 @import 'pages/home';
 
 body{

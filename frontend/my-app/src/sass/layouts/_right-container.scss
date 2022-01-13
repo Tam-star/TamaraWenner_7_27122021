@@ -8,18 +8,3 @@
     @include card-style();
 }
 
-.contact-container {
-    @include card-style;
-    & ul{
-        padding : 0;
-        & li {
-            list-style-type: none;
-            display : flex;
-            align-items: center;
-            & img {
-                @include profile-image();
-                margin-right: 20px;
-            }
-        }
-    }
-}

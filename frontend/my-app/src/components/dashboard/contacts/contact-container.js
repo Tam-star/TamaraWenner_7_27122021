@@ -26,7 +26,7 @@ export default function ContactContainer() {
             <h2>CONTACTS</h2>
             <ul className='contact-list'>
                 {contactList.map(contact =>  contact.id===userConnected.id ? 
-                '' : <Contact  picture={contact.imageUrl} pseudo={contact.pseudo} key={contact.id} />)}
+                '' : <Contact  contact={contact} key={contact.id} />)}
             </ul>
         </div>
     )

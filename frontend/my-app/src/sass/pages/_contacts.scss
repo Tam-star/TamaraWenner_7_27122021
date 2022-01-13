@@ -1,0 +1,21 @@
+.contact-container {
+    @include card-style;
+    & ul{
+        padding : 0;
+    }
+}
+
+.contact{
+    list-style-type: none;
+    display : flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding : 5px;
+    border : 2px solid $secondary-color;
+    border-radius : 20px;
+    cursor : pointer;
+    & img {
+        @include profile-image();
+        margin-right: 20px;
+    }
+}

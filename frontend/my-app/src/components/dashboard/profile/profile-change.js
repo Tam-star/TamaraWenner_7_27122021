@@ -1,8 +1,10 @@
 import React from 'react';
+import Modal from 'react-modal';
 import {  updateUserWithFormData, updateUserWithJSON } from '../../../API-functions/UserAPI-functions';
 import { useUserContext } from '../../../Contexts/UserContext';
 
 
+Modal.setAppElement('#root');
 
 function reducer(state, action) {
     switch (action.type) {
