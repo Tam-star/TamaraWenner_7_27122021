@@ -41,10 +41,12 @@ exports.getPostById = (req, res, next) => {
 }
 
 exports.createPost = (req, res, next) => {
+  let url = req.url;
+  console.log('url : ', url)
   try {
     const postObject = req.file ? {
       ...JSON.parse(req.body.post),
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+      imageUrl: `${req.protocol}://${req.get('host')}/images/posts/${req.file.filename}`
     } : req.body
 
     //Si l'utilisateur indique un id dans son POST, on le supprime
@@ -95,7 +97,7 @@ exports.modifyPost = (req, res, next) => {
 
   const postObject = req.file ? {
     ...JSON.parse(req.body.post),
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    imageUrl: `${req.protocol}://${req.get('host')}/images/posts/${req.file.filename}`
   } : req.body
 
   console.log(JSON.stringify(postObject))
@@ -120,8 +122,8 @@ exports.modifyPost = (req, res, next) => {
         return res.status(401).json({ message })
       }
       if (post.imageUrl && req.file) {
-        const filename = post.imageUrl.split('/images/')[1]
-        fs.unlink(`images/${filename}`, () => {
+        const filename = post.imageUrl.split('/images/posts/')[1]
+        fs.unlink(`images/posts/${filename}`, () => {
           return Post.update(postObject, {
             where: { id: id }
           })
@@ -166,8 +168,8 @@ exports.deletePost = (req, res, next) => {
       const postDeleted = post;
       //In case there is a post picture
       if (post.imageUrl) {
-        const filename = post.imageUrl.split('/images/')[1]
-        fs.unlink(`images/${filename}`, () => {
+        const filename = post.imageUrl.split('/images/posts/')[1]
+        fs.unlink(`images/posts/${filename}`, () => {
           return Post.destroy({
             where: { id: post.id }
           })

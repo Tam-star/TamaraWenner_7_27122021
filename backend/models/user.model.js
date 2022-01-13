@@ -58,7 +58,8 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue : 'regular'
     },
     bio: {
-      type: DataTypes.TEXT
+      type: DataTypes.TEXT,
+      defaultValue : ''
     }, 
     imageUrl: {
       type: DataTypes.STRING

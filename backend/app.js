@@ -32,6 +32,8 @@ sequelize.initDb()
 
 //Endpoints
 app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images/users', express.static(path.join(__dirname, 'images/users')));
+app.use('/images/posts', express.static(path.join(__dirname, 'images/posts')));
 app.use('/api/users', userRoutes)
 app.use('/api/posts', postRoutes)
 app.use('/api/comments', commentRoutes)

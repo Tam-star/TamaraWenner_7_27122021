@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const auth = require('../middlewares/auth');
-const multer = require('../middlewares/multer-config');
+const multer = require('../middlewares/multer-users');
 const userCtrl = require('../controllers/user.controller')
 
 router.get('/', auth, userCtrl.getAllUsers)

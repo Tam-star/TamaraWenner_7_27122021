@@ -71,7 +71,7 @@ exports.modifyUser = (req, res, next) => {
 
   const userObject = req.file ? {
     ...JSON.parse(req.body.user),
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    imageUrl: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`
   } : req.body
 
   if (userObject.id) {
@@ -100,8 +100,8 @@ exports.modifyUser = (req, res, next) => {
 
           //In case there is a profile picture
           if (user.imageUrl && req.file) {
-            const filename = user.imageUrl.split('/images/')[1]
-            fs.unlink(`images/${filename}`, () => {
+            const filename = user.imageUrl.split('/images/users/')[1]
+            fs.unlink(`images/users/${filename}`, () => {
               return User.update(userObject, {
                 where: { id: id }
               })
@@ -144,8 +144,8 @@ exports.modifyUser = (req, res, next) => {
 
         //In case there is a profile picture
         if (user.imageUrl) {
-          const filename = user.imageUrl.split('/images/')[1]
-          fs.unlink(`images/${filename}`, () => {
+          const filename = user.imageUrl.split('/images/users/')[1]
+          fs.unlink(`images/users/${filename}`, () => {
             return User.update(userObject, {
               where: { id: id }
             })
@@ -189,8 +189,8 @@ exports.deleteUser = (req, res, next) => {
     const userDeleted = user;
     //In case there is a profile picture
     if (user.imageUrl) {
-      const filename = user.imageUrl.split('/images/')[1]
-      fs.unlink(`images/${filename}`, () => {
+      const filename = user.imageUrl.split('/images/users/')[1]
+      fs.unlink(`images/users/${filename}`, () => {
         return User.destroy({
           where: { id: user.id }
         })
