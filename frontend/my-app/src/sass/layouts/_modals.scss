@@ -1,7 +1,7 @@
 .delete-modal{
     @include card-style();
     position: absolute;
-    top: 50%; left: 50%; /* à 50%/50% du parent référent */
+    top: 40%; left: 50%; /* à 50%/50% du parent référent */
     transform: translate(-50%, -50%); /* décalage de 50% de sa propre taille */
     border : 8px double $secondary-color;
     & h2 {

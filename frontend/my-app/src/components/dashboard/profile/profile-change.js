@@ -1,6 +1,7 @@
 import React from 'react';
 import {  updateUserWithFormData, updateUserWithJSON } from '../../../API-functions/UserAPI-functions';
-import {  useUserContext } from '../../../functions';
+import { useUserContext } from '../../../Contexts/UserContext';
+
 
 
 function reducer(state, action) {

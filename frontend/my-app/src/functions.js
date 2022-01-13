@@ -12,9 +12,6 @@ export const autoResize = event => {
 }
 
 
-export function useUserContext() {
-    return React.useContext(UserContext);
-  }
 
 export function getTimeAmount(timestamp) {
     

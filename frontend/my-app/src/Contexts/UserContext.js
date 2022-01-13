@@ -4,6 +4,9 @@ import { getUserInfo } from '../API-functions/UserAPI-functions';
 
 export const UserContext = React.createContext()
 
+export function useUserContext() {
+  return React.useContext(UserContext);
+}
 
 export const UserProvider = (props) => {
   const [user, setUser] = React.useState('')

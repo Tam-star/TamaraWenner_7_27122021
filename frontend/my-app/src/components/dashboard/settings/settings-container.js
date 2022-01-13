@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import { deleteUser } from '../../../API-functions/UserAPI-functions';
 import { deletePost, getAllPostsOfUser } from '../../../API-functions/PostAPI-functions';
-import {  useUserContext } from '../../../functions';
+import { useUserContext } from '../../../Contexts/UserContext';
 
 export default function SettingsContainer() {
     const navigate = useNavigate();

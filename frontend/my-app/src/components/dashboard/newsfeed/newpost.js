@@ -1,7 +1,8 @@
 import React from 'react';
 import { createPostWithFormData, createPostWithJSON } from '../../../API-functions/PostAPI-functions';
 import maleAvatar from '../../../assets/male-avatar-profile.jpg';
-import { useUserContext, autoResize } from '../../../functions';
+import { autoResize } from '../../../functions';
+import { useUserContext } from '../../../Contexts/UserContext';
 
 export default function NewPost({ handleUpdate }) {
 

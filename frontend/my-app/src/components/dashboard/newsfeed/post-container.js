@@ -1,7 +1,8 @@
 import React from 'react';
 import { getAllPosts } from '../../../API-functions/PostAPI-functions';
-import { getTimeAmount,  useUserContext } from '../../../functions';
+import { getTimeAmount } from '../../../functions';
 import Post from './post';
+import { useUserContext } from '../../../Contexts/UserContext';
 
 export default function PostContainer({ postUpdate, handleUpdate }) {
 

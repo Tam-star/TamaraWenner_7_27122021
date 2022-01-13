@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../API-functions/UserAPI-functions';
-import { useUserContext } from '../../functions';
+import { useUserContext } from '../../Contexts/UserContext';
 
 export default function UserNav() {
     

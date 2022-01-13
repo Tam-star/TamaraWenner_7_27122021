@@ -4,6 +4,7 @@ import Header from '../components/header';
 import LeftContainer from '../components/left-container';
 import { Outlet } from 'react-router-dom';
 import Footer from '../components/footer';
+import RightContainer from '../components/right-container';
 
 function Home() {
 
@@ -13,10 +14,11 @@ function Home() {
       <main className='main-container'>
         <LeftContainer connected={false} />
         <Outlet />
-        <section className='right-container info'>
+        {/* <section className='right-container info'>
           <h2>Pourquoi s'inscrire ?</h2>
           <p>Pour partager du contenu avec tes collègues de GROUPOMANIA</p>
-        </section>
+        </section> */}
+        <RightContainer connected={false}/>
       </main>
       <Footer />
     </>

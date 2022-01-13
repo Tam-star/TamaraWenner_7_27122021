@@ -1,6 +1,7 @@
 import React from 'react';
 import { getAllCommentsOfPost } from '../../../API-functions/CommentAPI-functions';
-import { getTimeAmount, useUserContext } from '../../../functions';
+import { getTimeAmount } from '../../../functions';
+import { useUserContext } from '../../../Contexts/UserContext';
 import Comment from './comment';
 import NewComment from './new-comment';
 

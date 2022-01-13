@@ -1,11 +1,11 @@
 import React from "react";
-import { UserContext } from "../../Contexts/UserContext";
 import maleAvatar from '../../assets/male-avatar-profile.jpg';
+import { useUserContext } from "../../Contexts/UserContext";
 
 
 export default function AsideCard() {
 
-    const [user] = React.useContext(UserContext)
+    const [user] = useUserContext()
 
     return (
         <aside className='profile-aside'>
