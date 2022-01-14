@@ -1,4 +1,4 @@
-const { User } = require('../config/db')
+const { User, Post, Comment } = require('../config/db')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
@@ -32,7 +32,7 @@ exports.getUserById = (req, res, next) => {
         console.log("sameuser")
         const message = 'L\'utilisateur a bien été récupéré.'
         const myData = {
-          id : user.id,
+          id: user.id,
           lastname: user.lastname,
           firstname: user.firstname,
           pseudo: user.pseudo,
@@ -47,7 +47,7 @@ exports.getUserById = (req, res, next) => {
         console.log("otheruser")
         const message = 'L\'utilisateur a bien été récupéré.'
         const dataOfOtherUser = {
-          id : user.id,
+          id: user.id,
           lastname: user.lastname,
           firstname: user.firstname,
           pseudo: user.pseudo,
@@ -191,25 +191,70 @@ exports.deleteUser = (req, res, next) => {
     if (user.imageUrl) {
       const filename = user.imageUrl.split('/images/users/')[1]
       fs.unlink(`images/users/${filename}`, () => {
-        return User.destroy({
-          where: { id: user.id }
+        //First we destroy all the comments linked to the user
+        return Comment.destroy({
+          where: { userId: user.id }
         })
+          //Then we look for all the posts written by the user 
           .then(_ => {
-            const message = `L'utilisateur ${userDeleted.pseudo} a bien été supprimé.`
-            res.clearCookie('groupomania-jwt')
-            res.json({ message })
+            console.log('Suppression de tous les commentaires écrits par le user')
+            return Post.findAll({
+              where: { userId: user.id }
+            })
+              .then((postList) => {
+                console.log('Tous les posts écrits par le user ont été récupérés')
+                return Promise.all(postList.map(post => Comment.destroy({ where: { postId: post.id } })))
+                  .then(_ => {
+                    console.log('Tous les commentaires de tous les posts écrits par le user ont été supprimés')
+                    return Promise.all(postList.map(post => Post.destroy({ where: { id: post.id } })))
+                      .then(_ => {
+                        console.log("Tous les posts de l'utilisateur ont bien été supprimés")
+                        return User.destroy({
+                          where: { id: user.id }
+                        })
+                          .then(_ => {
+                            const message = `L'utilisateur ${userDeleted.pseudo} a bien été supprimé.`
+                            res.clearCookie('groupomania-jwt')
+                            res.json({ message })
+                          })
+
+                      })
+                  })
+              })
           })
       })
     }
     //In case there is not a profile picture
     else {
-      return User.destroy({
-        where: { id: user.id }
+      return Comment.destroy({
+        where: { userId: user.id }
       })
+        //Then we look for all the posts written by the user 
         .then(_ => {
-          const message = `L'utilisateur ${userDeleted.pseudo} a bien été supprimé.`
-          res.clearCookie('groupomania-jwt')
-          res.json({ message })
+          console.log('Suppression de tous les commentaires écrits par le user')
+          return Post.findAll({
+            where: { userId: user.id }
+          })
+            .then((postList) => {
+              console.log('Tous les posts écrits par le user ont été récupérés')
+              return Promise.all(postList.map(post => Comment.destroy({ where: { postId: post.id } })))
+                .then(_ => {
+                  console.log('Tous les commentaires de tous les posts écrits par le user ont été supprimés')
+                  return Promise.all(postList.map(post => Post.destroy({ where: { id: post.id } })))
+                    .then(_ => {
+                      console.log("Tous les posts de l'utilisateur ont bien été supprimés")
+                      return User.destroy({
+                        where: { id: user.id }
+                      })
+                        .then(_ => {
+                          const message = `L'utilisateur ${userDeleted.pseudo} a bien été supprimé.`
+                          res.clearCookie('groupomania-jwt')
+                          res.json({ message })
+                        })
+
+                    })
+                })
+            })
         })
     }
 

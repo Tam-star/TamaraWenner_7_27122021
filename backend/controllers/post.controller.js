@@ -1,13 +1,12 @@
-const { Post, User } = require('../config/db')
+const { Post, User, Comment } = require('../config/db')
 const { ValidationError, ForeignKeyConstraintError } = require('sequelize')
 const fs = require('fs');
-const { post } = require('../routes/comment.route');
 
 exports.getAllPosts = (req, res, next) => {
   if (req.query.userId) {
     return Post.findAll({ where: { userId: req.query.userId } })
       .then(posts => {
-        const message = `La liste des posts de l'user ${req.query.userId } a bien été récupérée.`
+        const message = `La liste des posts de l'user ${req.query.userId} a bien été récupérée.`
         res.json({ message, data: posts })
       })
   }
@@ -170,23 +169,37 @@ exports.deletePost = (req, res, next) => {
       if (post.imageUrl) {
         const filename = post.imageUrl.split('/images/posts/')[1]
         fs.unlink(`images/posts/${filename}`, () => {
-          return Post.destroy({
-            where: { id: post.id }
+          //First we destroy every comments linked to this post
+          return Comment.destroy({
+            where: { postId: post.id }
           })
+            //Then we destroy the post
             .then(_ => {
-              const message = `Le post avec l'identifiant n°${postDeleted.id} a bien été supprimé.`
-              res.json({ message, data: postDeleted })
+              return Post.destroy({
+                where: { id: post.id }
+              })
+                .then(_ => {
+                  const message = `Le post avec l'identifiant n°${postDeleted.id} a bien été supprimé.`
+                  res.json({ message, data: postDeleted })
+                })
             })
         })
       }
       //In case there is not a post picture
       else {
-        return Post.destroy({
-          where: { id: post.id }
+        //First we destroy every comments linked to this post
+        return Comment.destroy({
+          where: { postId: post.id }
         })
+          //Then we destroy the post
           .then(_ => {
-            const message = `Le post avec l'identifiant n°${postDeleted.id} a bien été supprimé.`
-            res.json({ message, data: postDeleted })
+            return Post.destroy({
+              where: { id: post.id }
+            })
+              .then(_ => {
+                const message = `Le post avec l'identifiant n°${postDeleted.id} a bien été supprimé.`
+                res.json({ message, data: postDeleted })
+              })
           })
       }
     })
@@ -206,8 +219,10 @@ exports.postLike = (req, res, next) => {
   //   "like":1,
   //   "userId" : 123456
   // }
+  console.log(req.body)
   Post.findByPk(req.params.id)
     .then(post => {
+      console.log('il s agit du post ', req.params.id)
       if (post === null) {
         const message = "Le post demandé n'existe pas. Réessayez avec un autre identifiant"
         return res.status(404).json({ message })
@@ -217,8 +232,14 @@ exports.postLike = (req, res, next) => {
         return res.status(400).json({ message })
       }
       //Like
+      let arrayUsersLiked = post.usersLiked == '' ? [] : post.usersLiked.split(',')
       if (req.body.like == 1) {
-        const stringUsersLiked = `${post.usersLiked},${req.body.userId}`
+        //Si l'utilisateur aime déjà le post
+        if (arrayUsersLiked.includes(req.body.userId)) {
+          const message = 'Vous aimez déjà ce post'
+          return res.status(400).json({ message })
+        }
+        const stringUsersLiked = post.usersLiked == '' ? `${req.body.userId}` : `${post.usersLiked},${req.body.userId}`
         return Post.update({ usersLiked: stringUsersLiked }, {
           where: { id: req.params.id }
         })
@@ -229,10 +250,9 @@ exports.postLike = (req, res, next) => {
       }
       //Unlike
       if (req.body.like == 0) {
-        let arrayUsersLiked = post.usersLiked.split(',')
-        const index = arrayUsersLiked.indexOf(req.body.userId)
-        arrayUsersLiked.splice(index, 1)
+        const index = arrayUsersLiked.indexOf(req.body.userId.toString())
         if (index > -1) {
+          arrayUsersLiked.splice(index, 1)
           return Post.update({ usersLiked: arrayUsersLiked.join(',') }, {
             where: { id: req.params.id }
           })
