@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "postinstall": "echo \"LOL\" "
+    "postinstall": "node mkdir-script.js"
   },
   "keywords": [],
   "author": "",

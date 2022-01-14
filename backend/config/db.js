@@ -22,7 +22,7 @@ const Comment = CommentModel(sequelize, DataTypes)
 // Post.belongsTo(User, {foreignKey: 'userId', targetKey: 'id'});
 
 const initDb = () => {
-    return sequelize.sync().then(_ => {
+    return sequelize.sync({force:true}).then(_ => {
         console.log('La base de donnée a bien été initialisée !')
     })
 }
