@@ -55,7 +55,7 @@ DB_PASSWORD=toto1234
 ````
 
 
-Launch : 
+Launch the server : 
 
 ````sh
 npm start
@@ -80,6 +80,8 @@ Launch :
 ````sh
 npm start
 ````
+
+After a few seconds, your browser should open a page arriving to the welcome page of GROUPOMANIA.
 
 ## Other Types of Databases
 
