@@ -14,9 +14,7 @@ export default function ContactContainer() {
     React.useEffect(() => {
         getAllUsers()
             .then((response) => {
-                console.log(response.data)
                 setContactList(response.data)
-                console.log(contactList)
             })
             .catch((error) => console.log('something is wrong : ', error))
     }, [])

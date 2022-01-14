@@ -14,11 +14,9 @@ export const UserProvider = (props) => {
 
 
   function handleUser() {
-    console.log('loggin')
     getUserInfo(params.userId)
       .then((response) => {
         setUser(response.data)
-        console.log('useEffect used : ' + JSON.stringify(response.data))
       })
       .catch((error) => console.error(error))
   }

@@ -1,29 +1,44 @@
 import React from 'react';
 import Modal from 'react-modal';
 import maleAvatar from '../../../assets/male-avatar-profile.jpg';
-import { autoResize } from "../../../functions";
+import { autoResize, getTimeAmount } from "../../../functions";
 import { getUserInfo } from '../../../API-functions/UserAPI-functions';
-import { updatePostWithFormData, updatePostWithJSON, deletePost } from '../../../API-functions/PostAPI-functions';
+import { updatePostWithFormData, updatePostWithJSON, deletePost, likePost } from '../../../API-functions/PostAPI-functions';
 import CommentContainer from './comment-container';
 import { useThemeContext } from '../../../Contexts/ThemeContext';
+import { useUserContext } from '../../../Contexts/UserContext';
+import { useParams } from 'react-router-dom';
 
 
 Modal.setAppElement('#root');
 
-export default function Post({ postId, text, picture, timeOfCreation, userId, sameUser, handleUpdate }) {
+export default function Post({ sameUser, handleUpdate, post, likesArray }) {
 
-    const[mode] = useThemeContext()
+    const params = useParams()
+    const [mode] = useThemeContext()
+    const [userConnected] = useUserContext()
 
+    const timeOfCreation = getTimeAmount(post.created)
     const [userPseudo, setUserPseudo] = React.useState('')
     const [userProfilePicture, setUserProfilePicture] = React.useState('')
+
     //Modify post
     const [modifyingPost, setModifyingPost] = React.useState(false)
-    const [modifyingText, setModifyingText] = React.useState(text)
-    const [modifyingPicture, setModifyingPicture] = React.useState(picture)
+    const [modifyingText, setModifyingText] = React.useState(post.text)
+    const [modifyingPicture, setModifyingPicture] = React.useState(post.imageUrl)
+
     //Deleting post
     const [modalIsOpen, setIsOpen] = React.useState(false);
+
     //Comment section
     const [addComment, setAddComment] = React.useState(false)
+    const [numberOfComments, setNumberOfComments] = React.useState(0)
+
+    //Likes
+    //const arrayUserLiked = post.usersLiked.split(',')
+    const [like, setLike] = React.useState(likesArray.includes(params.userId) ? 1 : 0)
+    const [numberOfLikes, setNumberOfLikes] = React.useState(post.usersLiked === '' ? 0 : likesArray.length)
+
 
     const handleModifyingPost = (event) => {
         setModifyingPost(true)
@@ -58,11 +73,10 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
         event.preventDefault()
         if (fileInput.current.files[0]) {
             const formData = new FormData();
-            formData.append("post", `{"text" : "${textInput.current.value}", "userId" : ${userId}}`);
+            formData.append("post", `{"text" : "${textInput.current.value}", "userId" : ${post.userId}}`);
             formData.append('image', fileInput.current.files[0], fileInput.current.files[0].name)
-            console.log(formData.getAll('post'))
             setModifyingPost(false)
-            updatePostWithFormData(formData, postId).then(() => {
+            updatePostWithFormData(formData, post.id).then(() => {
                 handleUpdate()
             })
         }
@@ -71,17 +85,17 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
             if (modifyingPicture) {
                 request = {
                     text: textInput.current.value,
-                    userId: userId
+                    userId: post.userId
                 }
             } else {
                 request = {
                     text: textInput.current.value,
-                    userId: userId,
+                    userId: post.userId,
                     imageUrl: null
                 }
             }
 
-            updatePostWithJSON(request, postId).then(() => {
+            updatePostWithJSON(request, post.id).then(() => {
                 handleUpdate()
                 setModifyingPost(false)
             })
@@ -96,18 +110,31 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
         setIsOpen(false);
     }
     const handleDeletePost = (event) => {
-        deletePost(postId).then(() => handleUpdate())
+        deletePost(post.id).then(() => handleUpdate())
+    }
+
+
+    //Manage Likes 
+    const handleLike = () => {
+        console.log('clic like')
+        console.log('like before ', like)
+        if (like === 1) {
+            setLike(0)
+        } else {
+            setLike(1)
+        }
+        console.log('like after ', like)
     }
 
 
     //Manage Comment Section
-    const handleAddComment= () => {
+    const handleAddComment = () => {
         setAddComment(!addComment)
     }
 
 
     React.useEffect(() => {
-        getUserInfo(userId)
+        getUserInfo(post.userId)
             .then((response) => {
                 setUserPseudo(response.data.pseudo)
                 if (response.data.imageUrl !== null) {
@@ -118,11 +145,38 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
                 }
             })
             .catch((error) => console.error(error))
-    }, [userId])
+    }, [post.userId])
+
+
+    const isFirstRender = React.useRef(true);
+
+    React.useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false
+            console.log('first render')
+        }
+        else {
+            console.log('useeffect like, ', like)
+            let request = {
+                userId: userConnected.id
+            }
+            like ? request['like'] = 1 : request['like'] = 0
+            like ? setNumberOfLikes(numberOfLikes+1) : setNumberOfLikes(numberOfLikes-1)
+            console.log(request)
+            likePost(request, post.id)
+                .then((response) => {
+                    console.log(response.message)
+                    handleUpdate()
+                })
+                .catch((error) => console.log(error))
+        }
+
+    }, [like])
+
 
 
     return (
-        <article className={mode==='dark' ? 'post post--dark':'post'}>
+        <article className={mode === 'dark' ? 'post post--dark' : 'post'}>
             {modifyingPost ?
                 // Se déclenche lorsque l'on clique sur Modifier
                 <>
@@ -178,17 +232,21 @@ export default function Post({ postId, text, picture, timeOfCreation, userId, sa
                         </nav>
                     </header>
                     <main className='post__main'>
-                        <p>{text}</p>
-                        {picture ? <img src={picture} className='post__main__post-picture' alt='Profil' /> : ''}
+                        <p>{post.text}</p>
+                        {post.imageUrl ? <img src={post.imageUrl} className='post__main__post-picture' alt='Profil' /> : ''}
                     </main>
                     <footer className='post__footer'>
                         <nav className='post__footer__menu'>
                             <ul>
-                                <li><i className="fas fa-thumbs-up"></i>J'aime</li>
-                                <li  onClick={handleAddComment}><i className="far fa-comment"></i>Commenter</li>
+                                <li style={like ? { color: 'red' } : { color: 'black' }} onClick={handleLike} ><i className="fas fa-thumbs-up"></i>J'aime</li>
+                                <li onClick={handleAddComment}><i className="far fa-comment"></i>Commenter</li>
                             </ul>
+                            <div className='post__footer__menu__stats'>
+                                <p>{numberOfLikes} like{numberOfLikes > 1 ? 's' : ''}</p>
+                                <p>{numberOfComments} commentaire{numberOfComments > 1 ? 's' : ''}</p>
+                            </div>
                         </nav>
-                        <CommentContainer postId={postId} addComment={addComment} handleAddComment={handleAddComment} />
+                        <CommentContainer postId={post.id} addComment={addComment} handleAddComment={handleAddComment} handleNumberOfComments={setNumberOfComments} />
                     </footer>
                 </>}
 

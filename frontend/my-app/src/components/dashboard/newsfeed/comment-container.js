@@ -5,7 +5,7 @@ import { useUserContext } from '../../../Contexts/UserContext';
 import Comment from './comment';
 import NewComment from './new-comment';
 
-export default function CommentContainer({ postId, addComment, handleAddComment }) {
+export default function CommentContainer({ postId, addComment, handleAddComment, handleNumberOfComments }) {
 
     const [userConnected] = useUserContext()
 
@@ -19,10 +19,10 @@ export default function CommentContainer({ postId, addComment, handleAddComment 
 
 
     React.useEffect(() => {
-        console.log('use')
         getAllCommentsOfPost(postId)
             .then((response) => {
                 setCommentsList(response.data)
+                handleNumberOfComments(response.data.length)
                 if (response.data.length === 0 && addComment === false) {
                     setShowCommentSection(false)
                 }
@@ -31,7 +31,7 @@ export default function CommentContainer({ postId, addComment, handleAddComment 
                 }
             })
             .catch((error) => console.error(error))
-    }, [addComment, postId, commentUpdate])
+    }, [commentUpdate, addComment])
 
     if (showCommentSection) {
         return (

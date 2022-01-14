@@ -15,7 +15,6 @@ export default function UserNav() {
         logout()
             .then((data) => {
                 console.log('data from logout : ', data)
-                window.location.href = `../login`
                 navigate('../login')
             })
     }

@@ -55,13 +55,11 @@ export default function ProfileChange({ handleClick }) {
     const handleUpdateUser = event => {
         event.preventDefault()
         if (fileInput.current.files[0]) {
-            console.log('formdata')
             const formData = new FormData();
             formData.append(
                 "user",
                 `{"lastname" : "${state.lastname}", "firstname" : "${state.firstname}","pseudo" : "${state.pseudo}","bio" : "${state.bio}"${state.password !== "" ? `,"password" : "${state.password}"` : ''}}`);
             formData.append('image', fileInput.current.files[0], fileInput.current.files[0].name)
-            console.log(formData.getAll('user'))
             updateUserWithFormData(formData, user.id).then(() => {
                 handleClick(event)  //Close the modify-profile container
                 handleUser()
@@ -69,10 +67,8 @@ export default function ProfileChange({ handleClick }) {
             })
         }
         else {
-            console.log('json')
             let request = {}
             if (picture) {
-                console.log('picture')
                 request = state.password !== "" ? { ...state } :
                     {
                         lastname: state.lastname,
@@ -93,7 +89,6 @@ export default function ProfileChange({ handleClick }) {
                         imageUrl: null
                     }
             }
-            console.log('request', request)
             updateUserWithJSON(request, user.id).then(() => {
                 handleClick(event) //close the modify-profile container
                 handleUser()

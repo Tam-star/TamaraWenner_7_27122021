@@ -10,9 +10,9 @@ export default function Header({ connected = false }) {
         <header className={mode==='dark' ? 'main-header main-header--dark' :'main-header'}>
             {/* <img src={logo} className='main-header__logo' /> */}
             <div className={mode==='dark' ? 'main-header__logo main-header__logo--dark' :'main-header__logo'}></div>
-            {connected ?
+            {/* {connected ?
                 <SearchBar />
-                : ''}
+                : ''} */}
 
         </header>
     )

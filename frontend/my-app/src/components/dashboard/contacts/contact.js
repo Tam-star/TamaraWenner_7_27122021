@@ -22,7 +22,7 @@ export default function Contact({ contact }) {
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
                 className={'show-profile-modal'} >
-                <i className="fas fa-times profile-change__icon" onClick={closeModal}></i>
+                <i className="fas fa-times modal-close-icon" onClick={closeModal}></i>
                 <h2>{contact.pseudo}</h2>
                 <img src={contact.imageUrl ? contact.imageUrl : maleAvatar} alt={`Profil de ${contact.pseudo}`} />
                 <p><span className='show-profile-modal__title'>Prénom : </span>{contact.firstname} </p>

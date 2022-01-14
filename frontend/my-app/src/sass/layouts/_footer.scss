@@ -18,7 +18,7 @@
     &--dark {
         background-color: $tertiary-color;
         & ul li a {
-            color: $fourth-color;
+            color: $dark-text-color;
         }
     }
     &__logo {

@@ -41,7 +41,6 @@ export default function SettingsContainer() {
                 deleteUser(user.id).then(() => {
                     console.log('cookie d authentification supprimé')
                     navigate("../../");
-
                 })
 
             })

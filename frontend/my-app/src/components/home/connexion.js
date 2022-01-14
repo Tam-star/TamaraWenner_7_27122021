@@ -23,8 +23,6 @@ export default function Connexion() {
             }
             setAuth(true) //On autorise l'accès aux routes suivantes
             document.getElementsByClassName("message")[0].innerHTML = `Vous êtes connecté. Vous allez être redirigé vers votre dashboard`
-            //console.log('my message : '+ JSON.stringify(response.message))
-            console.log('my data:' +JSON.stringify(response.data))
             navigate(`../dashboard/${response.data.userId}/newsfeed`);
         })
         .catch((error) => {

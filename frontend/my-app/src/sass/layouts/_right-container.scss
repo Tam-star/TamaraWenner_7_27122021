@@ -2,13 +2,17 @@
 .right-container{
     width: 20vw;
     height :fit-content;
+    @include tablette-only{
+        width : 100%;
+        order : 2;
+    }
 }
 
 .info{
     @include card-style(white);
     &--dark {
         @include card-style($tertiary-color);
-        color: $fourth-color;
+        color: $dark-text-color;
     }
 }
 

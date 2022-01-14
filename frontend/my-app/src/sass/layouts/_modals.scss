@@ -1,42 +1,56 @@
-.show-profile-modal{
+.show-profile-modal {
     @include card-style(white);
     position: absolute;
-    top: 40%; left: 50%; /* à 50%/50% du parent référent */
+    top: 40%;
+    left: 50%; /* à 50%/50% du parent référent */
     transform: translate(-50%, -50%); /* décalage de 50% de sa propre taille */
-    padding : 20px;
+    padding: 20px;
+    @include mobile-only {
+        position: static;
+        transform: none;
+        width: 70%;
+        margin : auto;
+        border-radius: 0%;
+        display: flex;
+        flex-direction: column;
+    }
     &--dark {
         @include card-style($tertiary-color);
-        color: $fourth-color;
+        color: $dark-text-color;
     }
     & h2 {
         text-align: center;
     }
     & img {
         object-fit: cover;
-        width : 300px;
-        height: 300px;
+        max-width: 300px;
+        max-height: 300px;
+        @include mobile-only{
+            align-self : center;
+            max-width: 100%;
+        }
     }
-    &__title{
+    &__title {
         font-weight: bold;
     }
 }
 
-
-.delete-modal{
+.delete-modal {
     @include card-style(white);
     position: absolute;
-    top: 40%; left: 50%; /* à 50%/50% du parent référent */
+    top: 40%;
+    left: 50%; /* à 50%/50% du parent référent */
     transform: translate(-50%, -50%); /* décalage de 50% de sa propre taille */
-    border : 8px double $secondary-color;
+    border: 8px double $secondary-color;
     &--dark {
         @include card-style($tertiary-color);
-        color: $fourth-color;
+        color: $dark-text-color;
     }
     & h2 {
         text-align: center;
     }
     & div {
-        display : flex;
+        display: flex;
         justify-content: space-around;
         & button {
             @include post-validate-button();
@@ -44,9 +58,17 @@
     }
 }
 
-  .modal-close-icon{
-      position : absolute;
-      right : 30px;
-      top:30px;
-      cursor : pointer;
-  }
+.modal-close-icon {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    cursor: pointer;
+    @include mobile-only{
+        position : relative;
+        font-size: 20px;
+        left : 90%;
+        top : 10px;
+        //background-color : green;
+        //position : static;
+    }
+}

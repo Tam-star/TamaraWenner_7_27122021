@@ -47,6 +47,9 @@
         padding-bottom: 10px;
         &__form {
             display: flex;
+            @include mobile-only{
+                flex-direction: column;
+            }
             & textarea {
                 @include textarea-post();
                 flex: 1;
@@ -54,6 +57,9 @@
             &__validate {
                 @include post-validate-button();
                 margin-left: 10px;
+                @include mobile-only{
+                    margin-top : 10px;
+                }
             }
         }
     }
@@ -65,11 +71,11 @@
     margin-bottom: 10px;
     padding: 10px;
     background-color: $fourth-color;
-    // position: relative;
-    // top:0;
-    // left : -20px;
+    @include mobile-only{
+        flex-direction: column;
+        align-items: center;
+    }
     &__form {
-        //background-color: darkmagenta;
         position: relative;
         flex: 1;
         display: flex;
@@ -79,6 +85,9 @@
         & textarea {
             flex: 1;
             @include textarea-post();
+            @include mobile-only{
+                margin-top: 10px;
+            }
         }
         &__validate {
             @include post-validate-button();

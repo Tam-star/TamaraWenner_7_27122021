@@ -1,11 +1,3 @@
-import React from "react";
-import { UserContext } from "./Contexts/UserContext";
-
-export function redirectToNewsFeed() {
-    window.location.href = `./newsfeed`
-}
-
-
 export const autoResize = event => {
     event.target.style.height = 'auto';
     event.target.style.height = `${event.target.scrollHeight - 18}px`

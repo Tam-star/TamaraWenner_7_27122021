@@ -26,6 +26,7 @@
     padding: 0 20px;
     display: flex;
     flex-direction: column;
+    max-width: 100%;
 }
 
 @mixin textarea-post() {
@@ -46,5 +47,21 @@
     cursor: pointer;
     & i {
         margin-right: 10px;
+    }
+}
+
+
+//MEDIA QUERIES
+
+
+@mixin tablette-only{
+    @media(max-width: $breakpoint-tablette){
+        @content;
+    }
+}
+
+@mixin mobile-only{
+    @media(max-width: $breakpoint-mobile){
+        @content;
     }
 }

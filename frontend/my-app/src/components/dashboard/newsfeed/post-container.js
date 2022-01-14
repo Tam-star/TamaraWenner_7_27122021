@@ -13,6 +13,7 @@ export default function PostContainer({ postUpdate, handleUpdate }) {
         getAllPosts()
             .then((response) => {
                 setPostsList(response.data)
+                console.log(response.data)
             })
             .catch((error) => console.error(error))
     }, [postUpdate])
@@ -21,7 +22,7 @@ export default function PostContainer({ postUpdate, handleUpdate }) {
         <section className='post-container'>
             {postsList.map(post =>
                 <Post sameUser={userConnected.id === post.userId ? true : false}
-                    key={post.id} postId={post.id} text={post.text} picture={post.imageUrl}
+                    key={post.id} post={post} likesArray={post.usersLiked.split(',')}
                     timeOfCreation={getTimeAmount(post.created)} userId={post.userId}
                     handleUpdate={handleUpdate} />)}
         </section>

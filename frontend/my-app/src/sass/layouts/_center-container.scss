@@ -1,4 +1,8 @@
 .center-container{
     width : 60vw;
+    @include tablette-only{
+        width : 100%;
+        order : 3;
+    }
 }
 

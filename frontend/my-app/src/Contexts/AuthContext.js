@@ -32,17 +32,13 @@ export function RequireAuth({ children }) {
     const location = useLocation();
     const params = useParams()
     const navigate = useNavigate()
-    console.log("Mounting RequireAuth")
 
     React.useEffect(() => {
-        console.log("useeffect of RequireAuth")
         //It is going to check if the token belongs to the same user as the profile he tries to access
         if (params.userId) {
             getUserInfo(params.userId)
                 .then((response) => {
-                    console.log("meme utilisateur ? ", response.data.sameUser)
                     if (response.data.sameUser) {
-                        console.log(' l utilisateur est le meme')
                         checkedAuthentication()
                         navigate(location) //On retourne à l'endroit voulu
                     }

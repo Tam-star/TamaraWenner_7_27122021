@@ -87,8 +87,6 @@ export function updatePostWithJSON(request, id) {
 }
 
 
-
-
 export function deletePost(id) {
     const url = 'http://localhost:3000/api/posts/'+id;
     const options = {
@@ -98,6 +96,27 @@ export function deletePost(id) {
             'Content-type': 'application/json',
         },
         credentials: "include"
+    }
+    return fetch(url, options)
+        .then(reponse => reponse.json())
+        .catch(err => console.log("Something is wrong : ", err))
+}
+
+
+
+
+
+export function likePost(request, id) {
+    console.log('like sending')
+    const url = 'http://localhost:3000/api/posts/'+id+'/like';
+    const options = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json',
+        },
+        credentials: "include",
+        body : JSON.stringify(request)
     }
     return fetch(url, options)
         .then(reponse => reponse.json())

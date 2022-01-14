@@ -1,5 +1,9 @@
 .left-container {
     width: 20vw;
+    @include tablette-only{
+        width : 100%;
+        order :1;
+    }
 }
 
 .profile-aside {
@@ -11,7 +15,7 @@
     }
     &--dark {
         @include card-style($tertiary-color);
-        color: $fourth-color;
+        color: $dark-text-color;
     }
 }
 
@@ -19,7 +23,7 @@
     @include card-style(white);
     &--dark {
         @include card-style($tertiary-color);
-        color: $fourth-color;
+        color: $dark-text-color;
     }
     & ul {
         padding: 0;
