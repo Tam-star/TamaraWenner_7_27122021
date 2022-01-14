@@ -13,6 +13,7 @@ export const AuthProvider = (props) => {
         setAuth(true)
     }
 
+    console.log('AuthProvider')
     const value = { auth, setAuth, checkedAuthentication }
 
     return (
@@ -33,6 +34,7 @@ export function RequireAuth({ children }) {
     const params = useParams()
     const navigate = useNavigate()
 
+    console.log('Require Auth')
     React.useEffect(() => {
         //It is going to check if the token belongs to the same user as the profile he tries to access
         if (params.userId) {

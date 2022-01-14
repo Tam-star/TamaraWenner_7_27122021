@@ -3,33 +3,16 @@ import Modal from 'react-modal';
 import {  updateUserWithFormData, updateUserWithJSON } from '../../../API-functions/UserAPI-functions';
 import { useThemeContext } from '../../../Contexts/ThemeContext';
 import { useUserContext } from '../../../Contexts/UserContext';
-
+import { profileReducer } from '../../../reducers';
 
 Modal.setAppElement('#root');
-
-function reducer(state, action) {
-    switch (action.type) {
-        case 'lastname':
-            return { ...state, lastname: action.payload }
-        case 'firstname':
-            return { ...state, firstname: action.payload };
-        case 'pseudo':
-            return { ...state, pseudo: action.payload };
-        case 'bio':
-            return { ...state, bio: action.payload };
-        case 'password':
-            return { ...state, password: action.payload };
-        default:
-            throw new Error("Cette action n'est pas prévue")
-    }
-}
 
 export default function ProfileChange({ handleClick }) {
 
     const [mode] = useThemeContext()
     const [user, handleUser] = useUserContext()
     const [picture, setPicture] = React.useState(user.imageUrl)
-    const [state, dispatch] = React.useReducer(reducer,
+    const [state, dispatch] = React.useReducer(profileReducer,
         {
             lastname: user.lastname,
             firstname: user.firstname,
@@ -115,8 +98,8 @@ export default function ProfileChange({ handleClick }) {
                     Votre nom :
                 </label>
                 <input onChange={(event) =>
-                    dispatch({ type: "lastname", payload: event.target.value })
-                } type={'text'} id="last-name" name="last-name" value={state.lastname}></input>
+                    dispatch({ type: "lastname", payload: event.target.value })}
+                    type={'text'} id="last-name" name="last-name" value={state.lastname}></input>
                 <label htmlFor="first-name">
                     Votre prénom :
                 </label>

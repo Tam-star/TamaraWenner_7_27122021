@@ -4,7 +4,6 @@ export const autoResize = event => {
 }
 
 
-
 export function getTimeAmount(timestamp) {
     
     const seconds = (Date.now()-Date.parse(timestamp)) /1000

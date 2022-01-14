@@ -8,12 +8,12 @@ import { useUserContext } from '../../../Contexts/UserContext';
 import { useThemeContext } from '../../../Contexts/ThemeContext';
 
 export default function SettingsContainer() {
-  
+
     const navigate = useNavigate();
     const [mode, setMode] = useThemeContext()
     const [user] = useUserContext()
     //Switch Light Mode / Dark Mode
-    const [checked, setChecked] = React.useState(mode==='light' ? false : true);
+    const [checked, setChecked] = React.useState(mode === 'light' ? false : true);
     const handleChange = nextChecked => {
         setChecked(nextChecked);
         if (checked) {
@@ -34,19 +34,13 @@ export default function SettingsContainer() {
         setIsOpen(false);
     }
     const handleDeleteUser = (event) => {
-        getAllPostsOfUser(user.id)
-            .then((response) => {
-                response.data.map(post => deletePost(post.id))
-                console.log('tous les posts de l utilisateur ont été supprimés')
-                deleteUser(user.id).then(() => {
-                    console.log('cookie d authentification supprimé')
-                    navigate("../../");
-                })
-
-            })
+        deleteUser(user.id).then(() => {
+            console.log('cookie d authentification supprimé')
+            navigate("../../");
+        })
     }
     return (
-        <section className={mode==='dark' ? 'settings-container settings-container--dark' :  'settings-container'}>
+        <section className={mode === 'dark' ? 'settings-container settings-container--dark' : 'settings-container'}>
             <h2>Paramètres</h2>
             <h3>Mode</h3>
             <p>Light Mode / Dark Mode</p>
