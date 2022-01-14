@@ -8,9 +8,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 For this project to work, you need to have MySQL.
 
-You also need to create a database called : groupomania.
+You also need to create a database called : **groupomania**.
 
 You don't need to create the tables, only the database. 
+
+If you want to use another SQL Database, it is possible and explained [after the installation chapter](##other-types-of-databases).
 
 ### Clone the project
 
@@ -37,8 +39,8 @@ npm install
 Go in the config folder and create a '.env' file with your variables to access your database
 
 ````
-PORT=your port (for example : 3000)
-HOST=yourhostname (often it would be : localhost)
+PORT=your port 			<em>(for example : 3000)</em>
+HOST=yourhostname 		<em>(often it would be : localhost)</em>
 DB_USER=yourusername
 DB_PASSWORD=yourpassword
 ````
@@ -69,6 +71,28 @@ Launch :
 npm start
 ````
 
+## Other Types of Databases
+
+### SQL Types
+
+The project was built with Sequelize, so it's pretty easy if your using another SQL type,
+ your just need to change the dialect in db.js which is in the config folder inside the backend folder.
+
+````sh
+const sequelize = new Sequelize('groupomania', `${process.env.DB_USER}`, `${process.env.DB_PASSWORD}`, {
+    host: `${process.env.HOST}`,
+    dialect: 'mysql',
+    logging: false
+})
+
+````
+
+For more information, you can check the [Sequelize documentation](https://sequelize.org/v5/manual/dialects.html)
+
+
+### What if I want to use NoSQL ? 
+
+Then, I'm very sorry to inform you that is not going to work with this project.
 
 
 
