@@ -12,7 +12,7 @@ You also need to create a database called : **groupomania**.
 
 You don't need to create the tables, only the database. 
 
-If you want to use another SQL Database, it is possible and explained [after the installation chapter](##other-types-of-databases).
+If you want to use another SQL Database, it is possible and explained [after the installation chapter](#other-types-of-databases).
 
 ### Clone the project
 
@@ -38,12 +38,22 @@ npm install
 
 Go in the config folder and create a '.env' file with your variables to access your database
 
-````
-PORT=your port 			<em>(for example : 3000)</em>
-HOST=yourhostname 		<em>(often it would be : localhost)</em>
+````sh
+PORT=your port 			
+HOST=yourhostname 		
 DB_USER=yourusername
 DB_PASSWORD=yourpassword
 ````
+
+<em>For example</em> :
+
+````sh
+PORT=3000	
+HOST=localhost	
+DB_USER=toto
+DB_PASSWORD=toto1234
+````
+
 
 Launch : 
 
