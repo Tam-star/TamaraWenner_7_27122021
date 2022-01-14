@@ -1,6 +1,7 @@
 const { Post, User, Comment } = require('../config/db')
 const { ValidationError, ForeignKeyConstraintError } = require('sequelize')
 const fs = require('fs');
+const fsPromises = require("fs/promises");
 
 exports.getAllPosts = (req, res, next) => {
   if (req.query.userId) {
@@ -92,122 +93,88 @@ exports.createPost = (req, res, next) => {
 }
 
 
-exports.modifyPost = (req, res, next) => {
+exports.modifyPost = async (req, res, next) => {
+  try {
+    const postObject = req.file ? {
+      ...JSON.parse(req.body.post),
+      imageUrl: `${req.protocol}://${req.get('host')}/images/posts/${req.file.filename}`
+    } : req.body
 
-  const postObject = req.file ? {
-    ...JSON.parse(req.body.post),
-    imageUrl: `${req.protocol}://${req.get('host')}/images/posts/${req.file.filename}`
-  } : req.body
+    if (postObject.id) {
+      delete postObject.id //To prevent interfering with auto-increment
+    }
+    if (postObject.usersLiked) {
+      delete postObject.usersLiked //To prevent someone from putting a 1000 likes on his or her post
+    }
 
-  console.log(JSON.stringify(postObject))
-
-  if (postObject.id) {
-    delete postObject.id //To prevent interfering with auto-increment
-  }
-  if (postObject.usersLiked) {
-    delete postObject.usersLiked //To prevent someone from putting a 1000 likes on his or her post
-  }
-
-  const id = req.params.id
-  Post.findByPk(id)
-    .then(post => {
-      if (post === null) {
-        const message = 'Le post demandé n\'existe pas. Réessayez avec un autre identifiant'
-        return res.status(404).json({ message })
-      }
-      //Check if the person modifying the post is the one who created it
-      if (post.userId != req.auth.userId) {
-        const message = `Vous n'êtes pas autorisé à modifier ce post`
-        return res.status(401).json({ message })
-      }
-      if (post.imageUrl && req.file) {
-        const filename = post.imageUrl.split('/images/posts/')[1]
-        fs.unlink(`images/posts/${filename}`, () => {
-          return Post.update(postObject, {
-            where: { id: id }
-          })
-            .then(_ => {
-              const message = `Le post a bien été modifié.`
-              res.json({ message })
-            })
-        })
-      }
-      else {
-        return Post.update(postObject, {
-          where: { id: id }
-        })
-          .then(_ => {
-            const message = `Le post a bien été modifié.`
-            res.json({ message })
-          })
-      }
+    const id = req.params.id
+    const post = await Post.findByPk(id)
+    if (post === null) { //Check if post exists
+      const message = 'Le post demandé n\'existe pas. Réessayez avec un autre identifiant'
+      return res.status(404).json({ message })
+    }
+    //Check if the person modifying the post is the one who created it
+    if (post.userId != req.auth.userId) {
+      const message = `Vous n'êtes pas autorisé à modifier ce post`
+      return res.status(401).json({ message })
+    }
+    //Check if the post already had an image
+    if (post.imageUrl && req.file) {
+      const filename = post.imageUrl.split('/images/posts/')[1]
+      await fsPromises.unlink(`images/posts/${filename}`)
+    }
+    await Post.update(postObject, {
+      where: { id: id }
     })
-    .catch(error => {
-      if (error instanceof ValidationError) {
-        return res.status(400).json({ message: error.message })
-      }
-      const message = `Le post n'a pas pu être modifié, réessayez dans quelques instants`
-      res.status(500).json({ message })
-      console.log(`Il y a eu une erreur : ${error}`)
-    })
+    const message = `Le post a bien été modifié.`
+    res.json({ message })
+  }
+  catch (error) {
+    if (error instanceof ValidationError) {
+      return res.status(400).json({ message: error.message })
+    }
+    const message = `Le post n'a pas pu être modifié, réessayez dans quelques instants`
+    res.status(500).json({ message })
+    console.log(`Il y a eu une erreur : ${error}`)
+  }
+
 }
 
-exports.deletePost = (req, res, next) => {
-  Post.findByPk(req.params.id)
-    .then(post => {
-      if (post === null) {
-        const message = 'Le post demandé n\'existe pas. Réessayez avec un autre identifiant'
-        return res.status(404).json({ message })
-      }
-      //Check if the person modifying the post is the one who created it
-      if (post.userId != req.auth.userId && req.auth.userRights != 'moderator') {
-        const message = `Vous n'êtes pas autorisé à modifier ce post`
-        return res.status(401).json({ message })
-      }
-      const postDeleted = post;
-      //In case there is a post picture
-      if (post.imageUrl) {
-        const filename = post.imageUrl.split('/images/posts/')[1]
-        fs.unlink(`images/posts/${filename}`, () => {
-          //First we destroy every comments linked to this post
-          return Comment.destroy({
-            where: { postId: post.id }
-          })
-            //Then we destroy the post
-            .then(_ => {
-              return Post.destroy({
-                where: { id: post.id }
-              })
-                .then(_ => {
-                  const message = `Le post avec l'identifiant n°${postDeleted.id} a bien été supprimé.`
-                  res.json({ message, data: postDeleted })
-                })
-            })
-        })
-      }
-      //In case there is not a post picture
-      else {
-        //First we destroy every comments linked to this post
-        return Comment.destroy({
-          where: { postId: post.id }
-        })
-          //Then we destroy the post
-          .then(_ => {
-            return Post.destroy({
-              where: { id: post.id }
-            })
-              .then(_ => {
-                const message = `Le post avec l'identifiant n°${postDeleted.id} a bien été supprimé.`
-                res.json({ message, data: postDeleted })
-              })
-          })
-      }
+exports.deletePost = async (req, res, next) => {
+  try {
+    const post = await Post.findByPk(req.params.id)
+    //Check if post exists
+    if (post === null) {
+      const message = 'Le post demandé n\'existe pas. Réessayez avec un autre identifiant'
+      return res.status(404).json({ message })
+    }
+    //Check if the person modifying the post is the one who created it
+    if (post.userId != req.auth.userId && req.auth.userRights != 'moderator') {
+      const message = `Vous n'êtes pas autorisé à modifier ce post`
+      return res.status(401).json({ message })
+    }
+    const postDeleted = post;
+    //In case there is a post picture
+    if (post.imageUrl) {
+      const filename = post.imageUrl.split('/images/posts/')[1]
+      await fsPromises.unlink(`images/posts/${filename}`)
+    }
+    //First we destroy every comments linked to this post
+    await Comment.destroy({
+      where: { postId: post.id }
     })
-    .catch(error => {
-      const message = 'Le post n\'a pas pu être supprimé. Réessayez dans quelques instants'
-      res.status(500).json({ message, data: error })
-      console.log(`Il y a eu une erreur : ${error}`)
+    //Then we destroy the post
+    await Post.destroy({
+      where: { id: post.id }
     })
+    const message = `Le post avec l'identifiant n°${postDeleted.id} a bien été supprimé.`
+    res.json({ message, data: postDeleted })
+  }
+  catch (error) {
+    const message = 'Le post n\'a pas pu être supprimé. Réessayez dans quelques instants'
+    res.status(500).json({ message, data: error })
+    console.log(`Il y a eu une erreur : ${error}`)
+  }
 }
 
 
@@ -283,7 +250,3 @@ exports.postLike = (req, res, next) => {
       console.log(`Il y a eu une erreur : ${error}`)
     })
 }
-
-
-
-

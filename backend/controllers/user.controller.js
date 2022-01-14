@@ -2,8 +2,9 @@ const { User, Post, Comment } = require('../config/db')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+const fsPromises = require("fs/promises");
 const { ValidationError, UniqueConstraintError } = require('sequelize');
-const { errorMonitor } = require('stream');
+
 
 exports.getAllUsers = (req, res, next) => {
   User.findAll()
@@ -67,116 +68,59 @@ exports.getUserById = (req, res, next) => {
 }
 
 
-exports.modifyUser = (req, res, next) => {
+exports.modifyUser = async (req, res, next) => {
 
-  const userObject = req.file ? {
-    ...JSON.parse(req.body.user),
-    imageUrl: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`
-  } : req.body
+  try {
+    const userObject = req.file ? {
+      ...JSON.parse(req.body.user),
+      imageUrl: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`
+    } : req.body
 
-  if (userObject.id) {
-    delete userObject.id // To prevent interfering with auto-increment
-  }
-  if (userObject.rights) {
-    delete userObject.rights //To prevent someone from updating his or her rights (becoming a moderator)
-  }
+    if (userObject.id) {
+      delete userObject.id // To prevent interfering with auto-increment
+    }
+    if (userObject.rights) {
+      delete userObject.rights //To prevent someone from updating his or her rights (becoming a moderator)
+    }
 
-  const id = req.params.id
+    const id = req.params.id
 
-  if (userObject.password) {
-    bcrypt.hash(userObject.password, 10).then(hash => {
+    if (userObject.password) {
+      const hash = await bcrypt.hash(userObject.password, 10)
       userObject.password = hash
-      User.findByPk(id)
-        .then(user => {
-          if (user === null) {
-            const message = 'L\'utilisateur demandé n\'existe pas. Réessayez avec un autre identifiant'
-            return res.status(404).json({ message })
-          }
-          //Check with token if it belongs to the right user
-          if (user.id != req.auth.userId) {
-            const message = `Vous n'êtes pas autorisé à modifier cet utilisateur`
-            return res.status(401).json({ message })
-          }
+    }
+    const user = await User.findByPk(id)
+    if (user === null) {
+      const message = 'L\'utilisateur demandé n\'existe pas. Réessayez avec un autre identifiant'
+      return res.status(404).json({ message })
+    }
+    //Check with token if it belongs to the right user
+    if (user.id != req.auth.userId) {
+      const message = `Vous n'êtes pas autorisé à modifier cet utilisateur`
+      return res.status(401).json({ message })
+    }
 
-          //In case there is a replacing profile picture
-          if (user.imageUrl && req.file) {
-            const filename = user.imageUrl.split('/images/users/')[1]
-            fs.unlink(`images/users/${filename}`, () => {
-              return User.update(userObject, {
-                where: { id: id }
-              })
-                .then(_ => {
-                  const message = `L\'utilisateur ${user.pseudo} a bien été modifié.`
-                  res.json({ message })
-                })
-            })
-          }
-          //In case there is no profile picture
-          else {
-            return User.update(userObject, {
-              where: { id: id }
-            })
-              .then(_ => {
-                const message = `L\'utilisateur ${user.pseudo} a bien été modifié.`
-                res.json({ message })
-              })
-          }
-        })
-        .catch(error => {
-          const message = 'L\'utilisateur n\'a pas pu être modifié. Réessayez dans quelques instants'
-          res.status(500).json({ message, data: error })
-          console.log(`Il y a eu une erreur : ${error}`)
-        })
+    //In case there is a replacing profile picture
+    if (user.imageUrl && req.file) {
+      const filename = user.imageUrl.split('/images/users/')[1]
+      await fsPromises.unlink(`images/users/${filename}`)
+    }
+    await User.update(userObject, {
+      where: { id: id }
     })
-  } else {
-
-    User.findByPk(id)
-      .then(user => {
-        if (user === null) {
-          const message = 'L\'utilisateur demandé n\'existe pas. Réessayez avec un autre identifiant'
-          return res.status(404).json({ message })
-        }
-        //Check with token if it belongs to the right user
-        if (user.id != req.auth.userId) {
-          const message = `Vous n'êtes pas autorisé à modifier cet utilisateur`
-          return res.status(401).json({ message })
-        }
-
-        //In case there is a profile picture
-        if (user.imageUrl && req.file) {
-          const filename = user.imageUrl.split('/images/users/')[1]
-          fs.unlink(`images/users/${filename}`, () => {
-            return User.update(userObject, {
-              where: { id: id }
-            })
-              .then(_ => {
-                const message = `L\'utilisateur ${user.pseudo} a bien été modifié.`
-                res.json({ message })
-              })
-          })
-        }
-        //In case there is not a profile picture
-        else {
-          return User.update(userObject, {
-            where: { id: id }
-          })
-            .then(_ => {
-              const message = `L\'utilisateur ${user.pseudo} a bien été modifié.`
-              res.json({ message })
-            })
-        }
-      })
-      .catch(error => {
-        const message = 'L\'utilisateur n\'a pas pu être modifié. Réessayez dans quelques instants'
-        res.status(500).json({ message, data: error })
-        console.log(`Il y a eu une erreur : ${error}`)
-      })
-
+    const message = `L\'utilisateur ${user.pseudo} a bien été modifié.`
+    res.json({ message })
+  }
+  catch (error) {
+    const message = 'L\'utilisateur n\'a pas pu être modifié. Réessayez dans quelques instants'
+    res.status(500).json({ message, data: error })
+    console.log(`Il y a eu une erreur : ${error}`)
   }
 }
 
-exports.deleteUser = (req, res, next) => {
-  User.findByPk(req.params.id).then(user => {
+exports.deleteUser = async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.params.id)
     if (user === null) {
       const message = 'L\'utilisateur demandé n\'existe pas. Réessayez avec un autre identifiant'
       return res.status(404).json({ message })
@@ -190,80 +134,35 @@ exports.deleteUser = (req, res, next) => {
     //In case there is a profile picture
     if (user.imageUrl) {
       const filename = user.imageUrl.split('/images/users/')[1]
-      fs.unlink(`images/users/${filename}`, () => {
-        //First we destroy all the comments linked to the user
-        return Comment.destroy({
-          where: { userId: user.id }
-        })
-          //Then we look for all the posts written by the user 
-          .then(_ => {
-            console.log('Suppression de tous les commentaires écrits par le user')
-            return Post.findAll({
-              where: { userId: user.id }
-            })
-              .then((postList) => {
-                console.log('Tous les posts écrits par le user ont été récupérés')
-                return Promise.all(postList.map(post => Comment.destroy({ where: { postId: post.id } })))
-                  .then(_ => {
-                    console.log('Tous les commentaires de tous les posts écrits par le user ont été supprimés')
-                    return Promise.all(postList.map(post => Post.destroy({ where: { id: post.id } })))
-                      .then(_ => {
-                        console.log("Tous les posts de l'utilisateur ont bien été supprimés")
-                        return User.destroy({
-                          where: { id: user.id }
-                        })
-                          .then(_ => {
-                            const message = `L'utilisateur ${userDeleted.pseudo} a bien été supprimé.`
-                            res.clearCookie('groupomania-jwt')
-                            res.json({ message })
-                          })
-
-                      })
-                  })
-              })
-          })
-      })
+      await fsPromises.unlink(`images/users/${filename}`)
     }
-    //In case there is not a profile picture
-    else {
-      return Comment.destroy({
-        where: { userId: user.id }
-      })
-        //Then we look for all the posts written by the user 
-        .then(_ => {
-          console.log('Suppression de tous les commentaires écrits par le user')
-          return Post.findAll({
-            where: { userId: user.id }
-          })
-            .then((postList) => {
-              console.log('Tous les posts écrits par le user ont été récupérés')
-              return Promise.all(postList.map(post => Comment.destroy({ where: { postId: post.id } })))
-                .then(_ => {
-                  console.log('Tous les commentaires de tous les posts écrits par le user ont été supprimés')
-                  return Promise.all(postList.map(post => Post.destroy({ where: { id: post.id } })))
-                    .then(_ => {
-                      console.log("Tous les posts de l'utilisateur ont bien été supprimés")
-                      return User.destroy({
-                        where: { id: user.id }
-                      })
-                        .then(_ => {
-                          const message = `L'utilisateur ${userDeleted.pseudo} a bien été supprimé.`
-                          res.clearCookie('groupomania-jwt')
-                          res.json({ message })
-                        })
-
-                    })
-                })
-            })
-        })
-    }
-
-  })
-    .catch(error => {
-      const message = 'L\'utilisateur n\'a pas pu être supprimé. Réessayez dans quelques instants'
-      res.status(500).json({ message, data: error })
-      console.log(`Il y a eu une erreur : ${error}`)
+    //First we destroy all the comments linked to the user
+    await Comment.destroy({
+      where: { userId: user.id }
     })
+    console.log('Suppression de tous les commentaires écrits par le user')
+    //Then we look for all the posts written by the user 
+    const postList = await Post.findAll({
+      where: { userId: user.id }
+    })
+    console.log('Tous les posts écrits par le user ont été récupérés')
+    await Promise.all(postList.map(post => Comment.destroy({ where: { postId: post.id } })))
+    console.log('Tous les commentaires de tous les posts écrits par le user ont été supprimés')
+    await Promise.all(postList.map(post => Post.destroy({ where: { id: post.id } })))
+    console.log("Tous les posts de l'utilisateur ont bien été supprimés")
+    await User.destroy({
+      where: { id: user.id }
+    })
+    const message = `L'utilisateur ${userDeleted.pseudo} a bien été supprimé.`
+    res.clearCookie('groupomania-jwt')
+    res.json({ message })
+
+
+  } catch (error) {
+    const message = 'L\'utilisateur n\'a pas pu être supprimé. Réessayez dans quelques instants'
+    res.status(500).json({ message, data: error })
+    console.log(`Il y a eu une erreur : ${error}`)
+  }
 }
 
 
