@@ -18,8 +18,6 @@ const User = UserModel(sequelize, DataTypes)
 const Post = PostModel(sequelize, DataTypes)
 const Comment = CommentModel(sequelize, DataTypes)
 
-// User.hasMany(Post, {foreignKey: 'userId', sourceKey: 'id'});
-// Post.belongsTo(User, {foreignKey: 'userId', targetKey: 'id'});
 
 const initDb = () => {
     return sequelize.sync({force:true}).then(_ => {

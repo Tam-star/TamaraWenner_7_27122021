@@ -148,7 +148,13 @@ exports.deleteUser = async (req, res, next) => {
     console.log('Tous les posts écrits par le user ont été récupérés')
     await Promise.all(postList.map(post => Comment.destroy({ where: { postId: post.id } })))
     console.log('Tous les commentaires de tous les posts écrits par le user ont été supprimés')
-    await Promise.all(postList.map(post => Post.destroy({ where: { id: post.id } })))
+    await Promise.all(postList.map(post => {
+      if (post.imageUrl) {
+        const postFilename = post.imageUrl.split('/images/posts/')[1]
+        fsPromises.unlink(`images/posts/${postFilename}`)
+      }
+      Post.destroy({ where: { id: post.id } })
+    }))
     console.log("Tous les posts de l'utilisateur ont bien été supprimés")
     await User.destroy({
       where: { id: user.id }
