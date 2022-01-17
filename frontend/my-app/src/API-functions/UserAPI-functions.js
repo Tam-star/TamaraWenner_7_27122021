@@ -13,7 +13,14 @@ export function signUp(request) {
         body: JSON.stringify(request)
     }
     return fetch(url, options)
-        .then(reponse => reponse.json())
+        .then(reponse => reponse.json()
+            .then(data => {
+                const toreturn = {
+                    data: data,
+                    status: reponse.status
+                }
+                return toreturn
+            }))
         .catch(error => {
             console.log("Il y a erreur", error)
             error.json()
@@ -60,7 +67,7 @@ export function logout() {
 
 
 export function getUserInfo(id) {
-    const url = 'http://localhost:3000/api/users/'+id;
+    const url = 'http://localhost:3000/api/users/' + id;
     const options = {
         method: 'GET',
         headers: {
@@ -75,11 +82,11 @@ export function getUserInfo(id) {
 }
 
 export function updateUserWithFormData(formData, id) {
-    const url = 'http://localhost:3000/api/users/'+id;
+    const url = 'http://localhost:3000/api/users/' + id;
     const options = {
         method: 'PUT',
         credentials: "include",
-        body : formData
+        body: formData
     }
     return fetch(url, options)
         .then(reponse => reponse.json())
@@ -87,7 +94,7 @@ export function updateUserWithFormData(formData, id) {
 }
 
 export function updateUserWithJSON(request, id) {
-    const url = 'http://localhost:3000/api/users/'+id;
+    const url = 'http://localhost:3000/api/users/' + id;
     const options = {
         method: 'PUT',
         headers: {
@@ -95,7 +102,7 @@ export function updateUserWithJSON(request, id) {
             'Content-type': 'application/json',
         },
         credentials: "include",
-        body : JSON.stringify(request)
+        body: JSON.stringify(request)
     }
     return fetch(url, options)
         .then(reponse => reponse.json())
@@ -105,7 +112,7 @@ export function updateUserWithJSON(request, id) {
 
 
 export function deleteUser(id) {
-    const url = 'http://localhost:3000/api/users/'+id;
+    const url = 'http://localhost:3000/api/users/' + id;
     const options = {
         method: 'DELETE',
         headers: {

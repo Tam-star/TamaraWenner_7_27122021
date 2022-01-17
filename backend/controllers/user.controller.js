@@ -178,6 +178,14 @@ exports.signUp = (req, res, next) => {
     const message = `Un mot de passe est nécessaire`
     return res.status(400).json({ message })
   }
+  
+  const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})");
+  if(!strongRegex.test(req.body.password)){
+    const message = `Le mot de passe doit contenir au moins 8 caractères, dont un chiffre, une lettre majuscule, une lettre minuscule et un caractère spécial (!@#$%^&*)`
+    return res.status(400).json({ message })
+  }
+  
+ 
   bcrypt.hash(req.body.password, 10)
     .then(hash => {
       return User.create({

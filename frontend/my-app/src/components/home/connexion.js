@@ -2,31 +2,37 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../API-functions/UserAPI-functions'
 import { useAuthContext } from '../../Contexts/AuthContext';
-//import { redirectToNewsFeed } from '../functions';
+import { profileReducer } from '../../reducers';
 
 export default function Connexion() {
 
+    const [state, dispatch] = React.useReducer(profileReducer,
+        {
+            email: '',
+            password: ''
+        })
+
     const navigate = useNavigate();
     const {setAuth} = useAuthContext()
-
+    const message = React.useRef()
 
     const connect = (event) => {
         event.preventDefault()
         const myRequest = {
-            "email": document.getElementById("email").value,
-            "password": document.getElementById("password").value
+            "email": state.email,
+            "password": state.password
         }
         login(myRequest)
         .then((response) => {
             if(response.error){
-                return document.getElementsByClassName("message")[0].innerHTML = `${JSON.stringify(response.error).replace(/"/g, '')}`
+                return message.current.innerHTML = `${JSON.stringify(response.error).replace(/"/g, '')}`
             }
             setAuth(true) //On autorise l'accès aux routes suivantes
-            document.getElementsByClassName("message")[0].innerHTML = `Vous êtes connecté. Vous allez être redirigé vers votre dashboard`
+            message.current.innerHTML = `Vous êtes connecté. Vous allez être redirigé vers votre dashboard`
             navigate(`../dashboard/${response.data.userId}/newsfeed`);
         })
         .catch((error) => {
-            document.getElementsByClassName("message")[0].innerHTML = `Une erreur s'est produite : ${error}`
+            message.current.innerHTML = `Une erreur s'est produite : ${error}`
         })
 
     }
@@ -34,16 +40,20 @@ export default function Connexion() {
     return (
         <section className='center-container login-container'>
             <h1>Connexion</h1>
-            <p className="message"></p>
+            <p ref={message} className="message"></p>
             <form action="" method="post" onSubmit={connect}>
                 <label htmlFor="email">
                     Votre mail :
                 </label>
-                <input type={'email'} id="email" name="email"></input>
+                <input  onChange={(event) =>
+                    dispatch({ type: "email", payload: event.target.value })}
+                    type={'email'} id="email" name="email"></input>
                 <label htmlFor="password">
                     Votre mot de passe :
                 </label>
-                <input type={'password'} id="password" name="password" ></input>
+                <input onChange={(event) =>
+                    dispatch({ type: "password", payload: event.target.value })}
+                    type={'password'} id="password" name="password" ></input>
                 <input type="submit" value="Se connecter" ></input>
             </form >
         </section>

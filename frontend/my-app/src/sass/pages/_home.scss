@@ -1,17 +1,20 @@
-.login-container, .signup-container, .welcome-container{
-    margin : auto;
-    background-color : $secondary-color;
+.login-container,
+.signup-container,
+.welcome-container {
+    margin: auto;
+    background-color: $secondary-color;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    & p{
+    & p {
         text-align: center;
-        color : $primary-color;
+        color: $tertiary-color;
+        font-weight: bold;
     }
-    & form{
-        margin : 50px 0 150px 0;
-        display : flex;
+    & form {
+        margin: 50px 0 150px 0;
+        display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -21,20 +24,25 @@
         & input {
             margin-bottom: 25px;
         }
+        & .password-rules {
+            margin-bottom: 25px;
+            & p {
+                margin: 0;
+            }
+        }
     }
 }
 
-.welcome-container{
-    height : 60vh;
+.welcome-container {
+    height: 60vh;
     & h1 {
         font-size: 60px;
-        margin-top : 0;
+        margin-top: 0;
     }
-    &__logo{
-        width : 200px;
+    &__logo {
+        width: 200px;
     }
-    &__company-name{
-        color : $primary-color;
+    &__company-name {
+        color: $primary-color;
     }
 }
-
