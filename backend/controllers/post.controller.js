@@ -119,7 +119,7 @@ exports.modifyPost = async (req, res, next) => {
       return res.status(401).json({ message })
     }
     //Check if the post already had an image
-    if (post.imageUrl && req.file) {
+    if (post.imageUrl && (req.file || postObject.imageUrl === null)) {
       const filename = post.imageUrl.split('/images/posts/')[1]
       await fsPromises.unlink(`images/posts/${filename}`)
     }
