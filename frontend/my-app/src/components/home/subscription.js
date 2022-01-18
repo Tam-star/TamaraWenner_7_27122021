@@ -33,11 +33,11 @@ export default function Subscription() {
 
     const handlePassword = (event) => {
         dispatch({ type: "password", payload: event.target.value })
-        for(let i=0;i<regexArray.length;i++){
+        for (let i = 0; i < regexArray.length; i++) {
             if (regexArray[i].test(event.target.value)) {
                 refArray[i].current.style.color = "green"
             } else {
-               refArray[i].current.style.color = "#0c2246"
+                refArray[i].current.style.color = "#0c2246"
             }
         }
     }
@@ -53,13 +53,14 @@ export default function Subscription() {
         }
         signUp(myRequest)
             .then((response) => {
-                console.log(response)
-                if (response.status >= 400) {
-                    return message.current.innerHTML = `Nous n'avons pas pu vous inscrire : </br>${JSON.stringify(response.data.message).replace(/"/g, '').replace(/\\n/g, '</br>')}`
+                if (response.error) {
+                    return message.current.innerHTML = `Nous n'avons pas pu vous inscrire : </br>${JSON.stringify(response.error).replace(/"/g, '').replace(/\\n/g, '</br>')}`
                 }
-                message.current.innerHTML = `${JSON.stringify(response.data.message).replace(/"/g, '')} </br> Vous pouvez désormais vous connecter à votre compte`
+                message.current.innerHTML = `${JSON.stringify(response.message).replace(/"/g, '')} </br> Vous pouvez désormais vous connecter à votre compte via l'onglet Connexion`
             })
-            .catch(error => console.log('une erreur s est produite', error))
+            .catch(error => {
+                return message.current.innerHTML = `Une erreur s'est produite. Veuillez réessayer ultérieurement`
+            })
     }
 
     return (

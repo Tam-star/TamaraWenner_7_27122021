@@ -33,6 +33,10 @@
         @include card-style($tertiary-color);
         color: $dark-text-color;
     }
+    &__message{
+        color : $primary-color;
+        font-weight: bold;
+    }
     &__icon{
         position : absolute; 
         right : 30px;
@@ -59,6 +63,10 @@
                 flex-direction : column;
                 width : min-content;
             }
+        }
+        &__password-info{
+            font-style: italic;
+            font-size: 15px;
         }
         & label{
             margin : 5px;

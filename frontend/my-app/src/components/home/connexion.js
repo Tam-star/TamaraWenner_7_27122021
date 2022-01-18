@@ -13,7 +13,7 @@ export default function Connexion() {
         })
 
     const navigate = useNavigate();
-    const {setAuth} = useAuthContext()
+    const { setAuth } = useAuthContext()
     const message = React.useRef()
 
     const connect = (event) => {
@@ -23,17 +23,22 @@ export default function Connexion() {
             "password": state.password
         }
         login(myRequest)
-        .then((response) => {
-            if(response.error){
-                return message.current.innerHTML = `${JSON.stringify(response.error).replace(/"/g, '')}`
-            }
-            setAuth(true) //On autorise l'accès aux routes suivantes
-            message.current.innerHTML = `Vous êtes connecté. Vous allez être redirigé vers votre dashboard`
-            navigate(`../dashboard/${response.data.userId}/newsfeed`);
-        })
-        .catch((error) => {
-            message.current.innerHTML = `Une erreur s'est produite : ${error}`
-        })
+            .then((response) => {
+                if (response.error) {
+                    return message.current.innerHTML = `${JSON.stringify(response.error).replace(/"/g, '')}`
+                } else if (response.status == 429) {
+                    return message.current.innerHTML = `Vous avez atteint le nombre maximum de tentatives fixé à 3. Vous pourrez ré-essayer dans 30 minutes.`
+                }
+                else {
+                    setAuth(true) //On autorise l'accès aux routes suivantes
+                    message.current.innerHTML = `Vous êtes connecté. Vous allez être redirigé vers votre dashboard`
+                    navigate(`../dashboard/${response.data.userId}/newsfeed`);
+                }
+
+            })
+            .catch((error) => {
+                message.current.innerHTML = `Une erreur s'est produite. Veuillez réessayer ultérieurement`
+            })
 
     }
 
@@ -45,7 +50,7 @@ export default function Connexion() {
                 <label htmlFor="email">
                     Votre mail :
                 </label>
-                <input  onChange={(event) =>
+                <input onChange={(event) =>
                     dispatch({ type: "email", payload: event.target.value })}
                     type={'email'} id="email" name="email"></input>
                 <label htmlFor="password">

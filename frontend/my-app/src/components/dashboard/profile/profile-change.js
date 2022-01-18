@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
-import {  updateUserWithFormData, updateUserWithJSON } from '../../../API-functions/UserAPI-functions';
+import { updateUserWithFormData, updateUserWithJSON } from '../../../API-functions/UserAPI-functions';
 import { useThemeContext } from '../../../Contexts/ThemeContext';
 import { useUserContext } from '../../../Contexts/UserContext';
 import { profileReducer } from '../../../reducers';
@@ -21,6 +21,7 @@ export default function ProfileChange({ handleClick }) {
             password: ''
         })
     const fileInput = React.useRef()
+    const message = React.useRef()
 
     const handleFileChange = event => {
         const [file] = fileInput.current.files
@@ -43,11 +44,20 @@ export default function ProfileChange({ handleClick }) {
                 "user",
                 `{"lastname" : "${state.lastname}", "firstname" : "${state.firstname}","pseudo" : "${state.pseudo}","bio" : "${state.bio}"${state.password !== "" ? `,"password" : "${state.password}"` : ''}}`);
             formData.append('image', fileInput.current.files[0], fileInput.current.files[0].name)
-            updateUserWithFormData(formData, user.id).then(() => {
-                handleClick(event)  //Close the modify-profile container
-                handleUser()
-                console.log('profile updated')
-            })
+            updateUserWithFormData(formData, user.id)
+                .then((response) => {
+                    if (response.error) {
+                        return message.current.innerHTML = `Nous n'avons pas pu modifier votre profil : <br/>${JSON.stringify(response.error).replace(/"/g, '').replace(/\\n/g, '</br>')}`
+                    } else {
+                        message.current.innerHTML = `Votre profil a bien été modifié`
+                        handleUser()
+                    }
+
+                })
+                .catch((error) => {
+                    message.current.innerHTML = `Nous n'avons pas pu modifier votre profil : <br/>${JSON.stringify(error.message).replace(/"/g, '').replace(/\\n/g, '</br>')}`
+                    console.log(error.message)
+                })
         }
         else {
             let request = {}
@@ -72,18 +82,27 @@ export default function ProfileChange({ handleClick }) {
                         imageUrl: null
                     }
             }
-            updateUserWithJSON(request, user.id).then(() => {
-                handleClick(event) //close the modify-profile container
-                handleUser()
-                console.log('profile updated')
-            })
+            updateUserWithJSON(request, user.id)
+                .then((response) => {
+                    if (response.error) {
+                        return message.current.innerHTML = `Nous n'avons pas pu modifier votre profil : <br/>${JSON.stringify(response.error).replace(/"/g, '').replace(/\\n/g, '</br>')}`
+                    } else {
+                        message.current.innerHTML = `Votre profil a bien été modifié`
+                        handleUser()
+                    }
+                })
+                .catch((error) => {
+                    message.current.innerHTML = `Nous n'avons pas pu modifier votre profil : <br/>${JSON.stringify(error.message).replace(/"/g, '').replace(/\\n/g, '</br>')}`
+                    console.log(error.message)
+                })
         }
     }
 
     return (
-        <section className={ mode==='dark' ? 'profile-change profile-change--dark' :'profile-change'}>
+        <section className={mode === 'dark' ? 'profile-change profile-change--dark' : 'profile-change'}>
             <i className="fas fa-times profile-change__icon" onClick={handleClick}></i>
             <h2>Modifier votre profil</h2>
+            <p ref={message} className='profile-change__message'></p>
             <p className='no-allowed-change' title='Vous ne pouvez pas modifier votre email'>Email :  {user.email}</p>
             <form className='profile-change__form' action="" method="post" >
                 <div className='profile-change__form__picture' >
@@ -121,6 +140,9 @@ export default function ProfileChange({ handleClick }) {
                 <label htmlFor="password">
                     Votre mot de passe :
                 </label>
+                <p className='profile-change__form__password-info'>Si vous laissez ce champ vide, votre mot de passe ne sera pas modifié.<br />
+                    Si vous désirez modifier votre mot de passe, garder bien en tête qu'il doit toujours comprendre au moins 8 caractères,
+                    dont un chiffre, une lettre minuscule, une lettre majuscule et un caractère spécial</p>
                 <input onChange={(event) =>
                     dispatch({ type: "password", payload: event.target.value })}
                     type={'password'} id="password" name="password" value={state.password}></input>

@@ -35,9 +35,9 @@ export default function Post({ sameUser, handleUpdate, post, likesArray }) {
     const [numberOfComments, setNumberOfComments] = React.useState(0)
 
     //Likes
-    //const arrayUserLiked = post.usersLiked.split(',')
     const [like, setLike] = React.useState(likesArray.includes(params.userId) ? 1 : 0)
     const [numberOfLikes, setNumberOfLikes] = React.useState(post.usersLiked === '' ? 0 : likesArray.length)
+    const likeColor = mode === 'dark' ? 'white' : 'black'
 
 
     const handleModifyingPost = (event) => {
@@ -116,14 +116,11 @@ export default function Post({ sameUser, handleUpdate, post, likesArray }) {
 
     //Manage Likes 
     const handleLike = () => {
-        console.log('clic like')
-        console.log('like before ', like)
         if (like === 1) {
             setLike(0)
         } else {
             setLike(1)
         }
-        console.log('like after ', like)
     }
 
 
@@ -153,19 +150,15 @@ export default function Post({ sameUser, handleUpdate, post, likesArray }) {
     React.useEffect(() => {
         if (isFirstRender.current) {
             isFirstRender.current = false
-            console.log('first render')
         }
         else {
-            console.log('useeffect like, ', like)
             let request = {
                 userId: userConnected.id
             }
             like ? request['like'] = 1 : request['like'] = 0
-            like ? setNumberOfLikes(numberOfLikes+1) : setNumberOfLikes(numberOfLikes-1)
-            console.log(request)
+            like ? setNumberOfLikes(numberOfLikes + 1) : setNumberOfLikes(numberOfLikes - 1)
             likePost(request, post.id)
                 .then((response) => {
-                    console.log(response.message)
                     handleUpdate()
                 })
                 .catch((error) => console.log(error))
@@ -238,7 +231,7 @@ export default function Post({ sameUser, handleUpdate, post, likesArray }) {
                     <footer className='post__footer'>
                         <nav className='post__footer__menu'>
                             <ul>
-                                <li style={like ? { color: 'red' } : { color: 'black' }} onClick={handleLike} ><i className="fas fa-thumbs-up"></i>J'aime</li>
+                                <li style={like ? { color: 'red' } : { likeColor }} onClick={handleLike} ><i className="fas fa-thumbs-up"></i>J'aime</li>
                                 <li onClick={handleAddComment}><i className="far fa-comment"></i>Commenter</li>
                             </ul>
                             <div className='post__footer__menu__stats'>

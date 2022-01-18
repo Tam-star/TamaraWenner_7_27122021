@@ -52,6 +52,9 @@
             color: $primary-color;
         }
         &--dark{
+            &:hover{
+                background-color: black;
+            }
             &:hover i{
                color: $primary-color;
             }

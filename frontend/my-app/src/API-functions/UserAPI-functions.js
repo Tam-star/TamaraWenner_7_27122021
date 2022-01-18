@@ -13,17 +13,10 @@ export function signUp(request) {
         body: JSON.stringify(request)
     }
     return fetch(url, options)
-        .then(reponse => reponse.json()
-            .then(data => {
-                const toreturn = {
-                    data: data,
-                    status: reponse.status
-                }
-                return toreturn
-            }))
+        .then(reponse => reponse.json())
         .catch(error => {
             console.log("Il y a erreur", error)
-            error.json()
+            return error
         })
 }
 
@@ -40,10 +33,10 @@ export function login(request) {
         body: JSON.stringify(request)
     }
     return fetch(url, options)
-        .then(reponse => reponse.json())
+        .then(response => response.status==429 ? response : response.json())
         .catch(error => {
             console.log("Il y a erreur", error)
-            error.json()
+            return error
         })
 }
 
@@ -61,7 +54,7 @@ export function logout() {
         .then(reponse => reponse.json())
         .catch(error => {
             console.log("Il y a erreur", error)
-            error.json()
+            return error
         })
 }
 
