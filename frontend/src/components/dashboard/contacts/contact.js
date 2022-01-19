@@ -29,7 +29,7 @@ export default function Contact({ contact }) {
                 <p><span className='show-profile-modal__title'>Nom : </span>{contact.lastname} </p>
                 <p><span className='show-profile-modal__title'>Bio : </span> {contact.bio} </p>
             </Modal>
-            <li className='contact' onClick={openModal}>
+            <li tabIndex="0" className='contact' onKeyUp={(event) => { if (event.code === 'Enter') openModal() }} onClick={openModal}>
                 <img src={contact.imageUrl ? contact.imageUrl : maleAvatar} alt={`Profil de ${contact.pseudo}`} />
                 {contact.pseudo}
             </li>

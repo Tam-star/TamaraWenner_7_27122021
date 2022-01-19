@@ -108,6 +108,7 @@ export function deletePost(id) {
 
 export function likePost(request, id) {
     console.log('like sending')
+    //alert('like sending')
     const url = 'http://localhost:3000/api/posts/'+id+'/like';
     const options = {
         method: 'POST',

@@ -26,7 +26,7 @@ export default function NewComment({ postId, handleUpdate, handleAddComment }) {
 
     return (
         <div className='new-comment'>
-            <img src={user.imageUrl ? user.imageUrl : maleAvatar} className='profile-picture' alt='Profil' />
+            <img src={user.imageUrl ? user.imageUrl : maleAvatar} className='profile-picture' alt={`Profil de ${user.pseudo}`} />
             <form className='new-comment__form'>
                 <textarea ref={textInput} name="textarea" placeholder='Vous pouvez écrire ici.' onChange={autoResize}></textarea>
                 <button type="submit" className='new-comment__form__validate' onClick={handleCreateComment} >Post</button>

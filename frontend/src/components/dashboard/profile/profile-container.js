@@ -10,7 +10,7 @@ export default function ProfileContainer({ handleClick }) {
 
     return (
         <section className={mode==='dark' ? 'profile-container profile-container--dark' : 'profile-container'}>
-            <img src={user.imageUrl ? user.imageUrl : maleAvatar} className='profile-picture' alt='Profil' />
+            <img src={user.imageUrl ? user.imageUrl : maleAvatar} className='profile-picture' alt='Votre profil' />
             <div>
                 <p>Nom : {user.lastname}</p>
                 <p>Prénom :  {user.firstname}</p>

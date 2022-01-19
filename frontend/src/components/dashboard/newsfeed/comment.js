@@ -61,7 +61,7 @@ export default function Comment({ text, commentId, userId, sameUser, handleUpdat
                     <i title="Supprimer" className="fas fa-trash-alt" onClick={handleDeleteComment}></i>
                 </nav>
                 : ''}
-            <img src={userPicture ? userPicture : maleAvatar} className='profile-picture' alt='Profil' />
+            <img src={userPicture ? userPicture : maleAvatar} className='profile-picture' alt={`Profil de ${userPseudo}`} />
             {modifyComment ?
                 <div className="comment__modifying">
                     <p><span className="comment__text__pseudo">{userPseudo}</span></p>

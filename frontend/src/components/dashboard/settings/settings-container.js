@@ -3,7 +3,6 @@ import Switch from 'react-switch';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import { deleteUser } from '../../../API-functions/UserAPI-functions';
-import { deletePost, getAllPostsOfUser } from '../../../API-functions/PostAPI-functions';
 import { useUserContext } from '../../../Contexts/UserContext';
 import { useThemeContext } from '../../../Contexts/ThemeContext';
 

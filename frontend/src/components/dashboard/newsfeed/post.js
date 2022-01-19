@@ -174,7 +174,7 @@ export default function Post({ sameUser, handleUpdate, post, likesArray }) {
                 // Se déclenche lorsque l'on clique sur Modifier
                 <>
                     <header className='post__header'>
-                        <img src={userProfilePicture} className='profile-picture' alt='Profil' />
+                        <img src={userProfilePicture} className='profile-picture' alt={`Profil de ${userPseudo}`} />
                         <div>
                             <p className='post__header__user'>{userPseudo}</p>
                             <p>{timeOfCreation}</p>
@@ -188,7 +188,7 @@ export default function Post({ sameUser, handleUpdate, post, likesArray }) {
                                 <label htmlFor="imageInput">Choisissez une image : </label>
                                 <input ref={fileInput} type="file" id="imageInput" name="imageInput" accept="image/png, image/gif, image/jpeg" onChange={handleFileChange}></input>
                             </div>
-                            {modifyingPicture ? <img className='new-post__post-picture' src={modifyingPicture} alt='Post picture' /> : ''}
+                            {modifyingPicture ? <img className='new-post__post-picture' src={modifyingPicture} alt='Image du post à modifier' /> : ''}
                             {modifyingPicture ? <button onClick={handleFileRemove}>Supprimer l'image</button> : ''}
                         </form>
                         <button className='modifying-post__validate' onClick={handleUpdatePost} ><i className="fas fa-edit"></i>Update it!</button>
@@ -210,29 +210,29 @@ export default function Post({ sameUser, handleUpdate, post, likesArray }) {
                         </div>
                     </Modal>
                     <header className='post__header'>
-                        <img src={userProfilePicture} className='profile-picture' alt='Profil' />
+                        <img src={userProfilePicture} className='profile-picture' alt={`Profil de ${userPseudo}`} />
                         <div>
                             <p className='post__header__user'>{userPseudo}</p>
                             <p>{timeOfCreation}</p>
                         </div>
-                        <i className="post__header__icon-menu fas fa-ellipsis-h"></i>
+                        <i tabIndex="0" className="post__header__icon-menu fas fa-ellipsis-h"></i>
                         <nav className="post__header__menu">
                             <ul>
-                                {sameUser ? <li className="post__header__menu__element" onClick={handleModifyingPost}>Modifier</li> : ''}
-                                {sameUser ? <li className="post__header__menu__element" onClick={openModal}>Supprimer</li> : ''}
-                                <li className="post__header__menu__element post__header__menu__element--no-border">Signaler</li>
+                                {sameUser ? <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark " : "post__header__menu__element"} onClick={handleModifyingPost} tabIndex="0">Modifier</li> : ''}
+                                {sameUser || userConnected.rights == 'moderator' ? <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark " : "post__header__menu__element"} onClick={openModal} tabIndex="0">Supprimer</li> : ''}
+                                <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark post__header__menu__element--no-border" : "post__header__menu__element post__header__menu__element--no-border"} tabIndex="0">Signaler</li>
                             </ul>
                         </nav>
                     </header>
                     <main className='post__main'>
                         <p>{post.text}</p>
-                        {post.imageUrl ? <img src={post.imageUrl} className='post__main__post-picture' alt='Profil' /> : ''}
+                        {post.imageUrl ? <img src={post.imageUrl} className='post__main__post-picture' alt='Image liée au post' /> : ''}
                     </main>
                     <footer className='post__footer'>
                         <nav className='post__footer__menu'>
                             <ul>
-                                <li style={like ? { color: 'red' } : { likeColor }} onClick={handleLike} ><i className="fas fa-thumbs-up"></i>J'aime</li>
-                                <li onClick={handleAddComment}><i className="far fa-comment"></i>Commenter</li>
+                                <li tabIndex="0" style={like ? { color: 'red' } : { likeColor }} onClick={handleLike} onKeyUp={(event) => { if (event.code === 'Enter') handleLike() }}><i className="fas fa-thumbs-up"></i>J'aime</li>
+                                <li tabIndex="0" onClick={handleAddComment} onKeyUp={(event) => { if (event.code === 'Enter') handleAddComment() }}><i className="far fa-comment"></i>Commenter</li>
                             </ul>
                             <div className='post__footer__menu__stats'>
                                 <p>{numberOfLikes} like{numberOfLikes > 1 ? 's' : ''}</p>

@@ -32,7 +32,7 @@
     }
     &__validate {
         @include post-validate-button();
-        @include mobile-only{
+        @include mobile-only {
             margin-top: 20px;
         }
     }
@@ -69,6 +69,11 @@
                 display: block;
                 opacity: 100%;
             }
+            //For accessibility
+            &:focus + nav {
+                display: block;
+                opacity: 100%;
+            }
         }
         &__menu {
             display: none;
@@ -94,9 +99,25 @@
                 &:hover {
                     background-color: $secondary-color;
                 }
-                &--no-border {
-                    border-bottom: none;
+                &--dark {
+                    &:hover {
+                        background-color: black;
+                    }
                 }
+                &--no-border {
+                    border: none;
+                }
+            }
+            @include mobile-only {
+                top: 60%;
+                left: 50%;
+                transform: translate(-50%, -50%); 
+                background-color: white;
+                border-radius: 0;
+                border: 2px solid black;
+                width : 80%;
+                font-size: 20px;
+                text-align: center;
             }
         }
     }
@@ -104,6 +125,7 @@
         display: flex;
         flex-direction: column;
         position: relative;
+        overflow-wrap: break-word;
         &__post-picture {
             @include post-picture();
         }
@@ -112,15 +134,15 @@
         &__menu {
             display: flex;
             justify-content: space-between;
-            @include mobile-only{
+            @include mobile-only {
                 flex-direction: column-reverse;
             }
             & ul {
                 display: flex;
                 margin: 20px 0 0 0;
                 padding: 0;
-                @include mobile-only{
-                    margin-top : 10px;
+                @include mobile-only {
+                    margin-top: 10px;
                 }
                 & li {
                     list-style-type: none;

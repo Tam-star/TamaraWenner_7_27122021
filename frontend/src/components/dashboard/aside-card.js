@@ -11,7 +11,7 @@ export default function AsideCard() {
 
     return (
         <aside className={mode==='dark' ? 'profile-aside profile-aside--dark' : 'profile-aside'}>
-            <img src={user.imageUrl ? user.imageUrl : maleAvatar} alt='Profil' />
+            <img src={user.imageUrl ? user.imageUrl : maleAvatar} alt={`Profil de ${user.pseudo}`} />
             <p>Bonjour {user.pseudo} !</p>
         </aside>
     )

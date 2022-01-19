@@ -37,7 +37,10 @@ export default function UserNav() {
                         <i className="fas fa-cog"></i> Paramètres
                     </li>
                 </Link>
-                <li className={mode==='dark' ? 'left-menu__element left-menu__element--dark left-menu__element--no-border':'left-menu__element left-menu__element--no-border'} onClick={disconnect}><i className="fas fa-unlink"></i> Déconnexion</li>
+                <li tabIndex="0" className={mode === 'dark' ? 'left-menu__element left-menu__element--dark left-menu__element--no-border' : 'left-menu__element left-menu__element--no-border'}
+                    onClick={disconnect} onKeyUp={(event) => { if (event.code === 'Enter') disconnect() }}>
+                    <i className="fas fa-unlink"></i> Déconnexion
+                </li>
             </ul>
         </nav>
     )

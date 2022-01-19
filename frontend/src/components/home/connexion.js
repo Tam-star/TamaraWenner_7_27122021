@@ -26,7 +26,7 @@ export default function Connexion() {
             .then((response) => {
                 if (response.error) {
                     return message.current.innerHTML = `${JSON.stringify(response.error).replace(/"/g, '')}`
-                } else if (response.status == 429) {
+                } else if (response.status === 429) {
                     return message.current.innerHTML = `Vous avez atteint le nombre maximum de tentatives fixé à 3. Vous pourrez ré-essayer dans 30 minutes.`
                 }
                 else {
