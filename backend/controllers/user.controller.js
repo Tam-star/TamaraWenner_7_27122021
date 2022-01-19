@@ -40,6 +40,7 @@ exports.getUserById = (req, res, next) => {
           email: user.email,
           bio: user.bio,
           imageUrl: user.imageUrl,
+          rights : user.rights,
           sameUser: true
         }
         res.json({ message, data: myData })
@@ -216,6 +217,7 @@ exports.signUp = (req, res, next) => {
 
   bcrypt.hash(req.body.password, 10)
     .then(hash => {
+      //On ne met pas les droits pour ne pas que quelqu'un s'auto-déclare "moderator" ou "superadmin"
       return User.create({
         lastname: req.body.lastname,
         firstname: req.body.firstname,

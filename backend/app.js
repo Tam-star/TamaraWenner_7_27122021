@@ -1,6 +1,7 @@
 require('dotenv').config({ path: './config/.env' })
 
 const express = require('express')
+const helmet = require("helmet");
 const cookieParser = require('cookie-parser')
 const path = require('path');
 const morgan = require('morgan')
@@ -14,7 +15,7 @@ const sequelize = require('./config/db.js')
 //Routes
 const userRoutes = require('./routes/user.route')
 const postRoutes = require('./routes/post.route')
-const commentRoutes = require ('./routes/comment.route')
+const commentRoutes = require('./routes/comment.route')
 
 app.use(morgan('dev'))
    .use(cookieParser())
@@ -23,9 +24,10 @@ app.use(morgan('dev'))
       res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4000');
       res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization, ');
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-      res.setHeader('Access-Control-Allow-Credentials','true')
+      res.setHeader('Access-Control-Allow-Credentials', 'true')
       next();
-   });
+   })
+   .use(helmet({ crossOriginResourcePolicy: { policy: "same-site" } }))
 
 
 sequelize.initDb()

@@ -196,15 +196,15 @@ exports.postLike = (req, res, next) => {
       }
       if (req.body.like > 1 || req.body.like < 0) {
         const message = 'L\'élement "like" ne peut avoir pour valeur que 0 ou 1'
-        return res.status(400).json({ message })
+        return res.status(400).json({ error : message })
       }
       //Like
       let arrayUsersLiked = post.usersLiked == '' ? [] : post.usersLiked.split(',')
       if (req.body.like == 1) {
         //Si l'utilisateur aime déjà le post
-        if (arrayUsersLiked.includes(req.body.userId)) {
+        if (arrayUsersLiked.includes(req.body.userId.toString())) {
           const message = 'Vous aimez déjà ce post'
-          return res.status(400).json({ message })
+          return res.status(400).json({ error : message })
         }
         const stringUsersLiked = post.usersLiked == '' ? `${req.body.userId}` : `${post.usersLiked},${req.body.userId}`
         return Post.update({ usersLiked: stringUsersLiked }, {
