@@ -13,6 +13,21 @@ export function getAllPosts() {
         .catch(err => console.log("Something is wrong : ", err))
 }
 
+export function getOnePost(id) {
+    const url = 'http://localhost:3000/api/posts/'+id;
+    const options = {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        credentials: "include"
+    }
+    return fetch(url, options)
+        .then(reponse => reponse.json())
+        .catch(err => console.log("Something is wrong : ", err))
+}
+
 export function getAllPostsOfUser(userId) {
     const url = 'http://localhost:3000/api/posts?userId='+userId;
     const options = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import maleAvatar from '../../../assets/male-avatar-profile.jpg';
-import { autoResize, getTimeAmount } from "../../../functions";
+import { autoResize, formDataEscaping, getTimeAmount } from "../../../functions";
 import { getUserInfo } from '../../../API-functions/UserAPI-functions';
 import { updatePostWithFormData, updatePostWithJSON, deletePost, likePost } from '../../../API-functions/PostAPI-functions';
 import CommentContainer from './comment-container';
@@ -12,7 +12,9 @@ import { useParams } from 'react-router-dom';
 
 Modal.setAppElement('#root');
 
-export default function Post({ sameUser, handleUpdate, post, likesArray }) {
+export default function Post({ sameUser, handleUpdate, post }) {
+
+    const [thisPost, setThisPost] = React.useState(post)
 
     const params = useParams()
     const [mode] = useThemeContext()
@@ -38,8 +40,8 @@ export default function Post({ sameUser, handleUpdate, post, likesArray }) {
     const [numberOfComments, setNumberOfComments] = React.useState(0)
 
     //Likes
-    const [like, setLike] = React.useState(likesArray.includes(params.userId) ? 1 : 0)
-    const [numberOfLikes, setNumberOfLikes] = React.useState(post.usersLiked === '' ? 0 : likesArray.length)
+    const [like, setLike] = React.useState(post.usersLiked.split(',').includes(params.userId) ? 1 : 0)
+    const [numberOfLikes, setNumberOfLikes] = React.useState(post.usersLiked === '' ? 0 : post.usersLiked.split(',').length)
     const likeColor = mode === 'dark' ? 'white' : 'black'
 
 
@@ -86,15 +88,18 @@ export default function Post({ sameUser, handleUpdate, post, likesArray }) {
     const handleUpdatePost = event => {
         event.preventDefault()
         if (fileInput.current.files[0]) {
+            console.log('request with formdata')
             const formData = new FormData();
-            formData.append("post", `{"text" : "${textInput.current.value}", "userId" : ${post.userId}}`);
+            formData.append("post", `{"text" : "${formDataEscaping(textInput.current.value)}", "userId" : ${post.userId}}`);
             formData.append('image', fileInput.current.files[0], fileInput.current.files[0].name)
+
             setModifyingPost(false)
             updatePostWithFormData(formData, post.id).then(() => {
                 handleUpdate()
             })
         }
         else {
+            console.log('request with JSON')
             let request = {}
             if (modifyingPicture) {
                 request = {
@@ -231,10 +236,10 @@ export default function Post({ sameUser, handleUpdate, post, likesArray }) {
                         </div>
                         <i tabIndex="0" className="post__header__icon-menu fas fa-ellipsis-h" onClick={handleMenu} aria-label='Enter to access post menu' onKeyUp={(event) => { if (event.code === 'Enter') handleMenu(event) }}></i>
                         {menu ?
-                            <nav className={mode==='dark' ? "post__header__menu post__header__menu--dark":"post__header__menu"}>
+                            <nav className={mode === 'dark' ? "post__header__menu post__header__menu--dark" : "post__header__menu"}>
                                 <ul >
                                     {sameUser ? <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark " : "post__header__menu__element"} onClick={handleModifyingPost} tabIndex="0" onKeyUp={(event) => { if (event.code === 'Enter') handleModifyingPost() }} >Modifier</li> : ''}
-                                    {sameUser || userConnected.rights == 'moderator' ? <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark " : "post__header__menu__element"} onClick={openModal} tabIndex="0">Supprimer</li> : ''}
+                                    {sameUser || userConnected.rights === 'moderator' ? <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark " : "post__header__menu__element"} onClick={openModal} tabIndex="0">Supprimer</li> : ''}
                                     <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark post__header__menu__element--no-border" : "post__header__menu__element post__header__menu__element--no-border"} tabIndex="0" > <a href={`mailto: groupomania_moderateur@yahoo.com?subject=Signalement post créé le ${post.created} par ${userPseudo}`}>Signaler</a></li>
                                 </ul>
                             </nav> : ''}

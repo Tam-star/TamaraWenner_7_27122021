@@ -1,7 +1,7 @@
 import React from 'react';
 import { createPostWithFormData, createPostWithJSON } from '../../../API-functions/PostAPI-functions';
 import maleAvatar from '../../../assets/male-avatar-profile.jpg';
-import { autoResize } from '../../../functions';
+import { autoResize, formDataEscaping } from '../../../functions';
 import { useUserContext } from '../../../Contexts/UserContext';
 import { useThemeContext } from '../../../Contexts/ThemeContext';
 
@@ -31,8 +31,9 @@ export default function NewPost({ handleUpdate }) {
         event.preventDefault()
         if (fileInput.current.files[0]) {
             const formData = new FormData();
-            formData.append("post", `{"text" : "${textInput.current.value}", "userId" : ${userConnected.id}}`);
+            formData.append("post", `{"text" : "${formDataEscaping(textInput.current.value)}", "userId" : ${userConnected.id}}`);
             formData.append('image', fileInput.current.files[0], fileInput.current.files[0].name)
+        
             createPostWithFormData(formData).then(() => {
                 handleUpdate()
                 fileInput.current.value = ""

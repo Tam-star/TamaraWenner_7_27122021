@@ -3,6 +3,11 @@ export const autoResize = event => {
     event.target.style.height = `${event.target.scrollHeight - 18}px`
 }
 
+export function formDataEscaping(text){
+    let escapedText = text.replaceAll('\\', '\\\\').replaceAll('"', '\\\"')
+    return escapedText;
+}
+
 
 export function getTimeAmount(timestamp) {
 
