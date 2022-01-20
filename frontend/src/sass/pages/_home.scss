@@ -47,3 +47,24 @@
         color: $primary-color;
     }
 }
+
+.error-container {
+    background-color: $secondary-color;
+    text-align: center;
+    padding : 50px 0;
+    &__title {
+        font-size: 100px;
+        & p {
+            margin: 0;
+            padding: 0;
+        }
+        &__404 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            &__logo {
+                width: 100px;
+            }
+        }
+    }
+}

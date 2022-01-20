@@ -12,6 +12,7 @@ import CenterContainer from './components/center-container';
 import Welcome from './components/home/welcome';
 import { AuthProvider, RequireAuth } from './Contexts/AuthContext';
 import { ThemeProvider } from './Contexts/ThemeContext';
+import ErrorContainer from './components/home/error-container';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
               <Route index element={<Welcome />} />
               <Route path="signup" element={<Subscription />} />
               <Route path="login" element={<Connexion />} />
+              <Route path="*" element={<ErrorContainer />} />
             </Route>
             <Route path="dashboard/:userId"
               element={
@@ -33,6 +35,7 @@ function App() {
               <Route path="newsfeed" element={<CenterContainer centerElement='newsfeed' />} />
               <Route path="settings" element={<CenterContainer centerElement='settings' />} />
             </Route>
+
           </Routes>
         </AuthProvider>
       </ThemeProvider>
