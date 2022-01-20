@@ -100,7 +100,7 @@ export default function ProfileChange({ handleClick }) {
 
     return (
         <section className={mode === 'dark' ? 'profile-change profile-change--dark' : 'profile-change'}>
-            <i className="fas fa-times profile-change__icon" onClick={handleClick}></i>
+            <i tabIndex={0} className="fas fa-times profile-change__icon" aria-label='Exit modification du profil' onClick={handleClick} onKeyUp={(event) => { if (event.code === 'Enter') handleClick(event) }}></i>
             <h2>Modifier votre profil</h2>
             <p ref={message} className='profile-change__message'></p>
             <p className='no-allowed-change' title='Vous ne pouvez pas modifier votre email'>Email :  {user.email}</p>

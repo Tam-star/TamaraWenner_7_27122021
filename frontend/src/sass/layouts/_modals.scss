@@ -47,6 +47,10 @@
         @include card-style($tertiary-color);
         color: $dark-text-color;
     }
+    @include mobile-only{
+        width: 70%;
+        margin : auto;
+    }
     & h2 {
         text-align: center;
     }

@@ -12,13 +12,13 @@ export default function ProfileContainer({ handleClick }) {
         <section className={mode==='dark' ? 'profile-container profile-container--dark' : 'profile-container'}>
             <img src={user.imageUrl ? user.imageUrl : maleAvatar} className='profile-picture' alt='Votre profil' />
             <div>
-                <p>Nom : {user.lastname}</p>
-                <p>Prénom :  {user.firstname}</p>
-                <p>Pseudo : {user.pseudo}</p>
-                <p>Email :  {user.email}</p>
-                <p>Bio :  {user.bio}</p>
+                <p><span className='profile-container__title'>Nom : </span>{user.lastname}</p>
+                <p><span className='profile-container__title'>Prénom : </span>{user.firstname}</p>
+                <p><span className='profile-container__title'>Pseudo : </span>{user.pseudo}</p>
+                <p><span className='profile-container__title'>Email :  </span>{user.email}</p>
+                <p><span className='profile-container__title'>Bio :  </span>{user.bio}</p>
             </div>
-            <i title='Modifier son profil' className="fas fa-pen profile-container__modify-icon" onClick={handleClick}></i>
+            <i tabIndex='0' title='Modifier son profil' aria-label='Modifier votre profil' className="fas fa-pen profile-container__modify-icon" onClick={handleClick} onKeyUp={(event) => { if (event.code === 'Enter') handleClick(event) }}></i>
         </section>
     )
 }

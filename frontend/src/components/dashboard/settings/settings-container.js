@@ -79,7 +79,7 @@ export default function SettingsContainer() {
                 onRequestClose={closeModal}
                 className={'delete-modal'}
             >
-                <i className="fas fa-times profile-change__icon" onClick={closeModal}></i>
+                <i className="fas fa-times profile-change__icon" onClick={closeModal} tabIndex={0} onKeyUp={(event) => { if (event.code === 'Enter') closeModal(event) }}></i>
                 <h2 style={{ color: 'red' }}>Supprimer votre compte</h2>
                 <p>Êtes-vous sûr de vouloir supprimer votre compte ?</p>
                 <p>Toutes vos données et vos posts seront perdus.</p>

@@ -66,22 +66,13 @@
             position: absolute;
             right: 10px;
             cursor:pointer;
-            // &:hover + nav {
-            //     display: block;
-            //     opacity: 100%;
-            // }
-            // //For accessibility
-            // &:focus + nav {
-            //     display: block;
-            //     opacity: 100%;
-            // }
         }
         &__menu {
-            //display: none;
+            background-color: white;
             position: absolute;
             z-index: 2;
             right: 20px;
-            border: 1px dashed black;
+            border: 2px dashed $secondary-color;
             border-radius: 20px;
             padding: 10px;
             &:hover {
@@ -97,23 +88,36 @@
                 list-style-type: none;
                 cursor: pointer;
                 padding: 5px;
+                & a {
+                    text-decoration: none;
+                    color : black;
+                    display: inline-block;
+                    width : 100%;
+                    margin:0;
+                }
                 &:hover {
                     background-color: $secondary-color;
                 }
                 &--dark {
+                    color : white;
                     &:hover {
                         background-color: black;
+                    }
+                    & a {
+                        color : white;
                     }
                 }
                 &--no-border {
                     border: none;
                 }
             }
+            &--dark{
+                background-color: $tertiary-color;
+            }
             @include mobile-only {
                 top: 60%;
                 left: 50%;
                 transform: translate(-50%, -50%); 
-                background-color: white;
                 border-radius: 0;
                 border: 2px solid black;
                 width : 80%;

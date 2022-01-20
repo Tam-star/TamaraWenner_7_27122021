@@ -1,9 +1,9 @@
-
-.profile-container{
+.profile-container {
     @include card-style(white);
-    position : relative;
+    position: relative;
     display: flex;
-    @include mobile-only{
+    word-break: break-word;
+    @include mobile-only {
         flex-direction: column;
         align-items: center;
     }
@@ -12,20 +12,23 @@
         color: $dark-text-color;
     }
     & img {
-        width : 150px;
-        height : fit-content;
+        width: 150px;
+        height: fit-content;
         margin-right: 50px;
     }
-    &__modify-icon{
-        position : absolute;
-        right : 30px;
-        cursor : pointer;
+    &__modify-icon {
+        position: absolute;
+        right: 30px;
+        cursor: pointer;
+    }
+    &__title {
+        font-weight: bold;
     }
 }
 
-.profile-change{
+.profile-change {
     @include card-style(white);
-    position : relative;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -33,58 +36,58 @@
         @include card-style($tertiary-color);
         color: $dark-text-color;
     }
-    &__message{
-        color : $primary-color;
+    &__message {
+        color: $primary-color;
         font-weight: bold;
     }
-    &__icon{
-        position : absolute; 
-        right : 30px;
-        cursor : pointer;
+    &__icon {
+        position: absolute;
+        right: 30px;
+        cursor: pointer;
     }
     & h2 {
         text-align: center;
     }
-    &__form{
+    &__form {
         display: flex;
         flex-direction: column;
-        width : 70%;
-        &__picture{
-            display : flex;
+        width: 70%;
+        &__picture {
+            display: flex;
             justify-content: space-around;
             align-items: center;
-            margin-bottom : 20px;
+            margin-bottom: 20px;
             & img {
-                width : 150px;
-                height : fit-content;
+                width: 150px;
+                height: fit-content;
             }
             & div {
                 display: flex;
-                flex-direction : column;
-                width : min-content;
+                flex-direction: column;
+                width: min-content;
             }
         }
-        &__password-info{
+        &__password-info {
             font-style: italic;
             font-size: 15px;
         }
-        & label{
-            margin : 5px;
+        & label {
+            margin: 5px;
         }
-        & input{
-            margin : 5px 0 15px 0;
+        & input {
+            margin: 5px 0 15px 0;
         }
-        & textarea{
-            resize : none;
-            margin : 5px 0 15px 0;
+        & textarea {
+            resize: none;
+            margin: 5px 0 15px 0;
         }
-        &__submit{
-            color : $primary-color;
+        &__submit {
+            color: $primary-color;
             align-self: center;
         }
     }
 }
 
-.no-allowed-change{
-    color : grey;
+.no-allowed-change {
+    color: grey;
 }

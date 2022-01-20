@@ -231,11 +231,11 @@ export default function Post({ sameUser, handleUpdate, post, likesArray }) {
                         </div>
                         <i tabIndex="0" className="post__header__icon-menu fas fa-ellipsis-h" onClick={handleMenu} aria-label='Enter to access post menu' onKeyUp={(event) => { if (event.code === 'Enter') handleMenu(event) }}></i>
                         {menu ?
-                            <nav className="post__header__menu">
+                            <nav className={mode==='dark' ? "post__header__menu post__header__menu--dark":"post__header__menu"}>
                                 <ul >
                                     {sameUser ? <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark " : "post__header__menu__element"} onClick={handleModifyingPost} tabIndex="0" onKeyUp={(event) => { if (event.code === 'Enter') handleModifyingPost() }} >Modifier</li> : ''}
                                     {sameUser || userConnected.rights == 'moderator' ? <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark " : "post__header__menu__element"} onClick={openModal} tabIndex="0">Supprimer</li> : ''}
-                                    <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark post__header__menu__element--no-border" : "post__header__menu__element post__header__menu__element--no-border"} tabIndex="0">Signaler</li>
+                                    <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark post__header__menu__element--no-border" : "post__header__menu__element post__header__menu__element--no-border"} tabIndex="0" > <a href={`mailto: groupomania_moderateur@yahoo.com?subject=Signalement post créé le ${post.created} par ${userPseudo}`}>Signaler</a></li>
                                 </ul>
                             </nav> : ''}
                     </header>

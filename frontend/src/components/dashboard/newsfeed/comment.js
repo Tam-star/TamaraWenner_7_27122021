@@ -4,9 +4,11 @@ import { deleteComment, updateCommentWithJSON } from "../../../API-functions/Com
 import { getUserInfo } from "../../../API-functions/UserAPI-functions";
 import { autoResize } from "../../../functions";
 import { useThemeContext } from "../../../Contexts/ThemeContext";
+import { useUserContext } from "../../../Contexts/UserContext";
 
 export default function Comment({ text, commentId, userId, sameUser, handleUpdate, timeOfCreation }) {
 
+    const [userConnected] = useUserContext()
     const [mode] = useThemeContext()
 
     const [userPseudo, setUserPseudo] = React.useState('')
@@ -54,13 +56,11 @@ export default function Comment({ text, commentId, userId, sameUser, handleUpdat
     }, [])
 
     return (
-        <div className={mode==='dark' ? 'comment comment--dark':'comment'}>
-            {sameUser ?
-                <nav className="comment__menu">
-                    <i tabIndex="0" aria-label="Modifier le commentaire" title="Modifier" className="fas fa-edit" onClick={handleModifyComment} onKeyUp={(event) => { if (event.code === 'Enter') handleModifyComment(event) }}></i>
-                    <i tabIndex="0" aria-label="Supprimer le commentaire" title="Supprimer" className="fas fa-trash-alt" onClick={handleDeleteComment} onKeyUp={(event) => { if (event.code === 'Enter') handleDeleteComment(event) }}></i>
-                </nav>
-                : ''}
+        <div className={mode === 'dark' ? 'comment comment--dark' : 'comment'}>
+            <nav className="comment__menu">
+                {sameUser ? <i tabIndex="0" aria-label="Modifier le commentaire" title="Modifier" className="fas fa-edit" onClick={handleModifyComment} onKeyUp={(event) => { if (event.code === 'Enter') handleModifyComment(event) }}></i> : ''}
+                {sameUser || userConnected.rights === 'moderator' ? <i tabIndex="0" aria-label="Supprimer le commentaire" title="Supprimer" className="fas fa-trash-alt" onClick={handleDeleteComment} onKeyUp={(event) => { if (event.code === 'Enter') handleDeleteComment(event) }}></i> : ''}
+            </nav>
             <img src={userPicture ? userPicture : maleAvatar} className='profile-picture' alt={`Profil de ${userPseudo}`} />
             {modifyComment ?
                 <div className="comment__modifying">
