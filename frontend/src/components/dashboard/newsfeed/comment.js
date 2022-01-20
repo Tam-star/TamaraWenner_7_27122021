@@ -57,8 +57,8 @@ export default function Comment({ text, commentId, userId, sameUser, handleUpdat
         <div className={mode==='dark' ? 'comment comment--dark':'comment'}>
             {sameUser ?
                 <nav className="comment__menu">
-                    <i title="Modifier" className="fas fa-edit" onClick={handleModifyComment}></i>
-                    <i title="Supprimer" className="fas fa-trash-alt" onClick={handleDeleteComment}></i>
+                    <i tabIndex="0" aria-label="Modifier le commentaire" title="Modifier" className="fas fa-edit" onClick={handleModifyComment} onKeyUp={(event) => { if (event.code === 'Enter') handleModifyComment(event) }}></i>
+                    <i tabIndex="0" aria-label="Supprimer le commentaire" title="Supprimer" className="fas fa-trash-alt" onClick={handleDeleteComment} onKeyUp={(event) => { if (event.code === 'Enter') handleDeleteComment(event) }}></i>
                 </nav>
                 : ''}
             <img src={userPicture ? userPicture : maleAvatar} className='profile-picture' alt={`Profil de ${userPseudo}`} />

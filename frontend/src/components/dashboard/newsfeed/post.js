@@ -22,6 +22,9 @@ export default function Post({ sameUser, handleUpdate, post, likesArray }) {
     const [userPseudo, setUserPseudo] = React.useState('')
     const [userProfilePicture, setUserProfilePicture] = React.useState('')
 
+    //Menu
+    const [menu, setMenu] = React.useState(false)
+
     //Modify post
     const [modifyingPost, setModifyingPost] = React.useState(false)
     const [modifyingText, setModifyingText] = React.useState(post.text)
@@ -39,6 +42,17 @@ export default function Post({ sameUser, handleUpdate, post, likesArray }) {
     const [numberOfLikes, setNumberOfLikes] = React.useState(post.usersLiked === '' ? 0 : likesArray.length)
     const likeColor = mode === 'dark' ? 'white' : 'black'
 
+
+    const handleMenu = (event) => {
+        event.stopPropagation()
+        setMenu(!menu)
+    }
+
+    document.body.addEventListener('click', () => {
+        if (menu) {
+            setMenu(false)
+        }
+    })
 
     const handleModifyingPost = (event) => {
         setModifyingPost(true)
@@ -179,7 +193,7 @@ export default function Post({ sameUser, handleUpdate, post, likesArray }) {
                             <p className='post__header__user'>{userPseudo}</p>
                             <p>{timeOfCreation}</p>
                         </div>
-                        <i className="fas fa-times modifying-post__close-icon" onClick={handleCloseModifying}></i>
+                        <i tabIndex="0" className="fas fa-times modifying-post__close-icon" aria-label="Exit" onClick={handleCloseModifying} onKeyUp={(event) => { if (event.code === 'Enter') handleCloseModifying(event) }}></i>
                     </header>
                     <main className='post__main'>
                         <form className='modifying-post__form'>
@@ -201,7 +215,7 @@ export default function Post({ sameUser, handleUpdate, post, likesArray }) {
                         onRequestClose={closeModal}
                         className={'delete-modal'}
                     >
-                        <i className="fas fa-times profile-change__icon" onClick={closeModal}></i>
+                        <i tabIndex="0" className="fas fa-times profile-change__icon" aria-label="Exit" onClick={closeModal} onKeyUp={(event) => { if (event.code === 'Enter') closeModal(event) }}></i>
                         <h2>Supprimer le post</h2>
                         <p>Êtes-vous sûr de vouloir supprimer ce post ?</p>
                         <div>
@@ -215,14 +229,15 @@ export default function Post({ sameUser, handleUpdate, post, likesArray }) {
                             <p className='post__header__user'>{userPseudo}</p>
                             <p>{timeOfCreation}</p>
                         </div>
-                        <i tabIndex="0" className="post__header__icon-menu fas fa-ellipsis-h"></i>
-                        <nav className="post__header__menu">
-                            <ul>
-                                {sameUser ? <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark " : "post__header__menu__element"} onClick={handleModifyingPost} tabIndex="0">Modifier</li> : ''}
-                                {sameUser || userConnected.rights == 'moderator' ? <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark " : "post__header__menu__element"} onClick={openModal} tabIndex="0">Supprimer</li> : ''}
-                                <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark post__header__menu__element--no-border" : "post__header__menu__element post__header__menu__element--no-border"} tabIndex="0">Signaler</li>
-                            </ul>
-                        </nav>
+                        <i tabIndex="0" className="post__header__icon-menu fas fa-ellipsis-h" onClick={handleMenu} aria-label='Enter to access post menu' onKeyUp={(event) => { if (event.code === 'Enter') handleMenu(event) }}></i>
+                        {menu ?
+                            <nav className="post__header__menu">
+                                <ul >
+                                    {sameUser ? <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark " : "post__header__menu__element"} onClick={handleModifyingPost} tabIndex="0" onKeyUp={(event) => { if (event.code === 'Enter') handleModifyingPost() }} >Modifier</li> : ''}
+                                    {sameUser || userConnected.rights == 'moderator' ? <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark " : "post__header__menu__element"} onClick={openModal} tabIndex="0">Supprimer</li> : ''}
+                                    <li className={mode === 'dark' ? "post__header__menu__element post__header__menu__element--dark post__header__menu__element--no-border" : "post__header__menu__element post__header__menu__element--no-border"} tabIndex="0">Signaler</li>
+                                </ul>
+                            </nav> : ''}
                     </header>
                     <main className='post__main'>
                         <p>{post.text}</p>

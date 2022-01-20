@@ -65,18 +65,19 @@
         &__icon-menu {
             position: absolute;
             right: 10px;
-            &:hover + nav {
-                display: block;
-                opacity: 100%;
-            }
-            //For accessibility
-            &:focus + nav {
-                display: block;
-                opacity: 100%;
-            }
+            cursor:pointer;
+            // &:hover + nav {
+            //     display: block;
+            //     opacity: 100%;
+            // }
+            // //For accessibility
+            // &:focus + nav {
+            //     display: block;
+            //     opacity: 100%;
+            // }
         }
         &__menu {
-            display: none;
+            //display: none;
             position: absolute;
             z-index: 2;
             right: 20px;

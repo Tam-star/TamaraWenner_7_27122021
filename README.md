@@ -66,7 +66,7 @@ npm start
 Go into the frontend folder :
 
 ````sh
-cd frontend/my-app
+cd frontend
 ````
 
 Install the necessary packages :
