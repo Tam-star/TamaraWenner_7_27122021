@@ -39,6 +39,9 @@
         font-size: 60px;
         margin-top: 0;
         text-align: center;
+        @include mobile-only{
+            font-size : 45px;
+        }
     }
     &__logo {
         width: 200px;

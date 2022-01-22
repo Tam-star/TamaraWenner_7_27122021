@@ -1,14 +1,17 @@
+
+//For textarea to resize itself when text is very long
 export const autoResize = event => {
     event.target.style.height = 'auto';
     event.target.style.height = `${event.target.scrollHeight - 18}px`
 }
 
+//So it won't cause an error when sending formData to the server
 export function formDataEscaping(text){
     let escapedText = text.replaceAll('\\', '\\\\').replaceAll('"', '\\\"')
     return escapedText;
 }
 
-
+//Used to calculate how long ago were posts and comments posted
 export function getTimeAmount(timestamp) {
 
     const seconds = (Date.now() - Date.parse(timestamp)) / 1000

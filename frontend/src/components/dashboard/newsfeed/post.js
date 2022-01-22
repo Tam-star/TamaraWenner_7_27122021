@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import maleAvatar from '../../../assets/male-avatar-profile.jpg';
 import { autoResize, formDataEscaping, getTimeAmount } from "../../../functions";
 import { getUserInfo } from '../../../API-functions/UserAPI-functions';
-import { updatePostWithFormData, updatePostWithJSON, deletePost, likePost } from '../../../API-functions/PostAPI-functions';
+import { updatePostWithFormData, updatePostWithJSON, deletePost, likePost, getOnePost } from '../../../API-functions/PostAPI-functions';
 import CommentContainer from './comment-container';
 import { useThemeContext } from '../../../Contexts/ThemeContext';
 import { useUserContext } from '../../../Contexts/UserContext';
@@ -14,13 +14,21 @@ Modal.setAppElement('#root');
 
 export default function Post({ sameUser, handleUpdate, post }) {
 
-    const [thisPost, setThisPost] = React.useState(post)
-
     const params = useParams()
     const [mode] = useThemeContext()
     const [userConnected] = useUserContext()
+    const [thisPost, setThisPost] = React.useState(post)
 
-    const timeOfCreation = getTimeAmount(post.created)
+
+    const handleUpdateThisPost = () =>{
+        getOnePost(post.id)
+        .then(response => {
+            console.log(response)
+            setThisPost(response.data)
+        })
+    }
+
+    const timeOfCreation = getTimeAmount(thisPost.created)
     const [userPseudo, setUserPseudo] = React.useState('')
     const [userProfilePicture, setUserProfilePicture] = React.useState('')
 
@@ -29,8 +37,8 @@ export default function Post({ sameUser, handleUpdate, post }) {
 
     //Modify post
     const [modifyingPost, setModifyingPost] = React.useState(false)
-    const [modifyingText, setModifyingText] = React.useState(post.text)
-    const [modifyingPicture, setModifyingPicture] = React.useState(post.imageUrl)
+    const [modifyingText, setModifyingText] = React.useState(thisPost.text)
+    const [modifyingPicture, setModifyingPicture] = React.useState(thisPost.imageUrl)
 
     //Deleting post
     const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -40,22 +48,23 @@ export default function Post({ sameUser, handleUpdate, post }) {
     const [numberOfComments, setNumberOfComments] = React.useState(0)
 
     //Likes
-    const [like, setLike] = React.useState(post.usersLiked.split(',').includes(params.userId) ? 1 : 0)
-    const [numberOfLikes, setNumberOfLikes] = React.useState(post.usersLiked === '' ? 0 : post.usersLiked.split(',').length)
+    const [like, setLike] = React.useState(thisPost.usersLiked.split(',').includes(params.userId) ? 1 : 0)
+    const [numberOfLikes, setNumberOfLikes] = React.useState(thisPost.usersLiked === '' ? 0 : thisPost.usersLiked.split(',').length)
     const likeColor = mode === 'dark' ? 'white' : 'black'
 
-
+    //Affiche le menu du Post
     const handleMenu = (event) => {
         event.stopPropagation()
         setMenu(!menu)
     }
-
+    //Enlève le menu du post quand l'utilisateur clique à l'extérieur
     document.body.addEventListener('click', () => {
         if (menu) {
             setMenu(false)
         }
     })
 
+    //Permet de modifier le post
     const handleModifyingPost = (event) => {
         setModifyingPost(true)
     }
@@ -90,12 +99,12 @@ export default function Post({ sameUser, handleUpdate, post }) {
         if (fileInput.current.files[0]) {
             console.log('request with formdata')
             const formData = new FormData();
-            formData.append("post", `{"text" : "${formDataEscaping(textInput.current.value)}", "userId" : ${post.userId}}`);
+            formData.append("post", `{"text" : "${formDataEscaping(textInput.current.value)}", "userId" : ${thisPost.userId}}`);
             formData.append('image', fileInput.current.files[0], fileInput.current.files[0].name)
 
             setModifyingPost(false)
-            updatePostWithFormData(formData, post.id).then(() => {
-                handleUpdate()
+            updatePostWithFormData(formData, thisPost.id).then(() => {
+                handleUpdateThisPost()
             })
         }
         else {
@@ -104,19 +113,18 @@ export default function Post({ sameUser, handleUpdate, post }) {
             if (modifyingPicture) {
                 request = {
                     text: textInput.current.value,
-                    userId: post.userId
+                    userId: thisPost.userId
                 }
             } else {
                 request = {
                     text: textInput.current.value,
-                    userId: post.userId,
+                    userId: thisPost.userId,
                     imageUrl: null
                 }
             }
-
-            updatePostWithJSON(request, post.id).then(() => {
-                handleUpdate()
-                setModifyingPost(false)
+            setModifyingPost(false)
+            updatePostWithJSON(request, thisPost.id).then(() => {
+                handleUpdateThisPost()
             })
         }
     }
@@ -129,7 +137,7 @@ export default function Post({ sameUser, handleUpdate, post }) {
         setIsOpen(false);
     }
     const handleDeletePost = (event) => {
-        deletePost(post.id).then(() => handleUpdate())
+        deletePost(thisPost.id).then(() => handleUpdate())
     }
 
 
@@ -137,11 +145,12 @@ export default function Post({ sameUser, handleUpdate, post }) {
     const handleLike = () => {
         if (like === 1) {
             setLike(0)
+            
         } else {
             setLike(1)
         }
+        console.log(like)
     }
-
 
     //Manage Comment Section
     const handleAddComment = () => {
@@ -150,6 +159,7 @@ export default function Post({ sameUser, handleUpdate, post }) {
 
 
     React.useEffect(() => {
+        console.log('getuser')
         getUserInfo(post.userId)
             .then((response) => {
                 setUserPseudo(response.data.pseudo)
@@ -166,6 +176,7 @@ export default function Post({ sameUser, handleUpdate, post }) {
 
     const isFirstRender = React.useRef(true);
 
+
     React.useEffect(() => {
         if (isFirstRender.current) {
             isFirstRender.current = false
@@ -176,13 +187,12 @@ export default function Post({ sameUser, handleUpdate, post }) {
             }
             like ? request['like'] = 1 : request['like'] = 0
             like ? setNumberOfLikes(numberOfLikes + 1) : setNumberOfLikes(numberOfLikes - 1)
-            likePost(request, post.id)
+            likePost(request, thisPost.id)
                 .then((response) => {
-                    handleUpdate()
+                    handleUpdateThisPost()
                 })
                 .catch((error) => console.log(error))
         }
-
     }, [like])
 
 
@@ -234,7 +244,7 @@ export default function Post({ sameUser, handleUpdate, post }) {
                             <p className='post__header__user'>{userPseudo}</p>
                             <p>{timeOfCreation}</p>
                         </div>
-                        <i tabIndex="0" className="post__header__icon-menu fas fa-ellipsis-h" onClick={handleMenu} aria-label='Enter to access post menu' onKeyUp={(event) => { if (event.code === 'Enter') handleMenu(event) }}></i>
+                        <i tabIndex="0" className="post__header__icon-menu fas fa-ellipsis-h" onClick={handleMenu} role='link' aria-label='post menu' onKeyUp={(event) => { if (event.code === 'Enter') handleMenu(event) }}></i>
                         {menu ?
                             <nav className={mode === 'dark' ? "post__header__menu post__header__menu--dark" : "post__header__menu"}>
                                 <ul >
@@ -245,8 +255,8 @@ export default function Post({ sameUser, handleUpdate, post }) {
                             </nav> : ''}
                     </header>
                     <main className='post__main'>
-                        <p>{post.text}</p>
-                        {post.imageUrl ? <img src={post.imageUrl} className='post__main__post-picture' alt='Image liée au post' /> : ''}
+                        <p>{thisPost.text}</p>
+                        {thisPost.imageUrl ? <img src={thisPost.imageUrl} className='post__main__post-picture' alt='Image liée au post' /> : ''}
                     </main>
                     <footer className='post__footer'>
                         <nav className='post__footer__menu'>

@@ -24,7 +24,6 @@ function App() {
               <Route index element={<Welcome />} />
               <Route path="signup" element={<Subscription />} />
               <Route path="login" element={<Connexion />} />
-              <Route path="500" element={<ErrorContainer errorStatus={500}/>} />
               <Route path="*" element={<ErrorContainer />} />
             </Route>
             <Route path="dashboard/:userId"

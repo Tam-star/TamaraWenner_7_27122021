@@ -14,7 +14,7 @@ export default function RightContainer({ connected = false }) {
                 </>
                 : <div className={mode === 'dark' ? 'info info--dark' : 'info'}>
                     <h2>Pourquoi s'inscrire ?</h2>
-                    <p>Pour partager du contenu avec tes collègues de GROUPOMANIA</p>
+                    <p>Pour partager du contenu avec tes collègues de GROUPOMANIA, parce que le fun ne s'arrête pas après 18h !</p>
                 </div>}
         </section>
     )
