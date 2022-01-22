@@ -6,8 +6,6 @@ const cookieParser = require('cookie-parser')
 const path = require('path');
 const morgan = require('morgan')
 
-
-
 const app = express()
 const port = process.env.PORT
 const sequelize = require('./config/db.js')

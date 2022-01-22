@@ -22,6 +22,13 @@ Open a terminal where you want to clone the project and write this line :
 git clone https://github.com/Tam-star/TamaraWenner_7_27122021.git
 ````
 
+Access the project : 
+
+````sh
+cd .\TamaraWenner_7_27122021\
+````
+
+
 ###  Installing and launching the backend part
 
 Go into the backend folder : 
@@ -87,7 +94,7 @@ After a few seconds, your browser should open a page arriving to the welcome pag
 
 ### SQL Types
 
-The project was built with Sequelize, so it's pretty easy if your using another SQL type,
+The project was built with Sequelize, so it's pretty easy if you are using another SQL type,
  your just need to change the dialect in db.js which is in the config folder inside the backend folder.
 
 ````sh

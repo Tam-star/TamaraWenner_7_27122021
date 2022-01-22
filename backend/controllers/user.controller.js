@@ -30,7 +30,6 @@ exports.getUserById = (req, res, next) => {
       console.log('auth', req.auth.userId)
       //Depending on which user is asking, we don't send the same information
       if (req.auth.userId == req.params.id) {
-        console.log("sameuser")
         const message = 'L\'utilisateur a bien été récupéré.'
         const myData = {
           id: user.id,
@@ -46,7 +45,6 @@ exports.getUserById = (req, res, next) => {
         res.json({ message, data: myData })
       }
       else {
-        console.log("otheruser")
         const message = 'L\'utilisateur a bien été récupéré.'
         const dataOfOtherUser = {
           id: user.id,
@@ -78,7 +76,6 @@ exports.modifyUser = async (req, res, next) => {
       imageUrl: `${req.protocol}://${req.get('host')}/images/users/${req.file.filename}`
     } : req.body
 
-    console.log(userObject)
 
     if (userObject.id) {
       delete userObject.id // To prevent interfering with auto-increment
@@ -145,7 +142,6 @@ exports.deleteUser = async (req, res, next) => {
       return res.status(401).json({ message })
     }
     const userDeleted = user;
-    console.log(userDeleted)
     //In case there is a profile picture
     if (user.imageUrl) {
       const filename = user.imageUrl.split('/images/users/')[1]

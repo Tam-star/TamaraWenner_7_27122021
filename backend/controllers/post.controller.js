@@ -41,8 +41,6 @@ exports.getPostById = (req, res, next) => {
 }
 
 exports.createPost = (req, res, next) => {
-  let url = req.url;
-  console.log('url : ', url)
   try {
     const postObject = req.file ? {
       ...JSON.parse(req.body.post),
@@ -186,7 +184,6 @@ exports.postLike = (req, res, next) => {
   //   "like":1,
   //   "userId" : 123456
   // }
-  console.log(req.body)
   Post.findByPk(req.params.id)
     .then(post => {
       console.log('il s agit du post ', req.params.id)
