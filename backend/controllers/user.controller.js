@@ -20,14 +20,12 @@ exports.getAllUsers = (req, res, next) => {
 }
 
 
-//To get info from other persons
 exports.getUserById = (req, res, next) => {
   User.findByPk(req.params.id)
     .then(user => {
       if (!user) {
         return res.status(404).json({ error: 'Cet utilisateur n\'existe pas.' })
       }
-      console.log('auth', req.auth.userId)
       //Depending on which user is asking, we don't send the same information
       if (req.auth.userId == req.params.id) {
         const message = 'L\'utilisateur a bien été récupéré.'
