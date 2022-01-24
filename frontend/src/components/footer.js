@@ -10,10 +10,10 @@ export default function Footer() {
             <ul>
                 <li><a href='/signup'>S'inscrire</a></li>
                 <li><a href='/login'>Se connecter</a></li>
-                <li><a href='/'>Offres d'emploi</a></li>
-                <li><a href='/'>Cookies</a></li>
-                <li><a href='/'>Conditions générales</a></li>
-                <li><a href='/'>Aide</a></li>
+                <li><a href='#'>Offres d'emploi</a></li>
+                <li><a href='#'>Cookies</a></li>
+                <li><a href='#'>Conditions générales</a></li>
+                <li><a href='#'>Aide</a></li>
             </ul>
             <svg className={mode==='dark' ? 'main-footer__logo main-footer__logo--dark' :'main-footer__logo'} data-v-1084b650="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
                 <g data-v-1084b650="" id="640fb903-7c97-3a8b-d0a7-369102908d0a" stroke="none" transform="matrix(0.8499999999999999,0,0,0.8499999999999999,22.500006484985377,22.50005836486818)">

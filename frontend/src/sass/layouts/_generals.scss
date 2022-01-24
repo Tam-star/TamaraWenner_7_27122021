@@ -1,3 +1,17 @@
-.profile-picture{
+body {
+    font-family: "Poppins", sans-serif;
+}
+
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    background-color: $fourth-color;
+    @include tablette-only {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.profile-picture {
     @include profile-image();
 }
