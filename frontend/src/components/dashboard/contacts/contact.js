@@ -31,7 +31,7 @@ export default function Contact({ contact }) {
             </Modal>
             <li tabIndex="0" className='contact' onKeyUp={(event) => { if (event.code === 'Enter') openModal() }} onClick={openModal}>
                 <img src={contact.imageUrl ? contact.imageUrl : maleAvatar} alt={`Profil de ${contact.pseudo}`} />
-                {contact.pseudo}
+                <span className='contact__pseudo'>{contact.pseudo}</span>
             </li>
         </>
 

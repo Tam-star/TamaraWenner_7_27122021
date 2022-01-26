@@ -4,20 +4,25 @@
         @include card-style($tertiary-color);
         color: $dark-text-color;
     }
-    & ul{
-        padding : 0;
+    & ul {
+        padding: 0;
     }
 }
 
-.contact{
+.contact {
     list-style-type: none;
-    display : flex;
+    display: flex;
     align-items: center;
     margin-bottom: 10px;
-    padding : 5px;
-    border : 2px solid $secondary-color;
-    border-radius : 20px;
-    cursor : pointer;
+    padding: 5px;
+    border: 2px solid $secondary-color;
+    border-radius: 20px;
+    cursor: pointer;
+    &__pseudo {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
     & img {
         @include profile-image();
         margin-right: 20px;

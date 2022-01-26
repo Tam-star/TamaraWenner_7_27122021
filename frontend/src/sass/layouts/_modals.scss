@@ -5,14 +5,15 @@
     left: 50%; /* à 50%/50% du parent référent */
     transform: translate(-50%, -50%); /* décalage de 50% de sa propre taille */
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    word-break: break-word;
     @include mobile-only {
         position: static;
         transform: none;
         width: 70%;
-        margin : auto;
+        margin: auto;
         border-radius: 0%;
-        display: flex;
-        flex-direction: column;
     }
     &--dark {
         @include card-style($tertiary-color);
@@ -21,12 +22,15 @@
     & h2 {
         text-align: center;
     }
+    & p {
+        margin : 7px 0;
+    }
     & img {
         object-fit: cover;
         max-width: 300px;
         max-height: 300px;
-        @include mobile-only{
-            align-self : center;
+        align-self: center;
+        @include mobile-only {
             max-width: 100%;
         }
     }
@@ -47,9 +51,9 @@
         @include card-style($tertiary-color);
         color: $dark-text-color;
     }
-    @include mobile-only{
+    @include mobile-only {
         width: 70%;
-        margin : auto;
+        margin: auto;
     }
     & h2 {
         text-align: center;
@@ -68,11 +72,11 @@
     right: 30px;
     top: 30px;
     cursor: pointer;
-    @include mobile-only{
-        position : relative;
+    @include mobile-only {
+        position: relative;
         font-size: 20px;
-        left : 90%;
-        top : 10px;
+        left: 90%;
+        top: 10px;
         //background-color : green;
         //position : static;
     }
