@@ -67,4 +67,3 @@ const uploadPostImage = multer({ storage: postStorage, fileFilter: uploadFilter 
 
 
 module.exports = { uploadUserImage, uploadPostImage }
-//module.exports = multer({ storage : storage, fileFilter : uploadFilter }).single('image')
